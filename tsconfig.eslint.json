@@ -5,16 +5,5 @@
 	},
 	"extends": "./tsconfig.json",
 	"exclude": [],
-	"include": [
-		"**/**.js",
-		"**/**.ts",
-		"**/**.svelte",
-		"**/**.astro",
-		"**/**.cjs",
-		"**/**.mjs",
-		"**/**.cts",
-		"**/**.mts",
-		"**/**.jsx",
-		"**/**.tsx"
-	]
+	"include": ["**/**.js", "**/**.ts", "**/**.cjs", "**/**.mjs", "**/**.cts", "**/**.mts"]
 }

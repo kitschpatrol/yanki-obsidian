@@ -2,8 +2,11 @@ import sharedConfig, { overrideRules } from '@kitschpatrol/remark-config'
 
 const localConfig = {
 	...sharedConfig,
-	// Overrides are a special case, working as below (set `false` as the second element to disable):
-	// plugins: overrideRules(sharedConfig.plugins, [['remark-lint-first-heading-level', 2]])
+	plugins: overrideRules(sharedConfig.plugins, [
+		['remarkValidateLinks', { repository: false }],
+		['remark-lint-no-undefined-references', false],
+		['remark-lint-no-duplicate-headings', false],
+	]),
 }
 
 export default localConfig

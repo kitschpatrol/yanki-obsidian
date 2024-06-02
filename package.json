@@ -1,17 +1,55 @@
 {
-  "name": "yanki-obsidian",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@9.1.4+sha512.9df9cf27c91715646c7d675d1c9c8e41f6fce88246f1318c1aa6a1ed1aeb3c4f032fcdf4ba63cc69c4fe6d634279176b5358727d8f2cc1e65b65f43ce2f8bfb0",
-  "type": "module",
-  "devDependencies": {
-    "@kitschpatrol/shared-config": "^4.6.6"
-  }
+	"name": "yanki-obsidian",
+	"version": "0.0.0",
+	"type": "module",
+	"description": "An Obsidian plugin for ultra-simple flashcard syncing from a vault folder to Anki. Minimal configuration. No fuss.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kitschpatrol/yanki-obsidian.git"
+	},
+	"homepage": "https://github.com/kitschpatrol/yanki-obsidian",
+	"bugs": {
+		"url": "https://github.com/kitschpatrol/yanki-obsidian/issues",
+		"email": "eric@ericmika.com"
+	},
+	"author": {
+		"name": "Eric Mika",
+		"email": "eric@ericmika.com",
+		"url": "https://ericmika.com"
+	},
+	"license": "MIT",
+	"packageManager": "pnpm@9.1.4",
+	"engines": {
+		"node": ">=18.0.0",
+		"pnpm": ">=8.0.0"
+	},
+	"main": "./dist/main.js",
+	"keywords": [
+		"obsidian",
+		"obsidian-plugin",
+		"anki",
+		"flashcards",
+		"markdown",
+		"spaced-repetition",
+		"sync"
+	],
+	"scripts": {
+		"build": "tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production",
+		"clean": "git clean -fdX && rm ./pnpm-lock.yaml",
+		"dev": "tsx ./scripts/build.ts",
+		"fix": "shared-config --fix",
+		"lint": "shared-config --lint",
+		"release": "pnpm build && pnpm bumpp --commit 'Release: %s' && git push && git push --tags",
+		"test": "echo TODO"
+	},
+	"devDependencies": {
+		"@kitschpatrol/shared-config": "^4.6.6",
+		"@types/node": "^20.13.0",
+		"builtin-modules": "^4.0.0",
+		"bumpp": "^9.4.1",
+		"esbuild": "^0.21.4",
+		"obsidian": "latest",
+		"tsx": "^4.11.0",
+		"yanki-md": "link:../yanki-md"
+	}
 }

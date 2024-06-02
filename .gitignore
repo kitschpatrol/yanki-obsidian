@@ -19,3 +19,8 @@ node_modules/
 vendor/
 
 # Customizations
+
+# Obsidian
+data.json
+.hotreload
+resources/

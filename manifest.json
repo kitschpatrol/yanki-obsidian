@@ -1,0 +1,11 @@
+{
+	"id": "yanki-obsidian",
+	"name": "Yanki",
+	"version": "0.0.0",
+	"minAppVersion": "1.5.0",
+	"description": "Ultra-simple flashcard syncing from a vault folder to Anki.",
+	"author": "Eric Mika",
+	"authorUrl": "https://ericmika.com",
+	"helpUrl": "github.com/kitschpatrol/yanki-obsidian",
+	"isDesktopOnly": true
+}
