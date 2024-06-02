@@ -10,7 +10,7 @@ https://github.com/kitschpatrol/yanki-obsidian
 */
 `
 
-const production = process.argv[2] === 'production'
+const production = process.argv.includes('production')
 
 const context = await esbuild.context({
 	banner: {
@@ -34,21 +34,27 @@ const context = await esbuild.context({
 		'@lezer/lr',
 		...builtins,
 	],
+
 	format: 'cjs',
 	logLevel: 'info',
 	outbase: 'dist',
 	outfile: 'dist/main.js',
 	plugins: [
 		copy({
-			assets: { from: ['./src/*.css'], to: ['./dist'] },
-			resolveFrom: 'cwd',
-			watch: !production,
+			assets: { from: ['./src/**/*.css'], to: ['./'] },
 		}),
 	],
+
 	sourcemap: production ? false : 'inline',
 	target: 'es2020',
 
 	treeShaking: true,
 })
 
-await (production ? context.rebuild() : context.watch())
+if (production) {
+	await context.rebuild()
+	// eslint-disable-next-line unicorn/no-process-exit
+	process.exit(0)
+} else {
+	await context.watch()
+}

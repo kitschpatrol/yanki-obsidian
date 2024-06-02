@@ -14,10 +14,12 @@ import {
 // Remember to rename these classes and interfaces!
 
 type YankiPluginSettings = {
+	folders: string[]
 	mySetting: string
 }
 
 const yankiPluginDefaultSettings: YankiPluginSettings = {
+	folders: [],
 	mySetting: 'default',
 }
 
@@ -132,7 +134,7 @@ class SampleModal extends Modal {
 
 	onOpen() {
 		const { contentEl } = this
-		contentEl.setText('Hi from Yanki plugin!')
+		contentEl.setText('Hi from Yanki plugin!!!!!!!!!!!!!!!!!!!')
 	}
 }
 

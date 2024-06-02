@@ -34,14 +34,14 @@
 		"sync"
 	],
 	"scripts": {
-		"build": "rm -rf ./dist && tsx ./scripts/generate-manifest.ts && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production",
+		"build": "tsc -noEmit -skipLibCheck && pnpm dev production",
 		"clean": "git clean -fdX && rm ./pnpm-lock.yaml",
-		"dev": "rm -rf ./dist && tsx ./scripts/generate-manifest.ts && tsx ./scripts/build.ts",
+		"dev": "rm -rf ./dist && tsx ./scripts/generate-manifest.ts && touch ./dist/.hotreload && tsx ./scripts/build.ts",
 		"fix": "shared-config --fix",
 		"lint": "shared-config --lint",
-		"obsidian:link": "pnpm run obsidian:unlink && ln -s $(pwd)/dist ~/Notes/Vault/.obsidian/plugins/yanki",
+		"obsidian:link": "pnpm obsidian:unlink && ln -s $(pwd)/dist ~/Notes/Vault/.obsidian/plugins/yanki",
 		"obsidian:unlink": "rm -f ~/Notes/Vault/.obsidian/plugins/yanki",
-		"release": "pnpm build && pnpm bumpp --commit 'Release: %s' && git push && git push --tags",
+		"release": "pnpm bumpp --commit 'Release: %s' --tag '%s'",
 		"test": "echo TODO"
 	},
 	"devDependencies": {
@@ -50,7 +50,6 @@
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
 		"esbuild": "^0.21.4",
-		"esbuild-copy-static-files": "^0.1.0",
 		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
 		"tsx": "^4.11.0",

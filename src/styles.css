@@ -7,8 +7,9 @@ If your plugin does not need CSS, delete this file.
 
 */
 
+html,
 body {
-	margin: 10;
-	padding: 0;
+	margin: 1;
+	padding: 1;
 	font-family: Arial, sans-serif;
 }

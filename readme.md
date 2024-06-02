@@ -74,6 +74,8 @@ TODO:
 
 ### Implementation notes
 
+<https://github.com/pjeby/hot-reload>
+
 ### Similar projects
 
 - <https://github.com/JeppeKlitgaard/ObsidianAnkiBridge>
