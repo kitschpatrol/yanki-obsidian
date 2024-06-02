@@ -7,9 +7,21 @@ If your plugin does not need CSS, delete this file.
 
 */
 
-html,
-body {
-	margin: 1;
-	padding: 1;
-	font-family: Arial, sans-serif;
+div.yanki-settings {
+	div.search-input-container {
+		width: 100%;
+	}
+
+	div.setting-item {
+		border-top: none;
+		border-bottom: none;
+	}
+
+	div.setting-item:last-child {
+		justify-content: right;
+	}
+
+	div.yanki-folder {
+		/* padding: 0.5em 0; */
+	}
 }

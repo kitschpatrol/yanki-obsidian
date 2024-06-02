@@ -1,30 +1,38 @@
 /* eslint-disable no-new */
 import {
-	type App,
+	YankiPluginSettingTab,
+	type YankiPluginSettings,
+	yankiPluginDefaultSettings,
+} from './settings/settings'
+import {
 	type Editor,
 	type MarkdownFileInfo,
 	MarkdownView,
 	Modal,
 	Notice,
 	Plugin,
-	PluginSettingTab,
-	Setting,
+	type TAbstractFile,
+	TFolder,
 } from 'obsidian'
-
-// Remember to rename these classes and interfaces!
-
-type YankiPluginSettings = {
-	folders: string[]
-	mySetting: string
-}
-
-const yankiPluginDefaultSettings: YankiPluginSettings = {
-	folders: [],
-	mySetting: 'default',
-}
+import { YankiConnect } from 'yanki-connect'
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings
+
+	async handleRename(file: TAbstractFile, oldPath: string) {
+		if (file instanceof TFolder) {
+			const renamedFolder = file.path
+			const updatedFolders = this.settings.folders.map((folder) => {
+				if (folder.startsWith(oldPath)) {
+					return renamedFolder + folder.slice(oldPath.length)
+				}
+
+				return folder
+			})
+			this.settings.folders = updatedFolders
+			await this.saveSettings()
+		}
+	}
 
 	// Typed overrides
 	async loadData(): Promise<YankiPluginSettings> {
@@ -33,10 +41,22 @@ export default class YankiPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = { ...this.settings, ...(await this.loadData()) }
+		this.settings.syncOptions.obsidianVault = this.app.vault.getName()
 	}
 
 	async onload() {
+		console.log('Loading Yanki plugin')
 		await this.loadSettings()
+
+		const client = new YankiConnect(this.settings.syncOptions.ankiConnectOptions)
+
+		const results = await client.deck.deckNamesAndIds()
+
+		console.log('----------------------------------')
+		console.log(`results: ${JSON.stringify(results, undefined, 2)}`)
+
+		// Listen for file renames
+		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconElement = this.addRibbonIcon('dice', 'Yanki Plugin', () => {
@@ -93,7 +113,7 @@ export default class YankiPlugin extends Plugin {
 		})
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this))
+		this.addSettingTab(new YankiPluginSettingTab(this.app, this))
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -113,7 +133,7 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	onunload() {
-		console.log('unloading Yanki plugin')
+		console.log('Unloading Yanki plugin')
 	}
 
 	async saveSettings() {
@@ -138,30 +158,30 @@ class SampleModal extends Modal {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
-	plugin: YankiPlugin
+// Class SampleSettingTab extends PluginSettingTab {
+// 	plugin: YankiPlugin
 
-	constructor(app: App, plugin: YankiPlugin) {
-		super(app, plugin)
-		this.plugin = plugin
-	}
+// 	constructor(app: App, plugin: YankiPlugin) {
+// 		super(app, plugin)
+// 		this.plugin = plugin
+// 	}
 
-	display(): void {
-		const { containerEl } = this
+// 	display(): void {
+// 		const { containerEl } = this
 
-		containerEl.empty()
+// 		containerEl.empty()
 
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc("It's a secret!")
-			.addText((text) =>
-				text
-					.setPlaceholder('Enter your secret')
-					.setValue(this.plugin.settings.mySetting)
-					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value
-						await this.plugin.saveSettings()
-					}),
-			)
-	}
-}
+// 		new Setting(containerEl)
+// 			.setName('Setting #1')
+// 			.setDesc("It's a secret!")
+// 			.addText((text) =>
+// 				text
+// 					.setPlaceholder('Enter your secret')
+// 					.setValue(this.plugin.settings.mySetting)
+// 					.onChange(async (value) => {
+// 						this.plugin.settings.mySetting = value
+// 						await this.plugin.saveSettings()
+// 					}),
+// 			)
+// 	}
+// }

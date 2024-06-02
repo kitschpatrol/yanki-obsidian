@@ -21,6 +21,7 @@ const context = await esbuild.context({
 	external: [
 		'obsidian',
 		'electron',
+		'yanki-md',
 		'@codemirror/autocomplete',
 		'@codemirror/collab',
 		'@codemirror/commands',
@@ -39,6 +40,7 @@ const context = await esbuild.context({
 	logLevel: 'info',
 	outbase: 'dist',
 	outfile: 'dist/main.js',
+	platform: 'browser',
 	plugins: [
 		copy({
 			assets: { from: ['./src/**/*.css'], to: ['./'] },

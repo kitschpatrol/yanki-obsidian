@@ -3,8 +3,10 @@
 	"import": "@kitschpatrol/cspell-config",
 	"words": [
 		"anki",
+		"keymap",
 		"lezer",
 		"outbase",
+		"popperjs",
 		"yanki",
 		"Yankī"
 	]

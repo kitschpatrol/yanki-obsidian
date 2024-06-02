@@ -44,8 +44,10 @@
 		"release": "pnpm bumpp --commit 'Release: %s' --tag '%s'",
 		"test": "echo TODO"
 	},
+	"dependencies": {},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.6.6",
+		"@popperjs/core": "^2.11.8",
 		"@types/node": "^20.13.0",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
@@ -53,7 +55,8 @@
 		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
 		"tsx": "^4.11.0",
-		"yanki-md": "link:../yanki-md"
+		"type-fest": "^4.18.3",
+		"yanki-connect": "link:../yanki-connect"
 	},
 	"obsidian": {
 		"minAppVersion": "1.5.0",
