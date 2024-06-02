@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"noEmit": true,
+		"allowJs": true
+	},
+	"extends": "./tsconfig.json",
+	"exclude": [],
+	"include": [
+		"**/**.js",
+		"**/**.ts",
+		"**/**.svelte",
+		"**/**.astro",
+		"**/**.cjs",
+		"**/**.mjs",
+		"**/**.cts",
+		"**/**.mts",
+		"**/**.jsx",
+		"**/**.tsx"
+	]
+}
