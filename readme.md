@@ -19,7 +19,7 @@ TODO:
 
 <!-- short-description -->
 
-**An obsidian plugin for ultra-simple flashcard syncing from a vault folder to Anki. No customization. No configuration. No fuss.**
+**An obsidian plugin for ultra-simple flashcard syncing from a vault folder to Anki. Pure Markdown. No customization. No configuration. No fuss.**
 
 <!-- /short-description -->
 
@@ -75,6 +75,8 @@ TODO:
 ### Implementation notes
 
 ### Similar projects
+
+- <https://github.com/JeppeKlitgaard/ObsidianAnkiBridge>
 
 ## The future
 

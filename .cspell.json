@@ -1,5 +1,11 @@
 {
 	"$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
 	"import": "@kitschpatrol/cspell-config",
-	"words": ["anki", "lezer", "yanki", "Yankī"]
+	"words": [
+		"anki",
+		"lezer",
+		"outbase",
+		"yanki",
+		"Yankī"
+	]
 }

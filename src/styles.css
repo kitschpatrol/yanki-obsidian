@@ -6,3 +6,9 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+body {
+	margin: 10;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}

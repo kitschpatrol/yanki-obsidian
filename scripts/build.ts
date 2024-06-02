@@ -1,5 +1,6 @@
 import builtins from 'builtin-modules'
 import esbuild from 'esbuild'
+import { copy } from 'esbuild-plugin-copy'
 import process from 'node:process'
 
 const banner = `/*
@@ -35,9 +36,18 @@ const context = await esbuild.context({
 	],
 	format: 'cjs',
 	logLevel: 'info',
+	outbase: 'dist',
 	outfile: 'dist/main.js',
+	plugins: [
+		copy({
+			assets: { from: ['./src/*.css'], to: ['./dist'] },
+			resolveFrom: 'cwd',
+			watch: !production,
+		}),
+	],
 	sourcemap: production ? false : 'inline',
 	target: 'es2020',
+
 	treeShaking: true,
 })
 
