@@ -7,13 +7,14 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@popperjs/core':
+        specifier: ^2.11.8
+        version: 2.11.8
     devDependencies:
       '@kitschpatrol/shared-config':
         specifier: ^4.6.6
         version: 4.6.6(cspell@8.8.3)(eslint@8.57.0)(mdat@0.6.12(@types/node@20.13.0)(typescript@5.4.5))(postcss-html@1.7.0)(prettier@3.3.0)(stylelint@16.6.1(typescript@5.4.5))(svelte@4.2.17)(typescript@5.4.5)
-      '@popperjs/core':
-        specifier: ^2.11.8
-        version: 2.11.8
       '@types/node':
         specifier: ^20.13.0
         version: 20.13.0
@@ -38,9 +39,9 @@ importers:
       type-fest:
         specifier: ^4.18.3
         version: 4.18.3
-      yanki-connect:
-        specifier: link:../yanki-connect
-        version: link:../yanki-connect
+      yanki-md:
+        specifier: link:../yanki-md
+        version: link:../yanki-md
 
 packages:
 
@@ -4206,8 +4207,8 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
 
-  yaml@2.4.2:
-    resolution: {integrity: sha512-B3VqDZ+JAg1nZpaEmWtTXUlBneoGx6CPM9b0TENK6aoSu5t73dItudwdgmi6tHlIZZId4dZ9skcAQ2UbcyAeVA==}
+  yaml@2.4.3:
+    resolution: {integrity: sha512-sntgmxj8o7DE7g/Qi60cqpLBA3HG3STcDA0kO+WfB05jEKhZMbY7umNm2rBpQvsmZ16/lPXCJGW2672dgOUkrg==}
     engines: {node: '>= 14'}
     hasBin: true
 
@@ -5664,7 +5665,7 @@ snapshots:
     dependencies:
       '@cspell/cspell-types': 8.8.3
       comment-json: 4.2.3
-      yaml: 2.4.2
+      yaml: 2.4.3
 
   cspell-dictionary@8.8.3:
     dependencies:
@@ -9324,7 +9325,7 @@ snapshots:
       vfile-message: 4.0.2
       vfile-reporter: 8.1.1
       vfile-statistics: 3.0.0
-      yaml: 2.4.2
+      yaml: 2.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -9560,7 +9561,7 @@ snapshots:
 
   yaml@1.10.2: {}
 
-  yaml@2.4.2: {}
+  yaml@2.4.3: {}
 
   yargs-parser@21.1.1: {}
 

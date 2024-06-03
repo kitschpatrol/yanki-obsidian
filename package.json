@@ -2,7 +2,7 @@
 	"name": "yanki-obsidian",
 	"version": "0.0.0",
 	"type": "module",
-	"description": "Ultra-simple flashcard syncing from a folder in your Obsidian vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
+	"description": "Ultra-simple automated flashcard syncing from a folder in your Obsidian vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/kitschpatrol/yanki-obsidian.git"
@@ -26,6 +26,7 @@
 	"main": "./dist/main.js",
 	"keywords": [
 		"obsidian",
+		"obsidian-md",
 		"obsidian-plugin",
 		"anki",
 		"flashcards",
@@ -44,10 +45,11 @@
 		"release": "pnpm bumpp --commit 'Release: %s' --tag '%s'",
 		"test": "echo TODO"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@popperjs/core": "^2.11.8"
+	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.6.6",
-		"@popperjs/core": "^2.11.8",
 		"@types/node": "^20.13.0",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
@@ -56,7 +58,7 @@
 		"obsidian": "latest",
 		"tsx": "^4.11.0",
 		"type-fest": "^4.18.3",
-		"yanki-connect": "link:../yanki-connect"
+		"yanki-md": "link:../yanki-md"
 	},
 	"obsidian": {
 		"minAppVersion": "1.5.0",
