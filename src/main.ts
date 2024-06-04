@@ -14,7 +14,8 @@ import {
 	type TAbstractFile,
 	TFolder,
 } from 'obsidian'
-import { YankiConnect } from 'yanki-connect'
+// Import { YankiConnect } from 'yanki-connect'
+import { listNotes } from 'yanki-md'
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings
@@ -48,12 +49,17 @@ export default class YankiPlugin extends Plugin {
 		console.log('Loading Yanki plugin')
 		await this.loadSettings()
 
-		const client = new YankiConnect(this.settings.syncOptions.ankiConnectOptions)
-
-		const results = await client.deck.deckNamesAndIds()
+		const list = await listNotes({ namespace: '*' })
 
 		console.log('----------------------------------')
-		console.log(`results: ${JSON.stringify(results, undefined, 2)}`)
+		console.log(list)
+
+		// Const client = new YankiConnect(this.settings.syncOptions.ankiConnectOptions)
+
+		// const results = await client.deck.deckNamesAndIds()
+
+		// console.log('----------------------------------')
+		// console.log(`results: ${JSON.stringify(results, undefined, 2)}`)
 
 		// Listen for file renames
 		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))

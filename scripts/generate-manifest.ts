@@ -1,23 +1,11 @@
 import packageJson from '../package.json'
 import fs from 'node:fs/promises'
+import type { PluginManifest } from 'obsidian'
 
-type ObsidianManifest = {
-	author: string
-	authorUrl: string
-	description: string
-	helpUrl: string
-	id: string
-	isDesktopOnly: boolean
-	minAppVersion: string
-	name: string
-	version: string
-}
-
-const manifest: ObsidianManifest = {
+const manifest: PluginManifest = {
 	author: packageJson.author.name,
 	authorUrl: packageJson.author.url,
 	description: packageJson.description.replace(/\s+obsidian\s+/i, ' '),
-	helpUrl: packageJson.homepage,
 	id: packageJson.name,
 	version: packageJson.version,
 	...packageJson.obsidian,

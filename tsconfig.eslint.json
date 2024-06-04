@@ -4,6 +4,6 @@
 		"allowJs": true
 	},
 	"extends": "./tsconfig.json",
-	"exclude": [],
-	"include": ["**/**.js", "**/**.ts", "**/**.cjs", "**/**.mjs", "**/**.cts", "**/**.mts"]
+	"include": ["**/*", "**.*"],
+	"exclude": ["dist"]
 }

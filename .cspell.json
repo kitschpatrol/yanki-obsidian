@@ -3,6 +3,7 @@
 	"import": "@kitschpatrol/cspell-config",
 	"words": [
 		"anki",
+		"collab",
 		"keymap",
 		"lezer",
 		"outbase",

@@ -1,5 +1,6 @@
 import builtins from 'builtin-modules'
 import esbuild from 'esbuild'
+import { type Plugin } from 'esbuild'
 import { copy } from 'esbuild-plugin-copy'
 import process from 'node:process'
 
@@ -10,6 +11,13 @@ https://github.com/kitschpatrol/yanki-obsidian
 */
 `
 
+const ignoreNodeModulesPlugin: Plugin = {
+	name: 'ignore-node-modules',
+	setup(build) {
+		build.onResolve({ filter: /^node:.+$/ }, (args) => ({ external: true, path: args.path }))
+	},
+}
+
 const production = process.argv.includes('production')
 
 const context = await esbuild.context({
@@ -17,11 +25,12 @@ const context = await esbuild.context({
 		js: banner,
 	},
 	bundle: true,
+
 	entryPoints: ['./src/main.ts'],
 	external: [
 		'obsidian',
 		'electron',
-		'yanki-md',
+		// 'open',
 		'@codemirror/autocomplete',
 		'@codemirror/collab',
 		'@codemirror/commands',
@@ -35,21 +44,19 @@ const context = await esbuild.context({
 		'@lezer/lr',
 		...builtins,
 	],
-
 	format: 'cjs',
-	logLevel: 'info',
+	logLevel: 'error',
 	outbase: 'dist',
 	outfile: 'dist/main.js',
 	platform: 'browser',
 	plugins: [
+		ignoreNodeModulesPlugin,
 		copy({
 			assets: { from: ['./src/**/*.css'], to: ['./'] },
 		}),
 	],
-
 	sourcemap: production ? false : 'inline',
 	target: 'es2020',
-
 	treeShaking: true,
 })
 
