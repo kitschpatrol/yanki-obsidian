@@ -27,7 +27,7 @@ export type YankiPluginSettings = {
 }
 
 export const yankiPluginDefaultSettings: YankiPluginSettings = {
-	folders: [''],
+	folders: ['Anki'], // TODO reset
 	syncOptions: {
 		ankiConnectOptions: {
 			autoLaunch: false,
@@ -38,19 +38,10 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 		},
 		defaultDeckName: 'Yanki Obsidian Default',
 		dryRun: false,
-		namespace: 'Yanki Obsidian',
+		namespace: 'Yanki Obsidian Plugin',
 		obsidianVault: undefined,
 	},
 }
-
-// Export const yankiPluginDefaultSettings: YankiPluginSettings = {
-// 	folders: [''],
-// 	syncOptions: {
-// 		...defaultSyncOptions,
-// 		defaultDeckName: 'Yanki Obsidian Default',
-// 		namespace: 'Yanki Obsidian',
-// 	},
-// }
 
 export class YankiPluginSettingTab extends PluginSettingTab {
 	plugin: YankiPlugin

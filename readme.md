@@ -11,15 +11,23 @@ TODO:
 
 <!-- /title -->
 
-<!-- badges -->
+<!-- badges {
+  custom: {
+    "GitHub Release": {
+      image: "https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release",
+      link: "https://github.com/kitschpatrol/yanki-obsidian/releases/latest",
+    },
+  },
+} -->
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
 
 <!-- /badges -->
 
 <!-- short-description -->
 
-**An obsidian plugin for ultra-simple flashcard syncing from a vault folder to Anki. Pure Markdown. No customization. No configuration. No fuss.**
+**Ultra-simple automated flashcard syncing from a folder in your Obsidian vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.**
 
 <!-- /short-description -->
 
@@ -34,6 +42,9 @@ TODO:
 - [Usage](#usage)
   - [Library](#library)
   - [CLI](#cli)
+- [FAQ](#faq)
+  - [Why do I have to come up with a title for every card](#why-do-i-have-to-come-up-with-a-title-for-every-card)
+  - [Seeing the `noteId` property everywhere is annoying](#seeing-the-noteid-property-everywhere-is-annoying)
 - [Background](#background)
   - [Motivation](#motivation)
   - [Implementation notes](#implementation-notes)
@@ -67,6 +78,22 @@ TODO:
 #### Commands
 
 #### Examples
+
+## FAQ
+
+### Why do I have to come up with a title for every card
+
+Use Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin.
+
+### Seeing the `noteId` property everywhere is annoying
+
+Hide it with a [CSS snippet](https://help.obsidian.md/Extending+Obsidian/CSS+snippets):
+
+```css
+div.metadata-property[data-property-key='noteId'] {
+  display: none;
+}
+```
 
 ## Background
 

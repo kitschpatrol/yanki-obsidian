@@ -2,14 +2,15 @@ import packageJson from '../package.json'
 import fs from 'node:fs/promises'
 import type { PluginManifest } from 'obsidian'
 
-const manifest: PluginManifest = {
+const inferredManifest = {
 	author: packageJson.author.name,
 	authorUrl: packageJson.author.url,
-	description: packageJson.description.replace(/\s+obsidian\s+/i, ' '),
+	description: packageJson.description,
 	id: packageJson.name,
 	version: packageJson.version,
-	...packageJson.obsidian,
 }
+
+const manifest: PluginManifest = { ...inferredManifest, ...packageJson.obsidian }
 
 await fs.mkdir('./dist', { recursive: true })
 await fs.writeFile('./dist/manifest.json', JSON.stringify(manifest, undefined, 2))

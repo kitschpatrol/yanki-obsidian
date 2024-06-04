@@ -2,7 +2,7 @@
 	"name": "yanki-obsidian",
 	"version": "0.0.0",
 	"type": "module",
-	"description": "Ultra-simple automated flashcard syncing from a folder in your Obsidian vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
+	"description": "An Obsidian plugin for ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/kitschpatrol/yanki-obsidian.git"
@@ -61,6 +61,7 @@
 		"yanki-md": "link:../yanki-md"
 	},
 	"obsidian": {
+		"description": "Ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
 		"minAppVersion": "1.5.0",
 		"name": "Yanki",
 		"isDesktopOnly": true
