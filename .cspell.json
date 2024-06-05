@@ -3,16 +3,24 @@
 	"import": "@kitschpatrol/cspell-config",
 	"words": [
 		"anki",
+		"autolinks",
+		"cloze",
+		"clozes",
+		"clozing",
 		"collab",
-		"Debouncer",
+		"debouncer",
+		"Eby",
 		"keymap",
 		"lezer",
 		"outbase",
 		"popperjs",
+		"Rivero",
 		"Rivero's",
 		"Rodríguez",
 		"throttleit",
+		"throughs",
 		"yanki",
-		"Yankī"
+		"Yankī",
+		"Yatskov"
 	]
 }

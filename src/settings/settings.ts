@@ -76,7 +76,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setHeading()
 			.setName('Anki flashcard folders')
 			.setDesc(
-				'Yanki will automatically sync files in these folders to Anki. Folder syncing is always recursive, and Anki decks will be created to match the hierarchy of your Obsidian folders.',
+				'Yanki will sync files in the folders specified to Anki. Folder syncing is always recursive, and Anki decks will be created to match the hierarchy of your Obsidian folders.',
 			)
 
 		for (const [index, folder] of this.plugin.settings.folders.entries()) {
