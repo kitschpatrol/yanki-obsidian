@@ -7,4 +7,21 @@ div.yanki-settings {
 	div.setting-item-description {
 		max-width: 30rem;
 	}
+
+	/* Development only */
+	div.stats {
+		div.setting-item-info {
+			width: 100%;
+
+			div.setting-item-description {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+
+				p {
+					margin: 0;
+					font-weight: bold;
+				}
+			}
+		}
+	}
 }

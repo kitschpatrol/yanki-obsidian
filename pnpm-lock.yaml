@@ -32,6 +32,9 @@ importers:
       plur:
         specifier: ^5.1.0
         version: 5.1.0
+      pretty-ms:
+        specifier: ^9.0.0
+        version: 9.0.0
       throttleit:
         specifier: ^2.0.0
         version: 2.0.0

@@ -3,11 +3,28 @@
 import type YankiPlugin from '../main'
 import { FolderSuggest } from './folder-suggest'
 import { type App, type ButtonComponent, Notice, PluginSettingTab, Setting } from 'obsidian'
+import prettyMilliseconds from 'pretty-ms'
 import { type SyncOptions, hostAndPortToUrl, urlToHostAndPort } from 'yanki-md'
 
 export type YankiPluginSettings = {
 	autoSyncEnabled: boolean
 	folders: string[]
+	stats: {
+		sync: {
+			auto: number
+			duration: number
+			errors: number
+			invalid: number
+			manual: number
+			notes: {
+				created: number
+				deleted: number
+				recreated: number
+				unchanged: number
+				updated: number
+			}
+		}
+	}
 	syncOptions: SyncOptions
 	verboseLogging: boolean
 }
@@ -15,6 +32,22 @@ export type YankiPluginSettings = {
 export const yankiPluginDefaultSettings: YankiPluginSettings = {
 	autoSyncEnabled: true,
 	folders: ['Anki'], // TODO reset
+	stats: {
+		sync: {
+			auto: 0,
+			duration: 0,
+			errors: 0,
+			invalid: 0,
+			manual: 0,
+			notes: {
+				created: 0,
+				deleted: 0,
+				recreated: 0,
+				unchanged: 0,
+				updated: 0,
+			},
+		},
+	},
 	syncOptions: {
 		ankiConnectOptions: {
 			autoLaunch: false,
@@ -43,7 +76,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		new Notice('Saving initial settings')
+		if (this.plugin.settings.verboseLogging) {
+			new Notice('Saving initial settings')
+		}
+
 		this.initialSettings = JSON.parse(JSON.stringify(this.plugin.settings)) as YankiPluginSettings
 		this.containerEl.addClass('yanki-settings')
 		this.render()
@@ -222,5 +258,67 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				new Notice("Reset Yanki's Anki-Connect settings to defaults.")
 			})
 		})
+
+		// ----------------------------------------------------
+
+		// Development (temporary)
+		new Setting(this.containerEl)
+			.setName('Development')
+			.setDesc('Options to facilitate development and debugging.')
+			.setHeading()
+
+		new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
+			toggle.setValue(this.plugin.settings.verboseLogging)
+			toggle.onChange(async (value) => {
+				this.plugin.settings.verboseLogging = value
+				await this.plugin.saveSettings()
+			})
+		})
+
+		const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
+		const { created, deleted, recreated, unchanged, updated } =
+			this.plugin.settings.stats.sync.notes
+
+		new Setting(this.containerEl).setName('Sync stats').setClass('stats').descEl.innerHTML =
+			`<div><p>Overall</p>
+		<ul>
+			<li>Total syncs: ${auto + manual}</li>
+			<ul>
+				<li>Auto: ${auto}</li>
+				<li>Manual: ${manual}</li>
+				<li>Errors: ${errors}</li>
+				<li>Invalid: ${invalid}</li>
+				<li>Duration: ${prettyMilliseconds(duration)} (average)</li>
+			</ul>
+		</ul>
+		</div>
+		<div>
+		<p>Note actions</p>
+		<ul>
+			<li>Created: ${created}</li>
+			<li>Deleted: ${deleted}</li>
+			<li>Recreated: ${recreated}</li>
+			<li>Unchanged: ${unchanged}</li>
+			<li>Updated: ${updated}</li>
+			</ul>
+		</div>`
+
+		new Setting(this.containerEl)
+			.addButton((button) => {
+				button.setButtonText('Refresh stats')
+				button.onClick(() => {
+					this.render()
+				})
+			})
+			.addButton((button) => {
+				button.setButtonText('Reset stats')
+				button.onClick(async () => {
+					this.plugin.settings.stats.sync = JSON.parse(
+						JSON.stringify(yankiPluginDefaultSettings.stats.sync),
+					) as YankiPluginSettings['stats']['sync']
+					await this.plugin.saveSettings()
+					this.render()
+				})
+			})
 	}
 }

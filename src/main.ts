@@ -93,7 +93,10 @@ export default class YankiPlugin extends Plugin {
 
 	// This never seems to fire?
 	async onExternalSettingsChange() {
-		new Notice('External settings changed')
+		if (this.settings.verboseLogging) {
+			new Notice('External settings changed')
+		}
+
 		const originalSettings = JSON.parse(JSON.stringify(this.settings)) as YankiPluginSettings
 		await this.loadSettings()
 		await this.settingsChangeSyncCheck(originalSettings)
@@ -113,7 +116,10 @@ export default class YankiPlugin extends Plugin {
 			port !== oldPort ||
 			!arraysEqual(previousSettings.folders, this.settings.folders)
 		) {
-			new Notice('Settings changed warranting sync')
+			if (this.settings.verboseLogging) {
+				new Notice('Settings changed warranting sync')
+			}
+
 			await this.syncFlashcardsToAnkiExternal(false)
 		}
 	}
@@ -123,16 +129,17 @@ export default class YankiPlugin extends Plugin {
 			return
 		}
 
-		if (userInitiated) {
-			new Notice('User initiated')
-		}
-
-		if (userInitiated || this.settings.verboseLogging) {
-			new Notice('Anki sync started...')
+		if (this.settings.verboseLogging) {
+			if (userInitiated) {
+				new Notice('User initiated sync starting...')
+			} else {
+				new Notice('Auto sync starting...')
+			}
 		}
 
 		if (this.settings.folders.length === 0) {
 			new Notice("No flashcard folders to sync. You can specify folders in Yanki's settings tab.")
+			this.settings.stats.sync.invalid++
 			return
 		}
 
@@ -151,6 +158,7 @@ export default class YankiPlugin extends Plugin {
 
 		if (files.length === 0) {
 			new Notice('No flashcard files found.')
+			this.settings.stats.sync.invalid++
 			return
 		}
 
@@ -167,7 +175,24 @@ export default class YankiPlugin extends Plugin {
 			if (userInitiated || this.settings.verboseLogging) {
 				new Notice(formatSyncReport(report), 15_000)
 			}
+
+			// Dev stats
+			this.settings.stats.sync.duration =
+				this.settings.stats.sync.duration === 0
+					? report.duration
+					: (this.settings.stats.sync.duration + report.duration) / 2
+
+			for (const syncedFile of report.synced) {
+				this.settings.stats.sync.notes[syncedFile.action] += 1
+			}
+
+			if (userInitiated) {
+				this.settings.stats.sync.manual++
+			} else {
+				this.settings.stats.sync.auto++
+			}
 		} catch (error) {
+			this.settings.stats.sync.errors++
 			if (userInitiated || this.settings.verboseLogging) {
 				const errorNoticeFragment = new DocumentFragment()
 				const errorMessage = errorNoticeFragment.createEl('span')
@@ -180,12 +205,17 @@ export default class YankiPlugin extends Plugin {
 				new Notice(errorNoticeFragment, 15_000)
 			}
 		}
+
+		await this.saveSettings()
 	}
 
 	// Watch for changes
 	private async handleRename(fileOrFolder: TAbstractFile, oldPath: string) {
 		if (this.settings.folders.includes(oldPath)) {
-			new Notice('Watched folder renamed')
+			if (this.settings.verboseLogging) {
+				new Notice('Watched folder renamed')
+			}
+
 			const updatedFolders = this.settings.folders.map((folder) => {
 				if (folder.startsWith(oldPath)) {
 					return fileOrFolder.path + folder.slice(oldPath.length)
@@ -197,7 +227,10 @@ export default class YankiPlugin extends Plugin {
 			await this.saveSettings()
 			this.syncFlashcardsToAnkiInternal()
 		} else if (this.isInsideWatchedFolders(fileOrFolder)) {
-			new Notice('Renamed')
+			if (this.settings.verboseLogging) {
+				new Notice('Renamed')
+			}
+
 			this.syncFlashcardsToAnkiInternal()
 		}
 	}
@@ -205,7 +238,10 @@ export default class YankiPlugin extends Plugin {
 	private handleCreate(fileOrFolder: TAbstractFile) {
 		// Don't care about folders
 		if (fileOrFolder instanceof TFile && this.isInsideWatchedFolders(fileOrFolder)) {
-			new Notice('Create')
+			if (this.settings.verboseLogging) {
+				new Notice('Create')
+			}
+
 			this.syncFlashcardsToAnkiInternal()
 		}
 	}
@@ -219,10 +255,13 @@ export default class YankiPlugin extends Plugin {
 					(folder) => folder !== fileOrFolder.path,
 				)
 				if (this.settings.folders.length !== initialLength) {
-					new Notice('Delete Watched Folder')
+					if (this.settings.verboseLogging) {
+						new Notice('Delete Watched Folder')
+					}
+
 					await this.saveSettings()
 				}
-			} else {
+			} else if (this.settings.verboseLogging) {
 				new Notice('Delete')
 			}
 
@@ -232,7 +271,10 @@ export default class YankiPlugin extends Plugin {
 
 	private handleModify(fileOrFolder: TAbstractFile) {
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
-			new Notice('Modified')
+			if (this.settings.verboseLogging) {
+				new Notice('Modified')
+			}
+
 			this.syncFlashcardsToAnkiInternal()
 		}
 	}
