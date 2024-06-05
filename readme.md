@@ -27,37 +27,24 @@ TODO:
 
 <!-- short-description -->
 
-**Ultra-simple automated flashcard syncing from a folder in your Obsidian vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.**
+**An Obsidian plugin for ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.**
 
 <!-- /short-description -->
 
-<!-- table-of-contents -->
-
-## Table of contents
-
-- [Overview](#overview)
-- [Getting started](#getting-started)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-- [Usage](#usage)
-  - [Library](#library)
-  - [CLI](#cli)
-- [FAQ](#faq)
-  - [Why do I have to come up with a title for every card](#why-do-i-have-to-come-up-with-a-title-for-every-card)
-  - [Seeing the `noteId` property everywhere is annoying](#seeing-the-noteid-property-everywhere-is-annoying)
-- [Background](#background)
-  - [Motivation](#motivation)
-  - [Implementation notes](#implementation-notes)
-  - [Similar projects](#similar-projects)
-- [The future](#the-future)
-- [Maintainers](#maintainers)
-- [Acknowledgements](#acknowledgements)
-- [Contributing](#contributing)
-- [License](#license)
-
-<!-- /table-of-contents -->
+> [!IMPORTANT]
+> The Yanki Obsidian plugin is feature-complete but will remain zero-versioned until it's been thoroughly tested. Please Exercise caution and make backups of your Vault and Anki notes until the 1.0.0 release.
+>
+> The plugin currently available for download and installation directly from GitHub for advanced users. It will be submitted for review and potential inclusion as an Obsidian community plugin once I am completely confident in its design and reliability. _(Expected circa July 1, 2024.)_
+>
+> Any testing and feedback by adventurous users is extremely welcome.
 
 ## Overview
+
+The Yanki plugin automatically syncs a folder (or folders) of notes from your Obsidian vault to Anki.
+
+The primary novelty of its approach is in how Markdown is translated into Anki notes. The **structure** of a Markdown note determines the **type** of Anki note it becomes, so no extra syntax or Anki-specific markup is required — just pure Markdown.
+
+This also means that your flashcard notes remain nice and legible in Obsidian, and you don't have to deal with the cognitive switch of \`\`\`\`\` fenced regions and Anki's templating syntax.
 
 ## Getting started
 

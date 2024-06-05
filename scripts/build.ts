@@ -46,6 +46,7 @@ const context = await esbuild.context({
 	],
 	format: 'cjs',
 	logLevel: 'error',
+	minify: production,
 	outbase: 'dist',
 	outfile: 'dist/main.js',
 	platform: 'browser',
