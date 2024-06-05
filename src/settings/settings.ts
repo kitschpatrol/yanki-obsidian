@@ -25,6 +25,8 @@ export type YankiPluginSettings = {
 			}
 		}
 	}
+	syncMinIntervalAuto: number
+	syncMinIntervalManual: number
 	syncOptions: SyncOptions
 	verboseLogging: boolean
 }
@@ -48,6 +50,8 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 			},
 		},
 	},
+	syncMinIntervalAuto: 5000, // Ms
+	syncMinIntervalManual: 5000, // Ms
 	syncOptions: {
 		ankiConnectOptions: {
 			autoLaunch: false,
@@ -186,7 +190,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl).addButton((button) => {
 			button.setButtonText('Sync now')
 			button.onClick(async () => {
-				await this.plugin.syncFlashcardsToAnkiExternal(true)
+				await this.plugin.syncFlashcardsToAnkiManual(true)
 			})
 		})
 
@@ -274,6 +278,40 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				await this.plugin.saveSettings()
 			})
 		})
+
+		new Setting(this.containerEl)
+			.setName('Auto Sync Min Interval')
+			.setDesc('Minimum time between automatic syncs in milliseconds.')
+			.addText((text) => {
+				text.setValue(this.plugin.settings.syncMinIntervalAuto.toString())
+				text.onChange(async (value) => {
+					const duration = Number.parseInt(value, 10)
+					if (Number.isNaN(duration)) {
+						new Notice('Invalid number')
+						return
+					}
+
+					this.plugin.settings.syncMinIntervalAuto = duration
+					await this.plugin.saveSettings()
+				})
+			})
+
+		new Setting(this.containerEl)
+			.setName('Manual Sync Min Interval')
+			.setDesc('Minimum time between manual syncs in milliseconds.')
+			.addText((text) => {
+				text.setValue(this.plugin.settings.syncMinIntervalAuto.toString())
+				text.onChange(async (value) => {
+					const duration = Number.parseInt(value, 10)
+					if (Number.isNaN(duration)) {
+						new Notice('Invalid number')
+						return
+					}
+
+					this.plugin.settings.syncMinIntervalAuto = duration
+					await this.plugin.saveSettings()
+				})
+			})
 
 		const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
 		const { created, deleted, recreated, unchanged, updated } =

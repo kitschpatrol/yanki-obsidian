@@ -19,13 +19,20 @@ export default class YankiPlugin extends Plugin {
 	// Throttle fires on the leading edge, unlike Obsidian's built-in debounce which fires on the
 	// trailing edge. Users should get the throttled experience, but automated syncs should get the
 	// the debounced implementation due to event noise.
-	public syncFlashcardsToAnkiExternal = throttle(this.syncFlashcardsToAnki, 5000)
-	private syncFlashcardsToAnkiInternal = debounce(this.syncFlashcardsToAnki, 5000)
+	public syncFlashcardsToAnkiManual = throttle(
+		this.syncFlashcardsToAnki,
+		this.settings.syncMinIntervalManual,
+	)
+
+	private syncFlashcardsToAnkiAuto = debounce(
+		this.syncFlashcardsToAnki,
+		this.settings.syncMinIntervalAuto,
+	)
 
 	async onload() {
 		this.syncFlashcardsToAnki = this.syncFlashcardsToAnki.bind(this)
-		this.syncFlashcardsToAnkiInternal = this.syncFlashcardsToAnkiInternal.bind(this)
-		this.syncFlashcardsToAnkiExternal = this.syncFlashcardsToAnkiExternal.bind(this)
+		this.syncFlashcardsToAnkiAuto = this.syncFlashcardsToAnkiAuto.bind(this)
+		this.syncFlashcardsToAnkiManual = this.syncFlashcardsToAnkiManual.bind(this)
 		this.fileAdapterWrite = this.fileAdapterWrite.bind(this)
 		this.fileAdapterRead = this.fileAdapterRead.bind(this)
 
@@ -34,7 +41,7 @@ export default class YankiPlugin extends Plugin {
 
 		this.addCommand({
 			callback: async () => {
-				await this.syncFlashcardsToAnkiExternal(true)
+				await this.syncFlashcardsToAnkiManual(true)
 			},
 			id: 'sync-yanki-obsidian',
 			name: 'Sync flashcards to Anki',
@@ -54,9 +61,9 @@ export default class YankiPlugin extends Plugin {
 		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
 	}
 
-	onunload() {
-		// Anything to do?
-	}
+	// Nothing to do?
+	// onunload() {
+	// }
 
 	// Typed override
 	async loadData(): Promise<YankiPluginSettings> {
@@ -120,7 +127,7 @@ export default class YankiPlugin extends Plugin {
 				new Notice('Settings changed warranting sync')
 			}
 
-			await this.syncFlashcardsToAnkiExternal(false)
+			await this.syncFlashcardsToAnkiManual(false)
 		}
 	}
 
@@ -225,13 +232,13 @@ export default class YankiPlugin extends Plugin {
 			})
 			this.settings.folders = updatedFolders
 			await this.saveSettings()
-			this.syncFlashcardsToAnkiInternal()
+			this.syncFlashcardsToAnkiAuto()
 		} else if (this.isInsideWatchedFolders(fileOrFolder)) {
 			if (this.settings.verboseLogging) {
 				new Notice('Renamed')
 			}
 
-			this.syncFlashcardsToAnkiInternal()
+			this.syncFlashcardsToAnkiAuto()
 		}
 	}
 
@@ -242,7 +249,7 @@ export default class YankiPlugin extends Plugin {
 				new Notice('Create')
 			}
 
-			this.syncFlashcardsToAnkiInternal()
+			this.syncFlashcardsToAnkiAuto()
 		}
 	}
 
@@ -265,7 +272,7 @@ export default class YankiPlugin extends Plugin {
 				new Notice('Delete')
 			}
 
-			this.syncFlashcardsToAnkiInternal()
+			this.syncFlashcardsToAnkiAuto()
 		}
 	}
 
@@ -275,7 +282,7 @@ export default class YankiPlugin extends Plugin {
 				new Notice('Modified')
 			}
 
-			this.syncFlashcardsToAnkiInternal()
+			this.syncFlashcardsToAnkiAuto()
 		}
 	}
 
