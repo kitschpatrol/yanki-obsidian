@@ -1,4 +1,4 @@
-name: Create GitHub Release
+name: Create Obsidian Plugin GitHub Release
 
 on:
   push:
@@ -13,6 +13,7 @@ jobs:
       ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
       IS_VALID_COMMIT: false
       TAG_NAME: ''
+      ZIP_NAME: 'archive.zip'
 
     steps:
       - name: Checkout
@@ -31,7 +32,7 @@ jobs:
       - name: Validate Tag and Branch
         id: validation
         run: |
-          TAG=$(git tag --contains HEAD | grep '^v[0-9]' | head -n 1)
+          TAG=$(git tag --contains HEAD | grep '^[0-9]' | head -n 1)
           echo "🏷️ Tag for commit is: $TAG"
           BRANCH=$(git branch -r --contains tags/${GITHUB_REF_NAME} | grep 'origin/main' | xargs)
           if [[ -z "$BRANCH" ]]; then
@@ -46,6 +47,24 @@ jobs:
             echo "IS_VALID_COMMIT=true" >> $GITHUB_ENV
             echo "TAG_NAME=$TAG" >> $GITHUB_ENV
           fi
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install
+
+      - name: Build Plugin
+        run: pnpm run build
+
+      - name: Zip Artifacts
+        run: |
+          echo "ZIP_NAME="${GITHUB_REPOSITORY#*/}-${TAG_NAME}.zip" >> $GITHUB_ENV 
+          zip -r "${ZIP_NAME}" dist
 
       - name: Release Notes
         if: env.IS_VALID_COMMIT == 'true'
@@ -65,13 +84,10 @@ jobs:
           body: |
             ${{ steps.release-notes.outputs.changelog }}
           files: |
-            readme.md
-            README.md
-            LICENSE
-            license.txt
-            CHANGELOG
-            CHANGELOG.md
-            changelog.md
+            ${{ env.ZIP_NAME }}
+            dist/main.js
+            dist/manifest.json
+            dist/styles.css
 
       - name: Log Release Details
         if: env.IS_VALID_COMMIT == 'true'
