@@ -22,7 +22,7 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	}, {})
 
 	for (const [action, count] of Object.entries(actionCounts)) {
-		reportLines.push(`\t${count} cards ${action}`)
+		reportLines.push(`\t${count} ${plur('card', count)} ${action}`)
 	}
 
 	report.innerHTML = reportLines.join('<br>')

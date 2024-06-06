@@ -165,7 +165,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('Automatic sync')
-			.setDesc('Sync to the local Anki database whenever flashcard files are changed.')
+			.setDesc(
+				'Sync to the local Anki database whenever flashcard files are changed and the Anki desktop app is open.',
+			)
 			.addToggle((toggle) => {
 				toggle.setValue(this.plugin.settings.autoSyncEnabled)
 				toggle.onChange(async (value) => {
