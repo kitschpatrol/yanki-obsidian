@@ -1,6 +1,6 @@
 {
 	"name": "yanki-obsidian",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"description": "An Obsidian plugin for ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
 	"repository": {
@@ -35,14 +35,15 @@
 		"sync"
 	],
 	"scripts": {
-		"build": "tsc -noEmit -skipLibCheck && pnpm dev production",
+		"build": "rm -rf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
 		"clean": "git clean -fdX && rm ./pnpm-lock.yaml",
-		"dev": "rm -rf ./dist && tsx ./scripts/generate-manifest.ts && touch ./dist/.hotreload && tsx ./scripts/build.ts",
+		"dev": "rm -rf ./dist && pnpm run manifest && touch ./dist/.hotreload && tsx ./scripts/build.ts",
 		"fix": "shared-config --fix",
 		"lint": "shared-config --lint",
+		"manifest": "tsx ./scripts/generate-manifest.ts",
 		"obsidian:link": "pnpm obsidian:unlink && ln -s $(pwd)/dist ~/Notes/Vault/.obsidian/plugins/yanki",
 		"obsidian:unlink": "rm -f ~/Notes/Vault/.obsidian/plugins/yanki",
-		"release": "tsx ./scripts/generate-manifest.ts && pnpm bumpp --commit 'Release: %s' --tag '%s'"
+		"release": "pnpm run manifest && pnpm bumpp package.json manifest.json --commit \"Release: %s\" --tag \"%s\""
 	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.6.7",

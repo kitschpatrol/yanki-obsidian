@@ -20,3 +20,6 @@ pnpm-lock.yaml
 package-lock.json
 
 # Customizations
+
+# Generated file
+manifest.json

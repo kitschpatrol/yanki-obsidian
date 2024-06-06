@@ -66,6 +66,11 @@ jobs:
           echo ZIP_NAME="${GITHUB_REPOSITORY#*/}-${TAG_NAME}.zip" >> $GITHUB_ENV
           zip -r "${ZIP_NAME}" dist
 
+      - name: Zip Artifacts
+        run: |
+          mkdir -p ./zip
+          zip -r "./zip/${GITHUB_REPOSITORY##*/}-${TAG_NAME}.zip" dist/
+
       - name: Release Notes
         if: env.IS_VALID_COMMIT == 'true'
         id: release-notes
@@ -74,20 +79,19 @@ jobs:
       - name: Release
         if: env.IS_VALID_COMMIT == 'true'
         id: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           token: ${{ env.ACCESS_TOKEN }}
           draft: false
           prerelease: false
+          fail_on_unmatched_files: true
           name: ${{ env.TAG_NAME }}
           tag_name: ${{ env.TAG_NAME }}
           body: |
             ${{ steps.release-notes.outputs.changelog }}
           files: |
-            ${{ env.ZIP_NAME }}
-            dist/main.js
-            dist/manifest.json
-            dist/styles.css
+            dist/*
+            zip/*
 
       - name: Log Release Details
         if: env.IS_VALID_COMMIT == 'true'
