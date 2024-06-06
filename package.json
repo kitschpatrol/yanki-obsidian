@@ -18,7 +18,7 @@
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.1.4",
+	"packageManager": "pnpm@9.2.0",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=8.0.0"
@@ -42,7 +42,7 @@
 		"lint": "shared-config --lint",
 		"obsidian:link": "pnpm obsidian:unlink && ln -s $(pwd)/dist ~/Notes/Vault/.obsidian/plugins/yanki",
 		"obsidian:unlink": "rm -f ~/Notes/Vault/.obsidian/plugins/yanki",
-		"release": "pnpm bumpp --commit 'Release: %s' --tag '%s'"
+		"release": "tsx ./scripts/generate-manifest.ts && pnpm bumpp --commit 'Release: %s' --tag '%s'"
 	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.6.7",
@@ -55,9 +55,9 @@
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.0.0",
 		"throttleit": "^2.0.0",
-		"tsx": "^4.11.2",
+		"tsx": "^4.12.0",
 		"type-fest": "^4.19.0",
-		"yanki-md": "link:../yanki-md"
+		"yanki": "^0.2.1"
 	},
 	"obsidian": {
 		"description": "Ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",

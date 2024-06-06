@@ -1,5 +1,5 @@
 import plur from 'plur'
-import { type SyncReport } from 'yanki-md'
+import { type SyncReport } from 'yanki'
 
 export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	const { synced } = syncReport

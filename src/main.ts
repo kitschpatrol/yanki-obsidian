@@ -11,7 +11,7 @@ import { arraysEqual, formatSyncReport } from './utilities'
 import { Notice, Plugin, type TAbstractFile, TFile, TFolder, Vault, debounce } from 'obsidian'
 import throttle from 'throttleit'
 // Import { YankiConnect } from 'yanki-connect'
-import { syncFiles } from 'yanki-md'
+import { syncFiles } from 'yanki'
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings

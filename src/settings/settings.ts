@@ -4,7 +4,7 @@ import type YankiPlugin from '../main'
 import { FolderSuggest } from './folder-suggest'
 import { type App, type ButtonComponent, Notice, PluginSettingTab, Setting } from 'obsidian'
 import prettyMilliseconds from 'pretty-ms'
-import { type SyncOptions, hostAndPortToUrl, urlToHostAndPort } from 'yanki-md'
+import { type SyncOptions, hostAndPortToUrl, urlToHostAndPort } from 'yanki'
 
 export type YankiPluginSettings = {
 	autoSyncEnabled: boolean

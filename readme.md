@@ -343,9 +343,9 @@ If you have others in mind, feel free to [open an issue](https://github.com/kits
 
 ### Implementation notes
 
-The Yanki plugin is built on [`yanki-md`](https://github.com/kitschpatrol/yanki-md), a command line tool and TypeScript library that handles all the Markdown wrangling and communication with Anki. If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, `yanki-md` implements the same features (plus a few extras). Using the `yanki-md` CLI tool will not interfere with syncing from the Yanki Obsidian plugin.
+The Yanki plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a command line tool and TypeScript library that handles all the Markdown wrangling and communication with Anki. If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, `yanki` implements the same features (plus a few extras). Using the `yanki` CLI tool will not interfere with syncing from the Yanki Obsidian plugin.
 
-In turn, `yanki-md` is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://foosoft.net/projects/anki-connect/) API.
+In turn, `yanki` is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://foosoft.net/projects/anki-connect/) API.
 
 ### Other Obsidian Anki plugins
 
