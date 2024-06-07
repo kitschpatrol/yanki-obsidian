@@ -37,9 +37,13 @@
 
 The Yanki plugin automatically syncs a folder (or folders) of notes from your Obsidian vault to Anki.
 
-The primary novelty of its approach is in how Markdown is translated into Anki notes. The **structure** of a Markdown note determines the **type** of Anki note it becomes, so no extra syntax or Anki-specific markup is required — just pure Markdown.
+The primary novelty of its approach is in how Markdown is translated into Anki notes, and how folders are translated into Anki decks:
 
-This also means that your flashcard notes remain nice and legible in Obsidian, and you don't have to deal with the cognitive switch of ` ```fenced``` ` regions and Anki's rather noisy templating syntax.
+- The **structure** of a Markdown note determines the **type** of Anki note it becomes, so no extra syntax or Anki-specific markup is required — just pure Markdown.
+
+  This also means that your flashcard notes remain nice and legible in Obsidian, and you don't have to deal with the cognitive switch of ` ```fenced``` ` regions and Anki's rather noisy templating syntax.
+
+- The **parent folder** of your notes in your Obsidian vault determines their **deck name** in Anki, with any intermediate hierarchies created as needed.
 
 ## Quick start
 
@@ -47,6 +51,24 @@ This also means that your flashcard notes remain nice and legible in Obsidian, a
 
 - The [Anki desktop app](https://apps.ankiweb.net)
 - The [Anki-Connect](https://foosoft.net/projects/anki-connect/) add-on
+
+  If you need to install it, select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
+
+  Once installed, Anki-Connect requires some one-time setup to accept connections from Obsidian.
+
+  In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ from the list, and click the _Config_ button in the lower right. In the ensuing modal, add `"app://obsidian.md"` to the `webCorsOriginList` array, like so:
+
+  ```json
+  {
+    "apiKey": null,
+    "apiLogPath": null,
+    "ignoreOriginList": [],
+    "webBindAddress": "127.0.0.1",
+    "webBindPort": 8765,
+    "webCorsOrigin": "http://localhost",
+    "webCorsOriginList": ["http://localhost", "app://obsidian.md"]
+  }
+  ```
 
 2. **Plugin installation**
 
@@ -125,13 +147,13 @@ An extended palette of markdown syntax is available out of the box:
 
 ### Intelligent synchronization
 
-Your local Markdown files are the single point of truth for what will and up in Anki, but Yanki knows to leave your other Anki notes alone.
+Your local Obsidian markdown files are the single point of truth for what will and up in Anki, but Yanki knows to leave your other Anki notes alone.
 
-When you edit a local markdown note, Yanki makes every effort to update rather than delete it in the Anki database so that progress is preserved.
+When you edit a local Obsidian note, Yanki makes every effort to update rather than delete it in the Anki database so that review progress is preserved.
 
-But when you do want to delete something, it's as simple as deleting the local Markdown note from the file system and running `yanki sync` to remove it from the Anki database. Protections are in place to prevent deleting Anki notes that weren't initially created by Yanki.
+But when you do want to delete something, it's as simple as deleting it from Obsidian, and it will be removed from the Anki database on the next sync. Protections are in place to prevent deleting Anki notes that weren't initially created by Yanki.
 
-If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yanki will also trigger this next step in the sync, automating the flow from Markdown → Anki → AnkiWeb in one shot.
+If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yanki will also trigger this next step in the sync, automating the flow from Markdown → Anki → AnkiWeb in one shot. (Configurable via a [setting](#push-to-ankiweb).)
 
 ### Existing notes are untouched
 
@@ -225,6 +247,8 @@ But you shouldn't need to sync manually if automatic sync is enabled.
 
 #### Anki flashcard folders
 
+##### Watched folder list
+
 Yanki will sync files in the vault folders specified here to Anki.
 
 _Folder syncing is always recursive._
@@ -234,6 +258,10 @@ Anki decks will be created automatically to match the hierarchy of your Obsidian
 Selecting multiple folders from different parts of your vault is fine, they'll just end up in different Anki decks.
 
 Use care when editing or deleting folders from this list, since notes will be deleted from Anki (along with their review statistics) on the next sync.
+
+##### Ignore folder notes
+
+When enabled, notes matching the name of their parent folder will not be synced. This is useful if you use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin to keep a top-level note per folder.
 
 #### Sync settings
 
@@ -327,6 +355,14 @@ div.metadata-property[data-property-key='noteId'] {
 
 Yes, frontmatter is fine, as long as it's valid YAML. Yanki just ignores all of it except for the `tags` and `noteId` fields.
 
+### What happens if I duplicate a note that has a `noteId`?
+
+Yanki will try to preserve the `noteId` of the note that matches what's been synced to Anki in the past, and will create new `noteId`s for the remaining duplicates. But this is a bit risky and not super-recommended.
+
+### If I use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin, will my folder notes become Anki notes?
+
+The Yanki Plugin has a settings option to ignore folder notes. It's enabled by default.
+
 ## The future
 
 A few features are under consideration:
@@ -349,7 +385,15 @@ In turn, `yanki` is built on top of [`yanki-connect`](https://github.com/kitschp
 
 ### Other Obsidian Anki plugins
 
-- <https://github.com/JeppeKlitgaard/ObsidianAnkiBridge>
+- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
+- [Flashcards](https://github.com/reuseman/flashcards-obsidian)
+- [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)
+- [Note Synchronizer](https://github.com/tansongchen/obsidian-note-synchronizer)
+- [Awesome Flashcard](https://github.com/AwesomeDog/obsidian-awesome-flashcard)
+- [Auto Anki](https://github.com/ad2969/obsidian-auto-anki)
+- [text2anki-openai](https://github.com/manibatra/obsidian-text2anki-openai)
+- [AnkiSync+](https://github.com/RochaG07/anki-sync-plus)
 
 ## Maintainers
 

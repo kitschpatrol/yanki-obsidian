@@ -228,7 +228,7 @@ export default class YankiPlugin extends Plugin {
 				if (userInitiated || this.settings.verboseLogging) {
 					new Notice(
 						sanitizeHTMLToDom(
-							'<strong>Anki sync failed:</strong> Could not connect to Anki<br>Please make sure that Anki is running, and that it has the <a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on installed.',
+							'<strong>Anki sync failed:</strong> Could not connect to Anki<br>Please make sure that Anki is running, and that it has the <a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on installed and <a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start">configured</a>.',
 						),
 					)
 				}
