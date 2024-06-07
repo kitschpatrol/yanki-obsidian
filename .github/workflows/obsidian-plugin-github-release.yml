@@ -63,11 +63,6 @@ jobs:
 
       - name: Zip Artifacts
         run: |
-          echo ZIP_NAME="${GITHUB_REPOSITORY#*/}-${TAG_NAME}.zip" >> $GITHUB_ENV
-          zip -r "${ZIP_NAME}" dist
-
-      - name: Zip Artifacts
-        run: |
           mkdir -p ./zip
           zip -r "./zip/${GITHUB_REPOSITORY##*/}-${TAG_NAME}.zip" dist/
 
