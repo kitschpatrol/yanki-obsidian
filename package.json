@@ -1,6 +1,6 @@
 {
 	"name": "yanki-obsidian",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"type": "module",
 	"description": "An Obsidian plugin for ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
 	"repository": {
