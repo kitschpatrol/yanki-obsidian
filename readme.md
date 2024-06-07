@@ -405,7 +405,7 @@ Thanks to Alex Yatskov for creating [Anki-Connect](https://foosoft.net/projects/
 
 PJ Eby's [Hot-Reload](https://github.com/pjeby/hot-reload) Obsidian plugin is a huge help during development.
 
-Figuring out Obsidian's \[AbstractInputSuggest] for the folder selection settings depended on examples in projects by [Daniel Rodríguez Rivero](https://github.com/danielo515) and [Liam Cain](https://github.com/liamcain).
+Figuring out Obsidian's [AbstractInputSuggest](https://docs.obsidian.md/Reference/TypeScript+API/AbstractInputSuggest) class for the folder selection settings depended on examples in projects by [Daniel Rodríguez Rivero](https://github.com/danielo515) and [Liam Cain](https://github.com/liamcain).
 
 <!-- contributing -->
 
