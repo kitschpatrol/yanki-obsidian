@@ -1,20 +1,34 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-new */
 
+import { FolderSuggest } from '../extensions/folder-suggest'
 import type YankiPlugin from '../main'
-import { FolderSuggest } from './folder-suggest'
-import { type App, type ButtonComponent, Notice, PluginSettingTab, Setting } from 'obsidian'
+import { capitalize } from '../utilities'
+import {
+	type App,
+	type ButtonComponent,
+	Notice,
+	PluginSettingTab,
+	Setting,
+	moment,
+	sanitizeHTMLToDom,
+} from 'obsidian'
 import prettyMilliseconds from 'pretty-ms'
 import { type SyncOptions, hostAndPortToUrl, urlToHostAndPort } from 'yanki'
+
+export const yankiDebounceInterval = 5000
 
 export type YankiPluginSettings = {
 	autoSyncEnabled: boolean
 	folders: string[]
+	ignoreFolderNotes: boolean
 	stats: {
 		sync: {
 			auto: number
 			duration: number
 			errors: number
 			invalid: number
+			latestSyncTime: number | undefined
 			manual: number
 			notes: {
 				created: number
@@ -25,21 +39,21 @@ export type YankiPluginSettings = {
 			}
 		}
 	}
-	syncMinIntervalAuto: number
-	syncMinIntervalManual: number
 	syncOptions: SyncOptions
 	verboseLogging: boolean
 }
 
 export const yankiPluginDefaultSettings: YankiPluginSettings = {
 	autoSyncEnabled: true,
-	folders: ['Anki'], // TODO reset
+	folders: [],
+	ignoreFolderNotes: true,
 	stats: {
 		sync: {
 			auto: 0,
 			duration: 0,
 			errors: 0,
 			invalid: 0,
+			latestSyncTime: undefined,
 			manual: 0,
 			notes: {
 				created: 0,
@@ -50,8 +64,6 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 			},
 		},
 	},
-	syncMinIntervalAuto: 5000, // Ms
-	syncMinIntervalManual: 5000, // Ms
 	syncOptions: {
 		ankiConnectOptions: {
 			autoLaunch: false,
@@ -67,11 +79,11 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 		namespace: 'Yanki Obsidian Plugin', // To be overwritten with deck name
 		obsidianVault: undefined,
 	},
-	verboseLogging: true, // TODO
+	verboseLogging: false,
 }
 
 export class YankiPluginSettingTab extends PluginSettingTab {
-	initialSettings: YankiPluginSettings = yankiPluginDefaultSettings
+	private initialSettings: YankiPluginSettings = yankiPluginDefaultSettings
 	plugin: YankiPlugin
 
 	constructor(app: App, plugin: YankiPlugin) {
@@ -80,28 +92,23 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		if (this.plugin.settings.verboseLogging) {
-			new Notice('Saving initial settings')
-		}
-
 		this.initialSettings = JSON.parse(JSON.stringify(this.plugin.settings)) as YankiPluginSettings
 		this.containerEl.addClass('yanki-settings')
+		this.containerEl.setAttr('id', 'yanki-settings')
 		this.render()
 	}
 
 	async hide(): Promise<void> {
-		let folders = [...new Set(this.plugin.settings.folders)]
-		if (folders.length === 0) {
-			folders = ['']
-		}
-
-		this.plugin.settings.folders = folders
-		await this.plugin.saveSettings()
+		// Normalize folders
+		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
 		await this.plugin.settingsChangeSyncCheck(this.initialSettings)
 	}
 
-	render(): void {
+	public render(): void {
 		this.containerEl.empty()
+
+		// Cancel any pending syncs
+		this.plugin.syncFlashcardsToAnki.clear()
 
 		// Fake input to catch the automatic focus that was popping the search input.
 		// Focus is still just a tab away.
@@ -119,6 +126,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				'Yanki will sync files in the folders specified to Anki. Folder syncing is always recursive, and Anki decks will be created to match the hierarchy of your Obsidian folders.',
 			)
 
+		if (this.plugin.settings.folders.length === 0) {
+			this.plugin.settings.folders.push('')
+		}
+
 		for (const [index, folder] of this.plugin.settings.folders.entries()) {
 			new Setting(this.containerEl)
 				.addSearch((callback) => {
@@ -126,10 +137,15 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					callback
 						.setPlaceholder('Select a folder')
 						.setValue(folder)
-						.onChange(async (value) => {
+						.onChange((value) => {
 							this.plugin.settings.folders[index] = value
-							await this.plugin.saveSettings()
+							// Only really update on blur
 						})
+
+					callback.inputEl.addEventListener('blur', async () => {
+						await this.plugin.saveSettings()
+						this.render()
+					})
 				})
 				.addExtraButton((callback) => {
 					callback
@@ -140,22 +156,46 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 							await this.plugin.saveSettings()
 							this.render()
 						})
+
+					if (index === 0) {
+						callback.extraSettingsEl.style.visibility = 'hidden'
+					}
 				})
 				.infoEl.remove()
 		}
 
-		new Setting(this.containerEl).addButton((button: ButtonComponent) => {
-			button
-				.setTooltip('Add Folder')
-				.setButtonText('Add Folder')
-				.setCta()
-				// .setIcon('plus')
-				.onClick(async () => {
-					this.plugin.settings.folders.push('')
+		new Setting(this.containerEl)
+			.addButton((button: ButtonComponent) => {
+				button
+					.setTooltip('Add Folder')
+					.setButtonText('Add Folder')
+					.setCta()
+					// .setIcon('plus')
+					.onClick(async () => {
+						this.plugin.settings.folders.push('')
+						await this.plugin.saveSettings()
+						this.render()
+					})
+			})
+			.setDesc(
+				sanitizeHTMLToDom(
+					`Flashcard files found: <em>${this.plugin.getWatchedFiles().length}</em>`,
+				),
+			)
+
+		new Setting(this.containerEl)
+			.setName('Ignore folder notes')
+			.setDesc(
+				'Exclude notes with the same name as their parent folder from syncing. Useful in combination with the Folder notes plugin.',
+			)
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.ignoreFolderNotes)
+				toggle.onChange(async (value) => {
+					this.plugin.settings.ignoreFolderNotes = value
 					await this.plugin.saveSettings()
 					this.render()
 				})
-		})
+			})
 
 		// ----------------------------------------------------
 
@@ -173,6 +213,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				toggle.onChange(async (value) => {
 					this.plugin.settings.autoSyncEnabled = value
 					await this.plugin.saveSettings()
+					this.render()
 				})
 			})
 
@@ -182,19 +223,28 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				'Sync changes to the AnkiWeb "cloud" in addition to the local Anki database. This is like pressing the "Sync" button in the Anki desktop app.',
 			)
 			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.syncOptions.ankiWeb)
+				toggle.setValue(
+					this.plugin.settings.autoSyncEnabled ? this.plugin.settings.syncOptions.ankiWeb : false,
+				)
 				toggle.onChange(async (value) => {
 					this.plugin.settings.syncOptions.ankiWeb = value
 					await this.plugin.saveSettings()
+					this.render()
 				})
 			})
+			.setDisabled(!this.plugin.settings.autoSyncEnabled)
 
-		new Setting(this.containerEl).addButton((button) => {
-			button.setButtonText('Sync now')
-			button.onClick(async () => {
-				await this.plugin.syncFlashcardsToAnkiManual(true)
+		const { latestSyncTime } = this.plugin.settings.stats.sync
+		const syncTime = latestSyncTime === undefined ? 'Never' : moment.unix(latestSyncTime).fromNow()
+
+		new Setting(this.containerEl)
+			.addButton((button) => {
+				button.setButtonText('Sync now')
+				button.onClick(() => {
+					this.plugin.syncFlashcardsToAnki.trigger()
+				})
 			})
-		})
+			.setDesc(sanitizeHTMLToDom(`Last synced: <em>${capitalize(syncTime)}</em>`))
 
 		// ----------------------------------------------------
 
@@ -281,40 +331,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 		})
 
-		new Setting(this.containerEl)
-			.setName('Auto Sync Min Interval')
-			.setDesc('Minimum time between automatic syncs in milliseconds.')
-			.addText((text) => {
-				text.setValue(this.plugin.settings.syncMinIntervalAuto.toString())
-				text.onChange(async (value) => {
-					const duration = Number.parseInt(value, 10)
-					if (Number.isNaN(duration)) {
-						new Notice('Invalid number')
-						return
-					}
-
-					this.plugin.settings.syncMinIntervalAuto = duration
-					await this.plugin.saveSettings()
-				})
-			})
-
-		new Setting(this.containerEl)
-			.setName('Manual Sync Min Interval')
-			.setDesc('Minimum time between manual syncs in milliseconds.')
-			.addText((text) => {
-				text.setValue(this.plugin.settings.syncMinIntervalAuto.toString())
-				text.onChange(async (value) => {
-					const duration = Number.parseInt(value, 10)
-					if (Number.isNaN(duration)) {
-						new Notice('Invalid number')
-						return
-					}
-
-					this.plugin.settings.syncMinIntervalAuto = duration
-					await this.plugin.saveSettings()
-				})
-			})
-
 		const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
 		const { created, deleted, recreated, unchanged, updated } =
 			this.plugin.settings.stats.sync.notes
@@ -343,22 +359,15 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			</ul>
 		</div>`
 
-		new Setting(this.containerEl)
-			.addButton((button) => {
-				button.setButtonText('Refresh stats')
-				button.onClick(() => {
-					this.render()
-				})
+		new Setting(this.containerEl).addButton((button) => {
+			button.setButtonText('Reset stats')
+			button.onClick(async () => {
+				this.plugin.settings.stats.sync = JSON.parse(
+					JSON.stringify(yankiPluginDefaultSettings.stats.sync),
+				) as YankiPluginSettings['stats']['sync']
+				await this.plugin.saveSettings()
+				this.render()
 			})
-			.addButton((button) => {
-				button.setButtonText('Reset stats')
-				button.onClick(async () => {
-					this.plugin.settings.stats.sync = JSON.parse(
-						JSON.stringify(yankiPluginDefaultSettings.stats.sync),
-					) as YankiPluginSettings['stats']['sync']
-					await this.plugin.saveSettings()
-					this.render()
-				})
-			})
+		})
 	}
 }
