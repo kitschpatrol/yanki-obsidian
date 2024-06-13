@@ -16,6 +16,7 @@ import {
 	sanitizeHtmlToDomWithFunction,
 	sanitizeNamespace,
 } from './utilities'
+import { html } from 'code-tag'
 import sindreDebounce from 'debounce'
 import {
 	Notice,
@@ -157,7 +158,7 @@ export default class YankiPlugin extends Plugin {
 		if (userInitiated || this.settings.verboseLogging) {
 			new Notice(
 				sanitizeHTMLToDom(
-					`<strong>${userInitiated ? '' : 'Automatic '}Anki sync starting...</strong>`,
+					html`<strong>${userInitiated ? '' : 'Automatic '}Anki sync starting...</strong>`,
 				),
 			)
 		}
@@ -166,7 +167,8 @@ export default class YankiPlugin extends Plugin {
 			if (userInitiated || this.settings.verboseLogging) {
 				new Notice(
 					sanitizeHtmlToDomWithFunction(
-						'<strong>Anki sync failed:</strong> No flashcard folders to sync. You can specify flashcard folders in the Yanki plugin\'s <a class="settings">settings tab</a>.',
+						html`<strong>Anki sync failed:</strong> No flashcard folders to sync. You can specify
+							flashcard folders in the Yanki plugin's <a class="settings">settings tab</a>.`,
 						'settings',
 						this.openSettingsTab,
 					),
@@ -182,7 +184,8 @@ export default class YankiPlugin extends Plugin {
 		if (files.length === 0) {
 			if (userInitiated || this.settings.verboseLogging) {
 				sanitizeHtmlToDomWithFunction(
-					'<strong>Anki sync failed:</strong> No flashcard notes found. Check your flashcard folders in the Yanki plugin\'s <a class="settings">settings tab</a>.',
+					html`<strong>Anki sync failed:</strong> No flashcard notes found. Check your flashcard
+						folders in the Yanki plugin's <a class="settings">settings tab</a>.`,
 					'settings',
 					this.openSettingsTab,
 				)
@@ -229,7 +232,14 @@ export default class YankiPlugin extends Plugin {
 				if (userInitiated || this.settings.verboseLogging) {
 					new Notice(
 						sanitizeHTMLToDom(
-							'<strong>Anki sync failed:</strong> Could not connect to Anki<br>Please make sure that Anki is running, and that it has the <a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on installed and <a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start">configured</a>.',
+							html`<strong>Anki sync failed:</strong> Could not connect to Anki<br />Please make
+								sure that Anki is running, and that it has the
+								<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on
+								installed and
+								<a
+									href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
+									>configured</a
+								>.`,
 						),
 					)
 				}

@@ -4,6 +4,7 @@
 import { FolderSuggest } from '../extensions/folder-suggest'
 import type YankiPlugin from '../main'
 import { capitalize } from '../utilities'
+import { html } from 'code-tag'
 import {
 	type App,
 	type ButtonComponent,
@@ -110,7 +111,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Cancel any pending syncs
 		this.plugin.syncFlashcardNotesToAnki.clear()
 
-		// Fake input to catch the automatic focus that was popping the search input.
+		// Fake input to catch the automatic first-input focus that was popping the search input.
 		// Focus is still just a tab away.
 		const focusCatcher = this.containerEl.createEl('input', { type: 'text' })
 		focusCatcher.setAttribute('style', 'display: none;')
@@ -179,7 +180,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 			.setDesc(
 				sanitizeHTMLToDom(
-					`Flashcard notes found: <em>${this.plugin.getWatchedFiles().length}</em>`,
+					html`Flashcard notes found: <em>${String(this.plugin.getWatchedFiles().length)}</em>`,
 				),
 			)
 			.setClass('description-is-button-annotation')
@@ -245,7 +246,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					this.plugin.syncFlashcardNotesToAnki.trigger()
 				})
 			})
-			.setDesc(sanitizeHTMLToDom(`Last synced: <em>${capitalize(syncTime)}</em>`))
+			.setDesc(sanitizeHTMLToDom(html`Last synced: <em>${capitalize(syncTime)}</em>`))
 			.setClass('description-is-button-annotation')
 
 		// ----------------------------------------------------
@@ -256,8 +257,14 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setName('Anki-Connect settings')
 			.setHeading()
 
-		ankiConnectSetting.descEl.innerHTML =
-			'Anki-Connect is the Anki add-on that enables communication between Obsidian and Anki. See the <a href="https://foosoft.net/projects/anki-connect/">Anki-Connect documentation</a> for more information. The default settings below are usually fine.'
+		ankiConnectSetting.setDesc(
+			sanitizeHTMLToDom(
+				html`Anki-Connect is the Anki add-on that enables communication between Obsidian and Anki.
+					See the
+					<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect documentation</a> for
+					more information. The default settings below are usually fine.`,
+			),
+		)
 
 		new Setting(this.containerEl)
 			.setName('Host')
@@ -337,29 +344,36 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		const { created, deleted, recreated, unchanged, updated } =
 			this.plugin.settings.stats.sync.notes
 
-		new Setting(this.containerEl).setName('Sync stats').setClass('stats').descEl.innerHTML =
-			`<div><p>Overall</p>
-		<ul>
-			<li>Total syncs: ${auto + manual}</li>
-			<ul>
-				<li>Auto: ${auto}</li>
-				<li>Manual: ${manual}</li>
-				<li>Errors: ${errors}</li>
-				<li>Invalid: ${invalid}</li>
-				<li>Duration: ${prettyMilliseconds(duration)} (average)</li>
-			</ul>
-		</ul>
-		</div>
-		<div>
-		<p>Note actions</p>
-		<ul>
-			<li>Created: ${created}</li>
-			<li>Deleted: ${deleted}</li>
-			<li>Recreated: ${recreated}</li>
-			<li>Unchanged: ${unchanged}</li>
-			<li>Updated: ${updated}</li>
-			</ul>
-		</div>`
+		new Setting(this.containerEl)
+			.setName('Sync stats')
+			.setClass('stats')
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`<div>
+							<p>Overall</p>
+							<ul>
+								<li>Total syncs: ${String(auto + manual)}</li>
+								<ul>
+									<li>Auto: ${String(auto)}</li>
+									<li>Manual: ${String(manual)}</li>
+									<li>Errors: ${String(errors)}</li>
+									<li>Invalid: ${String(invalid)}</li>
+									<li>Duration: ${prettyMilliseconds(duration)} (average)</li>
+								</ul>
+							</ul>
+						</div>
+						<div>
+							<p>Note actions</p>
+							<ul>
+								<li>Created: ${String(created)}</li>
+								<li>Deleted: ${String(deleted)}</li>
+								<li>Recreated: ${String(recreated)}</li>
+								<li>Unchanged: ${String(unchanged)}</li>
+								<li>Updated: ${String(updated)}</li>
+							</ul>
+						</div>`,
+				),
+			)
 
 		new Setting(this.containerEl).addButton((button) => {
 			button.setButtonText('Reset stats')
