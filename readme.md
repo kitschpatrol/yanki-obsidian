@@ -33,6 +33,25 @@
 >
 > Any testing and feedback by adventurous users is extremely welcome.
 
+<!-- toc { depth: 2 } -->
+
+## Table of contents
+
+- [Overview](#overview)
+- [Quick start](#quick-start)
+- [Features](#features)
+- [Markdown note types](#markdown-note-types)
+- [Usage](#usage)
+- [FAQ](#faq)
+- [The future](#the-future)
+- [Background](#background)
+- [Maintainers](#maintainers)
+- [Acknowledgments](#acknowledgments)
+- [Contributing](#contributing)
+- [License](#license)
+
+<!-- /toc -->
+
 ## Overview
 
 The Yanki plugin automatically syncs a folder (or folders) of notes from your Obsidian vault to Anki.

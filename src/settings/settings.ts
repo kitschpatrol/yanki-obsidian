@@ -124,7 +124,16 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setHeading()
 			.setName('Anki flashcard folders')
 			.setDesc(
-				'Yanki will sync notes in the folders specified to Anki. Folder syncing is always recursive, and Anki decks will be created to match the hierarchy of your Obsidian folders.',
+				sanitizeHTMLToDom(
+					html`Yanki will sync notes in the folders specified to Anki. Folder syncing is always
+						recursive, and Anki decks will be created to match the hierarchy of your Obsidian
+						folders. See the
+						<a
+							href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#markdown-note-types"
+							>Yanki documentation</a
+						>
+						for details on how to structure your flashcard notes.`,
+				),
 			)
 
 		if (this.plugin.settings.folders.length === 0) {
@@ -188,7 +197,11 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl)
 			.setName('Ignore folder notes')
 			.setDesc(
-				'Exclude notes with the same name as their parent folder from syncing. Useful in combination with the Folder notes plugin.',
+				sanitizeHTMLToDom(
+					html`Exclude notes with the same name as their parent folder from syncing. Useful in
+						combination with the
+						<a href="https://lostpaul.github.io/obsidian-folder-notes/">Folder notes</a> plugin.`,
+				),
 			)
 			.addToggle((toggle) => {
 				toggle.setValue(this.plugin.settings.ignoreFolderNotes)
@@ -261,6 +274,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			sanitizeHTMLToDom(
 				html`Anki-Connect is the Anki add-on that enables communication between Obsidian and Anki.
 					See the
+					<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
+						>Yanki quick start guide</a
+					>
+					for instructions on how to set up Anki-Connect, and the
 					<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect documentation</a> for
 					more information. The default settings below are usually fine.`,
 			),
@@ -329,7 +346,13 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Development (temporary)
 		new Setting(this.containerEl)
 			.setName('Development')
-			.setDesc('Options to facilitate development and debugging.')
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Options to facilitate development and debugging of Yanki.<br />Trouble with the
+						plugin? Please
+						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
+				),
+			)
 			.setHeading()
 
 		new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
@@ -376,7 +399,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			)
 
 		new Setting(this.containerEl).addButton((button) => {
-			button.setButtonText('Reset stats')
+			button.setButtonText('Reset sync stats')
 			button.onClick(async () => {
 				this.plugin.settings.stats.sync = structuredClone(yankiPluginDefaultSettings.stats.sync)
 				await this.plugin.saveSettings()
