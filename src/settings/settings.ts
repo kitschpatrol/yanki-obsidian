@@ -177,8 +177,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl)
 			.addButton((button: ButtonComponent) => {
 				button
-					.setTooltip('Add Folder')
-					.setButtonText('Add Folder')
+					.setTooltip('Add folder')
+					.setButtonText('Add folder')
 					.setCta()
 					// .setIcon('plus')
 					.onClick(async () => {
