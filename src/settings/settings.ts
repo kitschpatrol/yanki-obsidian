@@ -1,7 +1,6 @@
 import { FolderSuggest } from '../extensions/folder-suggest'
 import type YankiPlugin from '../main'
-import { capitalize } from '../utilities'
-import { html } from 'code-tag'
+import { capitalize, html } from '../utilities'
 import {
 	type App,
 	type ButtonComponent,

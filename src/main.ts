@@ -10,10 +10,10 @@ import {
 import {
 	arraysEqual,
 	formatSyncReport,
+	html,
 	sanitizeHtmlToDomWithFunction,
 	sanitizeNamespace,
 } from './utilities'
-import { html } from 'code-tag'
 import sindreDebounce from 'debounce'
 import {
 	Notice,
@@ -23,6 +23,7 @@ import {
 	TFolder,
 	Vault,
 	moment,
+	requestUrl,
 	sanitizeHTMLToDom,
 } from 'obsidian'
 import { syncFiles } from 'yanki'
@@ -197,7 +198,30 @@ export default class YankiPlugin extends Plugin {
 		try {
 			const report = await syncFiles(
 				filePaths,
-				this.settings.syncOptions,
+				{
+					...this.settings.syncOptions,
+					ankiConnectOptions: {
+						// Use Obsidian's fetch implementation
+						async customFetch(input, init) {
+							const response = await requestUrl({
+								body: init.body,
+								headers: init.headers,
+								method: init.method,
+								url: input,
+							})
+
+							return {
+								async json() {
+									// Wrapped to satisfy fetch definition
+									return new Promise((resolve) => {
+										resolve(response.json)
+									})
+								},
+								status: response.status,
+							}
+						},
+					},
+				},
 				this.fileAdapterRead,
 				this.fileAdapterWrite,
 			)
@@ -225,7 +249,13 @@ export default class YankiPlugin extends Plugin {
 		} catch (error) {
 			this.settings.stats.sync.errors++
 
-			if (error instanceof Error && error.message === 'Failed to fetch') {
+			if (
+				error instanceof Error &&
+				// Error from platform's fetch()
+				(error.message === 'Failed to fetch' ||
+					// Error from Obsidian's requestUrl()
+					error.message === 'net::ERR_CONNECTION_REFUSED')
+			) {
 				if (userInitiated || this.settings.verboseLogging) {
 					new Notice(
 						sanitizeHTMLToDom(
@@ -238,12 +268,19 @@ export default class YankiPlugin extends Plugin {
 									>configured</a
 								>.`,
 						),
+						15_000,
 					)
 				}
 			} else {
 				// Always notice on weird errors
 				const fragment = sanitizeHtmlToDomWithFunction(
-					`<strong>Anki sync failed:</strong><pre style="white-space: pre-wrap;">${String(error)}</pre>Please check <a class="settings">the plugin settings</a>, review the <a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again. If trouble persists, you can open <a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the Yanki plugin repository.`,
+					html`<strong>Anki sync failed:</strong>
+						<pre style="white-space: pre-wrap;">${String(error)}</pre>
+						Please check <a class="settings">the plugin settings</a>, review the
+						<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try
+						again. If trouble persists, you can open
+						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the
+						Yanki plugin repository.`,
 					'settings',
 					this.openSettingsTab,
 				)
