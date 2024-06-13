@@ -182,6 +182,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					`Flashcard notes found: <em>${this.plugin.getWatchedFiles().length}</em>`,
 				),
 			)
+			.setClass('description-is-button-annotation')
 
 		new Setting(this.containerEl)
 			.setName('Ignore folder notes')
@@ -245,6 +246,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				})
 			})
 			.setDesc(sanitizeHTMLToDom(`Last synced: <em>${capitalize(syncTime)}</em>`))
+			.setClass('description-is-button-annotation')
 
 		// ----------------------------------------------------
 

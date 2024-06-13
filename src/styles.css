@@ -24,4 +24,16 @@ div.yanki-settings {
 			}
 		}
 	}
+
+	/* Keep button annotations to the right */
+	div.setting-item.description-is-button-annotation {
+		div.setting-item-info {
+			display: flex;
+			justify-content: flex-end;
+		}
+
+		div.setting-item-control {
+			flex: none;
+		}
+	}
 }
