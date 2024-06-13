@@ -20,9 +20,6 @@ importers:
       bumpp:
         specifier: ^9.4.1
         version: 9.4.1
-      code-tag:
-        specifier: ^1.2.0
-        version: 1.2.0
       debounce:
         specifier: ^2.1.0
         version: 2.1.0
@@ -1117,10 +1114,6 @@ packages:
 
   code-red@1.0.4:
     resolution: {integrity: sha512-7qJWqItLA8/VPVlKJlFXU+NBlo/qyfs39aJcuMT/2ere32ZqvF5OSxgdM5xOfJJ7O429gg2HM47y8v9P+9wrNw==}
-
-  code-tag@1.2.0:
-    resolution: {integrity: sha512-5O79BzMWQxXQKJiubtwtIXqXsgd9u90xvze+K5PLajtM4ewM2emlEvLBdvgviXORHrBmzijG9+6qPtt+xpkv9Q==}
-    engines: {node: '>=18'}
 
   collapse-white-space@2.1.0:
     resolution: {integrity: sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw==}
@@ -5474,8 +5467,6 @@ snapshots:
       acorn: 8.11.3
       estree-walker: 3.0.3
       periscopic: 3.1.0
-
-  code-tag@1.2.0: {}
 
   collapse-white-space@2.1.0: {}
 
