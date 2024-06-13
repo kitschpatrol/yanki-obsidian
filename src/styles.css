@@ -5,7 +5,7 @@ div.yanki-settings {
 
 	/* Keep the line length reasonable */
 	div.setting-item-description {
-		max-width: 30rem;
+		max-width: 70ch;
 	}
 
 	/* Development only */
