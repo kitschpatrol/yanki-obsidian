@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable no-new */
-
 import { FolderSuggest } from '../extensions/folder-suggest'
 import type YankiPlugin from '../main'
 import { capitalize } from '../utilities'

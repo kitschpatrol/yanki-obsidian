@@ -1,8 +1,5 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable no-new */
-/* eslint-disable perfectionist/sort-classes */
 
 import {
 	YankiPluginSettingTab,
