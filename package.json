@@ -18,7 +18,7 @@
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.2.0",
+	"packageManager": "pnpm@9.3.0",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=8.0.0"
@@ -46,19 +46,19 @@
 		"release": "pnpm run manifest && pnpm bumpp package.json manifest.json --commit \"Release: %s\" --tag \"%s\""
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^4.6.7",
+		"@kitschpatrol/shared-config": "^4.7.1",
 		"@types/node": "^20.14.2",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
 		"debounce": "^2.1.0",
-		"esbuild": "^0.21.4",
+		"esbuild": "^0.21.5",
 		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.0.0",
 		"throttleit": "^2.0.0",
-		"tsx": "^4.13.0",
-		"type-fest": "^4.19.0",
+		"tsx": "^4.15.3",
+		"type-fest": "^4.20.0",
 		"yanki": "^0.2.3"
 	},
 	"obsidian": {
