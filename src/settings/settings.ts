@@ -108,7 +108,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		this.containerEl.empty()
 
 		// Cancel any pending syncs
-		this.plugin.syncFlashcardsToAnki.clear()
+		this.plugin.syncFlashcardNotesToAnki.clear()
 
 		// Fake input to catch the automatic focus that was popping the search input.
 		// Focus is still just a tab away.
@@ -123,7 +123,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setHeading()
 			.setName('Anki flashcard folders')
 			.setDesc(
-				'Yanki will sync files in the folders specified to Anki. Folder syncing is always recursive, and Anki decks will be created to match the hierarchy of your Obsidian folders.',
+				'Yanki will sync notes in the folders specified to Anki. Folder syncing is always recursive, and Anki decks will be created to match the hierarchy of your Obsidian folders.',
 			)
 
 		if (this.plugin.settings.folders.length === 0) {
@@ -179,7 +179,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 			.setDesc(
 				sanitizeHTMLToDom(
-					`Flashcard files found: <em>${this.plugin.getWatchedFiles().length}</em>`,
+					`Flashcard notes found: <em>${this.plugin.getWatchedFiles().length}</em>`,
 				),
 			)
 
@@ -206,7 +206,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl)
 			.setName('Automatic sync')
 			.setDesc(
-				'Sync to the local Anki database whenever flashcard files are changed and the Anki desktop app is open.',
+				'Sync to the local Anki database whenever flashcard notes are changed and the Anki desktop application is open.',
 			)
 			.addToggle((toggle) => {
 				toggle.setValue(this.plugin.settings.autoSyncEnabled)
@@ -241,7 +241,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.addButton((button) => {
 				button.setButtonText('Sync now')
 				button.onClick(() => {
-					this.plugin.syncFlashcardsToAnki.trigger()
+					this.plugin.syncFlashcardNotesToAnki.trigger()
 				})
 			})
 			.setDesc(sanitizeHTMLToDom(`Last synced: <em>${capitalize(syncTime)}</em>`))
@@ -291,7 +291,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// new Setting(this.containerEl)
 		// 	.setName('Auto-Launch Anki')
 		// 	.setDesc(
-		// 		'Experimental Mac-only feature to automatically launch the Anki desktop app when syncing.',
+		// 		'Experimental Mac-only feature to automatically launch the Anki desktop application when syncing.',
 		// 	)
 		// 	.addToggle(async (toggle) => {
 		// 		const { autoLaunch } = this.plugin.settings.syncOptions.ankiConnectOptions

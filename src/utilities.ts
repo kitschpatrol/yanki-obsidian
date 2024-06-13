@@ -8,7 +8,7 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	const reportLines: string[] = []
 	reportLines.push(
 		'<strong>Successfully synced to Anki.</strong>',
-		`Found ${synced.length} ${plur('flashcard', synced.length)} in vault.`,
+		`Found ${synced.length} flashcard ${plur('note', synced.length)} in vault.`,
 		'',
 		'Sync report:',
 	)

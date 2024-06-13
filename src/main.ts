@@ -41,29 +41,29 @@ export default class YankiPlugin extends Plugin {
 		this.openSettingsTab = this.openSettingsTab.bind(this)
 
 		// Pretty sure sindreDebounce handles binding
-		// this.syncFlashcardsToAnki = this.syncFlashcardsToAnki.bind(this)
+		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
 
 		await this.loadSettings()
 		this.addSettingTab(this.settingsTab)
 
 		this.addCommand({
 			callback: () => {
-				this.syncFlashcardsToAnki.trigger()
+				this.syncFlashcardNotesToAnki.trigger()
 			},
 			id: 'sync-yanki-obsidian',
-			name: 'Sync flashcards to Anki',
+			name: 'Sync flashcard notes to Anki',
 		})
 
 		// Spot any changes since last session
 		this.app.workspace.onLayoutReady(async () => {
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 			this.registerEvent(this.app.vault.on('create', this.handleCreate.bind(this)))
 		})
 
 		// Create is also called when the vault is first loaded for each existing file
 		this.registerEvent(this.app.vault.on('delete', this.handleDelete.bind(this)))
 
-		// Still necessary in case files are dragged in
+		// Still necessary in case notes are dragged in
 		this.registerEvent(this.app.vault.on('modify', this.handleModify.bind(this)))
 		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
 	}
@@ -142,13 +142,14 @@ export default class YankiPlugin extends Plugin {
 			port !== oldPort ||
 			!arraysEqual(previousSettings.folders, this.settings.folders)
 		) {
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
 	// Using alternate debounce implementation with 'trigger()' function, which lets user-triggered syncs fire immediately
-	// eslint-disable-next-line @typescript-eslint/no-inferrable-types, complexity
-	syncFlashcardsToAnki = sindreDebounce(async (userInitiated: boolean = true): Promise<void> => {
+
+	// eslint-disable-next-line complexity
+	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated = true): Promise<void> => {
 		if (!userInitiated && !this.settings.autoSyncEnabled) {
 			return
 		}
@@ -261,16 +262,16 @@ export default class YankiPlugin extends Plugin {
 			})
 			this.settings.folders = updatedFolders
 			await this.saveSettings()
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 		} else if (this.isInsideWatchedFolders(fileOrFolder)) {
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
 	private async handleCreate(fileOrFolder: TAbstractFile) {
 		// Don't care about folders
 		if (fileOrFolder instanceof TFile && this.isInsideWatchedFolders(fileOrFolder)) {
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
@@ -286,13 +287,13 @@ export default class YankiPlugin extends Plugin {
 				}
 			}
 
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
 	private async handleModify(fileOrFolder: TAbstractFile) {
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
-			await this.syncFlashcardsToAnki(false)
+			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
