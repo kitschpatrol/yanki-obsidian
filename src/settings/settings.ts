@@ -92,7 +92,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		this.initialSettings = JSON.parse(JSON.stringify(this.plugin.settings)) as YankiPluginSettings
+		this.initialSettings = structuredClone(this.plugin.settings)
 		this.containerEl.addClass('yanki-settings')
 		this.containerEl.setAttr('id', 'yanki-settings')
 		this.render()
@@ -362,9 +362,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl).addButton((button) => {
 			button.setButtonText('Reset stats')
 			button.onClick(async () => {
-				this.plugin.settings.stats.sync = JSON.parse(
-					JSON.stringify(yankiPluginDefaultSettings.stats.sync),
-				) as YankiPluginSettings['stats']['sync']
+				this.plugin.settings.stats.sync = structuredClone(yankiPluginDefaultSettings.stats.sync)
 				await this.plugin.saveSettings()
 				this.render()
 			})

@@ -123,7 +123,7 @@ export default class YankiPlugin extends Plugin {
 			new Notice('External settings changed')
 		}
 
-		const originalSettings = JSON.parse(JSON.stringify(this.settings)) as YankiPluginSettings
+		const originalSettings = structuredClone(this.settings)
 		await this.loadSettings()
 		await this.settingsChangeSyncCheck(originalSettings)
 	}
