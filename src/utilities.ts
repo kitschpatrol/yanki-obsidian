@@ -20,7 +20,15 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	}, {})
 
 	for (const [action, count] of Object.entries(actionCounts)) {
-		reportLines.push(`\t${count} ${plur('card', count)} ${action}`)
+		reportLines.push(`\t${count} Anki ${plur('card', count)} ${action}`)
+	}
+
+	const renameCount = synced.filter(
+		({ filePath, filePathOriginal }) => filePath !== filePathOriginal,
+	).length
+
+	if (renameCount > 0) {
+		reportLines.push(`\t${renameCount} local ${plur('note', renameCount)} renamed`)
 	}
 
 	return sanitizeHTMLToDom(reportLines.join('<br>'))

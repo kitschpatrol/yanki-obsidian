@@ -73,6 +73,8 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 		ankiWeb: true,
 		defaultDeckName: 'Yanki Obsidian Default',
 		dryRun: false,
+		manageFilenames: 'off',
+		maxFilenameLength: 60,
 		namespace: 'Yanki Obsidian Plugin', // To be overwritten with deck name
 		obsidianVault: undefined,
 	},
@@ -117,8 +119,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Folders
 
 		new Setting(this.containerEl)
-			.setHeading()
 			.setName('Anki flashcard folders')
+			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
 					html`Yanki will sync notes in the folders specified to Anki. Folder syncing is always
@@ -207,6 +209,51 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					this.render()
 				})
 			})
+
+		// ----------------------------------------------------
+
+		// Note filename management
+
+		new Setting(this.containerEl)
+			.setName('Automatic note names')
+			.setHeading()
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Yanki can automatically set the file name of flashcard notes to a snippet of text
+						derived from either the <em>prompt</em> or <em>response</em> of the note. If enabled,
+						note file names are updated whenever notes are synced to Anki.`,
+				),
+			)
+
+		new Setting(this.containerEl)
+			.setName('Automatically name flashcard notes')
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOptions({
+						off: 'Off',
+						prompt: 'Prompt',
+						response: 'Response',
+					})
+					.setValue(this.plugin.settings.syncOptions.manageFilenames)
+					.onChange(async (value) => {
+						this.plugin.settings.syncOptions.manageFilenames =
+							value as YankiPluginSettings['syncOptions']['manageFilenames']
+						await this.plugin.saveSettings()
+						this.render()
+					})
+			})
+
+		new Setting(this.containerEl)
+			.setName('Maximum note name length')
+			.addText((text) => {
+				text.setPlaceholder(String(yankiPluginDefaultSettings.syncOptions.maxFilenameLength))
+				text.setValue(String(this.plugin.settings.syncOptions.maxFilenameLength))
+				text.onChange(async (value) => {
+					this.plugin.settings.syncOptions.maxFilenameLength = Number(value)
+					await this.plugin.saveSettings()
+				})
+			})
+			.setDisabled(this.plugin.settings.syncOptions.manageFilenames === 'off')
 
 		// ----------------------------------------------------
 
@@ -342,6 +389,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Development (temporary)
 		new Setting(this.containerEl)
 			.setName('Development')
+			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
 					html`Options to facilitate development and debugging of Yanki.<br />Trouble with the
@@ -349,7 +397,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				),
 			)
-			.setHeading()
 
 		new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
 			toggle.setValue(this.plugin.settings.verboseLogging)

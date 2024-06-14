@@ -178,6 +178,14 @@ If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yank
 
 Yanki tags the notes it's in charge of with a hidden field, so it will never touch your existing Anki notes. (_But please exercise caution until the 1.0 release..._)
 
+### Note name management
+
+The "one Obsidian note = one Anki note" premise can make for a lot of individual note files, and thinking up and renaming notes as their content is revised can be tedious. So, if you want, Yanki can manage the names of your note files based on their content.
+
+Yanki looks inside each note, and extracts either the text of the "prompt" (e.g. the front of the card in most cases), or the "response" (e.g. the back of the card in most cases) to use as the filename. Truncation, deduplication, and sanitization are all taken care of.
+
+Edge cases are carefully managed to ensure that there's always _some kind_ of best-effort semantically valuable file name assigned.
+
 ## Markdown note types
 
 Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain element in your Markdown notes.
@@ -284,6 +292,28 @@ When enabled, notes matching the name of their parent folder will not be synced.
 
 _Default: Enabled_
 
+#### Automatic note names
+
+##### Automatically name flashcard notes
+
+When enabled, local note files will be renamed to match their content. This is useful if you want to feel have semantically reasonable note file names without managing them by hand. The "Prompt" option will attempt to create the filename based on the what Anki would show you first — usually the front of the card. The while "Response" option will prioritize whatever Anki would show you second — usually the back of the card, or the elided text in the case of a cloze card, or the type-in part of a type in the answer card.
+
+If the prompt or response has multiple lines, only the first line is considered.
+
+For edge cases, like notes with empty prompt content or no response content, Yanki will fall back to the other parts of the card to try to . If, after every effort, no reasonable title can be identified, then "Untitled" will be used.
+
+The file renaming pass runs as part of every sync to Anki, and only affects notes in side a [watched folder](#watched-folder-list).
+
+There are some great community plugins dedicated to content-driven file naming, like Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin, but the feature is built into Yanki since the renaming process can be more precise when it understands the structure of flashcard notes.
+
+_Default: Off_
+
+##### Maximum note name length
+
+Yanki will truncate long automatic file names with ellipses. This setting allows you to specify, in characters, how long of an automatic title you would like (exclusive of the truncation ellipses and file extension). Note that a (generous) upper limit is enforced to comply with operating system limitations.
+
+_Default: 60 characters_
+
 #### Sync settings
 
 ##### Automatic sync
@@ -316,7 +346,7 @@ These are advanced settings to accommodate custom Anki-Connect configurations. T
 
 ### Why do I have to come up with a name for every note
 
-You don't. Check out Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin.
+You don't! Enable the [automatic note naming](#automatic-note-names) setting.
 
 ### Does Yanki work on Obsidian's mobile apps?
 

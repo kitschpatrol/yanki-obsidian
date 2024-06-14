@@ -32,9 +32,13 @@ export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings
 	private readonly settingsTab: YankiPluginSettingTab = new YankiPluginSettingTab(this.app, this)
 
+	// Where is "unregisterEvent"?
+	// private readonly syncInProgress = false
+
 	async onload() {
 		this.fileAdapterWrite = this.fileAdapterWrite.bind(this)
 		this.fileAdapterRead = this.fileAdapterRead.bind(this)
+		this.fileAdapterRename = this.fileAdapterRename.bind(this)
 		this.getWatchedFiles = this.getWatchedFiles.bind(this)
 		this.getSanitizedFolders = this.getSanitizedFolders.bind(this)
 		this.openSettingsTab = this.openSettingsTab.bind(this)
@@ -64,6 +68,8 @@ export default class YankiPlugin extends Plugin {
 
 		// Still necessary in case notes are dragged in
 		this.registerEvent(this.app.vault.on('modify', this.handleModify.bind(this)))
+
+		// Only look at folders, which can affect deck names
 		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
 	}
 
@@ -114,6 +120,17 @@ export default class YankiPlugin extends Plugin {
 		}
 
 		return this.app.vault.modify(file, data)
+	}
+
+	async fileAdapterRename(oldPath: string, newPath: string): Promise<void> {
+		const file = this.app.vault.getFileByPath(oldPath)
+		if (file === null) {
+			throw new Error(`File not found: ${oldPath}`)
+		}
+
+		new Notice(`Renaming ${oldPath}\nto\n${newPath}`)
+
+		return this.app.vault.rename(file, newPath)
 	}
 
 	// This never seems to fire?
@@ -177,6 +194,8 @@ export default class YankiPlugin extends Plugin {
 			return
 		}
 
+		// This.syncInProgress = true
+
 		const files: TFile[] = this.getWatchedFiles()
 
 		if (files.length === 0) {
@@ -190,6 +209,7 @@ export default class YankiPlugin extends Plugin {
 			}
 
 			this.settings.stats.sync.invalid++
+			// This.syncInProgress = false
 			return
 		}
 
@@ -224,6 +244,7 @@ export default class YankiPlugin extends Plugin {
 				},
 				this.fileAdapterRead,
 				this.fileAdapterWrite,
+				this.fileAdapterRename,
 			)
 
 			if (userInitiated || this.settings.verboseLogging) {
@@ -248,7 +269,6 @@ export default class YankiPlugin extends Plugin {
 			}
 		} catch (error) {
 			this.settings.stats.sync.errors++
-
 			if (
 				error instanceof Error &&
 				// Error from platform's fetch()
@@ -291,10 +311,20 @@ export default class YankiPlugin extends Plugin {
 		// Save stats and update the settings tab
 		await this.saveSettings()
 		this.settingsTab.render()
+
+		// This.syncInProgress = false
 	}, yankiDebounceInterval)
 
-	// Watch for changes
+	// Watch for changes, but only folders!
 	private async handleRename(fileOrFolder: TAbstractFile, oldPath: string) {
+		// If (this.syncInProgress) {
+		// 	return
+		// }
+
+		if (fileOrFolder instanceof TFile) {
+			return
+		}
+
 		const watchedFolders = this.getSanitizedFolders()
 		if (watchedFolders.includes(oldPath)) {
 			const updatedFolders = watchedFolders.map((folder) => {
@@ -308,11 +338,16 @@ export default class YankiPlugin extends Plugin {
 			await this.saveSettings()
 			await this.syncFlashcardNotesToAnki(false)
 		} else if (this.isInsideWatchedFolders(fileOrFolder)) {
+			//
 			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
 	private async handleCreate(fileOrFolder: TAbstractFile) {
+		// If (this.syncInProgress) {
+		// 	return
+		// }
+
 		// Don't care about folders
 		if (fileOrFolder instanceof TFile && this.isInsideWatchedFolders(fileOrFolder)) {
 			await this.syncFlashcardNotesToAnki(false)
@@ -336,6 +371,10 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	private async handleModify(fileOrFolder: TAbstractFile) {
+		// If (this.syncInProgress) {
+		// 	return
+		// }
+
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
 			await this.syncFlashcardNotesToAnki(false)
 		}
