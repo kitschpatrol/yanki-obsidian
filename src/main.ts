@@ -144,18 +144,32 @@ export default class YankiPlugin extends Plugin {
 		await this.settingsChangeSyncCheck(originalSettings)
 	}
 
+	/**
+	 * Certain settings changes require a sync to Anki
+	 * @param previousSettings
+	 */
 	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
 		const {
-			host: oldHost,
-			key: oldKey,
-			port: oldPort,
-		} = previousSettings.syncOptions.ankiConnectOptions
-		const { host, key, port } = this.settings.syncOptions.ankiConnectOptions
+			ankiConnectOptions: { host: oldHost, key: oldKey, port: oldPort },
+			ankiWeb: oldAnkiWeb,
+			manageFilenames: oldManageFilenames,
+			maxFilenameLength: oldMaxFilenameLength,
+		} = previousSettings.syncOptions
+
+		const {
+			ankiConnectOptions: { host, key, port },
+			ankiWeb,
+			manageFilenames,
+			maxFilenameLength,
+		} = this.settings.syncOptions
 
 		if (
 			key !== oldKey ||
 			host !== oldHost ||
 			port !== oldPort ||
+			ankiWeb !== oldAnkiWeb ||
+			manageFilenames !== oldManageFilenames ||
+			maxFilenameLength !== oldMaxFilenameLength ||
 			!arraysEqual(previousSettings.folders, this.settings.folders)
 		) {
 			await this.syncFlashcardNotesToAnki(false)
