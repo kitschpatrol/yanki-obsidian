@@ -128,8 +128,6 @@ export default class YankiPlugin extends Plugin {
 			throw new Error(`File not found: ${oldPath}`)
 		}
 
-		new Notice(`Renaming ${oldPath}\nto\n${newPath}`)
-
 		return this.app.vault.rename(file, newPath)
 	}
 
