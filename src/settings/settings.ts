@@ -28,6 +28,7 @@ export type YankiPluginSettings = {
 			latestSyncTime: number | undefined
 			manual: number
 			notes: {
+				ankiUnreachable: number
 				created: number
 				deleted: number
 				recreated: number
@@ -53,6 +54,7 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 			latestSyncTime: undefined,
 			manual: 0,
 			notes: {
+				ankiUnreachable: 0,
 				created: 0,
 				deleted: 0,
 				recreated: 0,
@@ -407,7 +409,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		})
 
 		const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
-		const { created, deleted, recreated, unchanged, updated } =
+		const { ankiUnreachable, created, deleted, recreated, unchanged, updated } =
 			this.plugin.settings.stats.sync.notes
 
 		new Setting(this.containerEl)
@@ -436,6 +438,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 								<li>Recreated: ${String(recreated)}</li>
 								<li>Unchanged: ${String(unchanged)}</li>
 								<li>Updated: ${String(updated)}</li>
+								<li>Anki Unreachable: ${String(ankiUnreachable)}</li>
 							</ul>
 						</div>`,
 				),

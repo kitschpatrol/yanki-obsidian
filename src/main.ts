@@ -174,9 +174,6 @@ export default class YankiPlugin extends Plugin {
 		}
 	}
 
-	// Using alternate debounce implementation with 'trigger()' function, which lets user-triggered syncs fire immediately
-
-	// eslint-disable-next-line complexity
 	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated = true): Promise<void> => {
 		if (!userInitiated && !this.settings.autoSyncEnabled) {
 			return
@@ -281,43 +278,23 @@ export default class YankiPlugin extends Plugin {
 			}
 		} catch (error) {
 			this.settings.stats.sync.errors++
-			if (
-				error instanceof Error &&
-				// Error from platform's fetch()
-				(error.message === 'Failed to fetch' ||
-					// Error from Obsidian's requestUrl()
-					error.message === 'net::ERR_CONNECTION_REFUSED')
-			) {
-				if (userInitiated || this.settings.verboseLogging) {
-					new Notice(
-						sanitizeHTMLToDom(
-							html`<strong>Anki sync failed:</strong> Could not connect to Anki<br />Please make
-								sure that Anki is running, and that it has the
-								<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on
-								installed and
-								<a
-									href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
-									>configured</a
-								>.`,
-						),
-						15_000,
-					)
-				}
-			} else {
-				// Always notice on weird errors
-				const fragment = sanitizeHtmlToDomWithFunction(
-					html`<strong>Anki sync failed:</strong>
-						<pre style="white-space: pre-wrap;">${String(error)}</pre>
-						Please check <a class="settings">the plugin settings</a>, review the
-						<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try
-						again. If trouble persists, you can open
-						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the
-						Yanki plugin repository.`,
-					'settings',
-					this.openSettingsTab,
-				)
-				new Notice(fragment, 15_000)
-			}
+
+			// Connection errors are caught in the Yanki library, and surfaced to Obsidian in the sync report
+			// by detecting `ankiUnreachable` sync actions
+
+			// Always notice on weird errors
+			const fragment = sanitizeHtmlToDomWithFunction(
+				html`<strong>Anki sync failed:</strong>
+					<pre style="white-space: pre-wrap;">${String(error)}</pre>
+					Please check <a class="settings">the plugin settings</a>, review the
+					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again.
+					If trouble persists, you can open
+					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the
+					Yanki plugin repository.`,
+				'settings',
+				this.openSettingsTab,
+			)
+			new Notice(fragment, 15_000)
 		}
 
 		// Save stats and update the settings tab

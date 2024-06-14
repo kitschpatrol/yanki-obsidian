@@ -5,6 +5,25 @@ import { type SyncReport } from 'yanki'
 export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	const { synced } = syncReport
 
+	// Aggregate the counts of each action:
+	const actionCounts = synced.reduce<Record<string, number>>((acc, note) => {
+		acc[note.action] = (acc[note.action] || 0) + 1
+		return acc
+	}, {})
+
+	const ankiUnreachable = actionCounts.ankiUnreachable > 0
+
+	if (ankiUnreachable) {
+		return sanitizeHTMLToDom(
+			html`<strong>Anki sync failed:</strong> Could not connect to Anki<br /><br />Please make sure
+				that Anki is running, and that it has the
+				<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on installed and
+				<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
+					>configured</a
+				>.`,
+		)
+	}
+
 	const reportLines: string[] = []
 	reportLines.push(
 		'<strong>Successfully synced to Anki.</strong>',
@@ -12,12 +31,6 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 		'',
 		'Sync report:',
 	)
-
-	// Aggregate the counts of each action:
-	const actionCounts = synced.reduce<Record<string, number>>((acc, note) => {
-		acc[note.action] = (acc[note.action] || 0) + 1
-		return acc
-	}, {})
 
 	for (const [action, count] of Object.entries(actionCounts)) {
 		reportLines.push(`\t${count} Anki ${plur('card', count)} ${action}`)

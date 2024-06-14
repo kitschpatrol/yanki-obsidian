@@ -73,21 +73,9 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
   If you need to install it, select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
 
-  Once installed, Anki-Connect requires some one-time setup to accept connections from Obsidian.
+  Anki-Connect may ask for your permission in the Anki application to connect to Obsidian on the first sync.
 
-  In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ from the list, and click the _Config_ button in the lower right. In the ensuing modal, add `"app://obsidian.md"` to the `webCorsOriginList` array, like so:
-
-  ```json
-  {
-    "apiKey": null,
-    "apiLogPath": null,
-    "ignoreOriginList": [],
-    "webBindAddress": "127.0.0.1",
-    "webBindPort": 8765,
-    "webCorsOrigin": "http://localhost",
-    "webCorsOriginList": ["http://localhost", "app://obsidian.md"]
-  }
-  ```
+  If you encounter trouble with Anki-Connect, please see [the manual configuration procedure](#ive-installed-anki-connect-but-am-still-getting-connection-errors).
 
 2. **Plugin installation**
 
@@ -302,7 +290,7 @@ If the prompt or response has multiple lines, only the first line is considered.
 
 For edge cases, like notes with empty prompt content or no response content, Yanki will fall back to the other parts of the card to try to . If, after every effort, no reasonable title can be identified, then "Untitled" will be used.
 
-The file renaming pass runs as part of every sync to Anki, and only affects notes in side a [watched folder](#watched-folder-list).
+The file renaming pass runs as part of every sync to Anki, and only affects notes in side a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names.
 
 There are some great community plugins dedicated to content-driven file naming, like Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin, but the feature is built into Yanki since the renaming process can be more precise when it understands the structure of flashcard notes.
 
@@ -413,6 +401,24 @@ Yanki will try to preserve the `noteId` of the note that matches what's been syn
 ### If I use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin, will my folder notes become Anki notes?
 
 The Yanki Plugin has a settings option to ignore folder notes. It's enabled by default.
+
+### I've installed Anki-Connect, but am still getting connection errors
+
+If the automatic permission request fails, you might need to configure Anki-Connect to accept connections from Obsidian.
+
+In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ from the list, and click the _Config_ button in the lower right. In the ensuing modal, add `"app://obsidian.md"` to the `webCorsOriginList` array, like so:
+
+```json
+{
+  "apiKey": null,
+  "apiLogPath": null,
+  "ignoreOriginList": [],
+  "webBindAddress": "127.0.0.1",
+  "webBindPort": 8765,
+  "webCorsOrigin": "http://localhost",
+  "webCorsOriginList": ["http://localhost", "app://obsidian.md"]
+}
+```
 
 ## The future
 

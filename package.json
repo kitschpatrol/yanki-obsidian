@@ -58,7 +58,7 @@
 		"pretty-ms": "^9.0.0",
 		"tsx": "^4.15.4",
 		"type-fest": "^4.20.0",
-		"yanki": "^0.3.1"
+		"yanki": "^0.4.0"
 	},
 	"obsidian": {
 		"description": "Ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
