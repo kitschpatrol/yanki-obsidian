@@ -38,9 +38,6 @@ importers:
       pretty-ms:
         specifier: ^9.0.0
         version: 9.0.0
-      throttleit:
-        specifier: ^2.0.0
-        version: 2.0.0
       tsx:
         specifier: ^4.15.4
         version: 4.15.4
@@ -3832,10 +3829,6 @@ packages:
 
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
-
-  throttleit@2.0.0:
-    resolution: {integrity: sha512-9VImOCJfOMzgBNJIa8ifGnJbAY3XGkl+mGV/+N69+L07QXrg6B6FqPI+2MCqdO5Ojega5BsA94zKHh2rHsQW9Q==}
-    engines: {node: '>=18'}
 
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
@@ -9127,8 +9120,6 @@ snapshots:
       b4a: 1.6.6
 
   text-table@0.2.0: {}
-
-  throttleit@2.0.0: {}
 
   through@2.3.8: {}
 

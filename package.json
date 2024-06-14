@@ -56,7 +56,6 @@
 		"obsidian": "latest",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.0.0",
-		"throttleit": "^2.0.0",
 		"tsx": "^4.15.4",
 		"type-fest": "^4.20.0",
 		"yanki": "^0.3.1"
