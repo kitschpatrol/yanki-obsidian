@@ -1,6 +1,20 @@
 import { sanitizeHTMLToDom } from 'obsidian'
 import plur from 'plur'
-import { type SyncReport } from 'yanki'
+import { type RenameFilesReport, type SyncReport } from 'yanki'
+
+export function formatRenameReport(renameReport: RenameFilesReport): DocumentFragment {
+	const { notes } = renameReport
+
+	const renameCount = notes.filter(
+		({ filePath, filePathOriginal }) => filePath !== filePathOriginal,
+	).length
+
+	if (renameCount > 0) {
+		return sanitizeHTMLToDom(html`${renameCount} local ${plur('note', renameCount)} renamed`)
+	}
+
+	return sanitizeHTMLToDom(html`No local notes renamed`)
+}
 
 export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	const { synced } = syncReport

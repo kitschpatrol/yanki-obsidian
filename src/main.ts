@@ -9,6 +9,7 @@ import {
 } from './settings/settings'
 import {
 	arraysEqual,
+	formatRenameReport,
 	formatSyncReport,
 	html,
 	sanitizeHtmlToDomWithFunction,
@@ -26,7 +27,7 @@ import {
 	requestUrl,
 	sanitizeHTMLToDom,
 } from 'obsidian'
-import { syncFiles } from 'yanki'
+import { renameFiles, syncFiles } from 'yanki'
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings
@@ -42,6 +43,8 @@ export default class YankiPlugin extends Plugin {
 		this.getWatchedFiles = this.getWatchedFiles.bind(this)
 		this.getSanitizedFolders = this.getSanitizedFolders.bind(this)
 		this.openSettingsTab = this.openSettingsTab.bind(this)
+
+		this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
 
 		// Pretty sure sindreDebounce handles binding
 		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
@@ -171,6 +174,34 @@ export default class YankiPlugin extends Plugin {
 			!arraysEqual(previousSettings.folders, this.settings.folders)
 		) {
 			await this.syncFlashcardNotesToAnki(false)
+		}
+	}
+
+	private async updateNoteFilenames(): Promise<void> {
+		if (this.settings.folders.length === 0 || this.settings.syncOptions.manageFilenames === 'off') {
+			return
+		}
+
+		const files: TFile[] = this.getWatchedFiles()
+
+		if (files.length === 0) {
+			return
+		}
+
+		const filePaths = files.map((file) => file.path)
+
+		const report = await renameFiles(
+			filePaths,
+			{
+				...this.settings.syncOptions,
+			},
+			this.fileAdapterRead,
+			this.fileAdapterWrite,
+			this.fileAdapterRename,
+		)
+
+		if (this.settings.verboseLogging) {
+			new Notice(formatRenameReport(report), 5000)
 		}
 	}
 
@@ -365,6 +396,8 @@ export default class YankiPlugin extends Plugin {
 		// }
 
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
+			// Rename right away
+			await this.updateNoteFilenames()
 			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
