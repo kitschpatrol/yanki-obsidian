@@ -214,51 +214,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		// ----------------------------------------------------
 
-		// Note filename management
-
-		new Setting(this.containerEl)
-			.setName('Automatic note names')
-			.setHeading()
-			.setDesc(
-				sanitizeHTMLToDom(
-					html`Yanki can automatically set the file name of flashcard notes to a snippet of text
-						derived from either the <em>prompt</em> or <em>response</em> of the note. If enabled,
-						note file names are updated whenever notes are synced to Anki.`,
-				),
-			)
-
-		new Setting(this.containerEl)
-			.setName('Automatically name flashcard notes')
-			.addDropdown((dropdown) => {
-				dropdown
-					.addOptions({
-						off: 'Off',
-						prompt: 'Prompt',
-						response: 'Response',
-					})
-					.setValue(this.plugin.settings.syncOptions.manageFilenames)
-					.onChange(async (value) => {
-						this.plugin.settings.syncOptions.manageFilenames =
-							value as YankiPluginSettings['syncOptions']['manageFilenames']
-						await this.plugin.saveSettings()
-						this.render()
-					})
-			})
-
-		new Setting(this.containerEl)
-			.setName('Maximum note name length')
-			.addText((text) => {
-				text.setPlaceholder(String(yankiPluginDefaultSettings.syncOptions.maxFilenameLength))
-				text.setValue(String(this.plugin.settings.syncOptions.maxFilenameLength))
-				text.onChange(async (value) => {
-					this.plugin.settings.syncOptions.maxFilenameLength = Number(value)
-					await this.plugin.saveSettings()
-				})
-			})
-			.setDisabled(this.plugin.settings.syncOptions.manageFilenames === 'off')
-
-		// ----------------------------------------------------
-
 		// Sync
 
 		new Setting(this.containerEl).setName('Sync settings').setHeading()
@@ -385,6 +340,51 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				new Notice("Reset Yanki's Anki-Connect settings to defaults.")
 			})
 		})
+
+		// ----------------------------------------------------
+
+		// Note filename management
+
+		new Setting(this.containerEl)
+			.setName('Automatic note names')
+			.setHeading()
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Yanki can automatically set the file name of flashcard notes to a snippet of text
+						derived from either the <em>prompt</em> or <em>response</em> of the note. If enabled,
+						note file names are updated whenever notes are synced to Anki.`,
+				),
+			)
+
+		new Setting(this.containerEl)
+			.setName('Automatically name flashcard notes')
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOptions({
+						off: 'Off',
+						prompt: 'Prompt',
+						response: 'Response',
+					})
+					.setValue(this.plugin.settings.syncOptions.manageFilenames)
+					.onChange(async (value) => {
+						this.plugin.settings.syncOptions.manageFilenames =
+							value as YankiPluginSettings['syncOptions']['manageFilenames']
+						await this.plugin.saveSettings()
+						this.render()
+					})
+			})
+
+		new Setting(this.containerEl)
+			.setName('Maximum note name length')
+			.addText((text) => {
+				text.setPlaceholder(String(yankiPluginDefaultSettings.syncOptions.maxFilenameLength))
+				text.setValue(String(this.plugin.settings.syncOptions.maxFilenameLength))
+				text.onChange(async (value) => {
+					this.plugin.settings.syncOptions.maxFilenameLength = Number(value)
+					await this.plugin.saveSettings()
+				})
+			})
+			.setDisabled(this.plugin.settings.syncOptions.manageFilenames === 'off')
 
 		// ----------------------------------------------------
 
