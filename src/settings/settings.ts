@@ -13,7 +13,7 @@ import {
 import prettyMilliseconds from 'pretty-ms'
 import { type SyncOptions, hostAndPortToUrl, urlToHostAndPort } from 'yanki'
 
-export const yankiDebounceInterval = 2500
+export const yankiDebounceInterval = 4000
 
 export type YankiPluginSettings = {
 	autoSyncEnabled: boolean
