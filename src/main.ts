@@ -16,6 +16,7 @@ import {
 	sanitizeNamespace,
 } from './utilities'
 import sindreDebounce from 'debounce'
+import path from 'node:path'
 import {
 	Notice,
 	Plugin,
@@ -403,7 +404,8 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	private isInsideWatchedFolders(fileOrFolder: TAbstractFile): boolean {
-		const folderPath = `${fileOrFolder instanceof TFolder ? fileOrFolder.path : fileOrFolder.parent?.path}/`
+		// Use dirname to find parent folder even if file has been deleted
+		const folderPath = `${fileOrFolder instanceof TFolder ? fileOrFolder.path : fileOrFolder.parent?.path ?? path.dirname(fileOrFolder.path)}/`
 		return this.getSanitizedFolders().some((watchedFolder) => folderPath.startsWith(watchedFolder))
 	}
 
