@@ -12,12 +12,12 @@ export function formatRenameReport(renameReport: RenameFilesReport): DocumentFra
 	if (renameCount > 0) {
 		return sanitizeHTMLToDom(
 			html`<strong>Anki note file rename:</strong><br />${renameCount} local
-				${plur('note', renameCount)} renamed`,
+				${plur('note', renameCount)} renamed.`,
 		)
 	}
 
 	return sanitizeHTMLToDom(
-		html`<strong>Anki note file rename:</strong><br />No local notes renamed`,
+		html`<strong>Anki note file rename:</strong><br />All local note names are already correct.`,
 	)
 }
 

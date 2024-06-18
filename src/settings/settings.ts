@@ -107,6 +107,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	}
 
 	public render(): void {
+		// Save scroll position, so the settings don't jump around on re-renders
+		const scrollPosition = this.containerEl.scrollTop
+
 		this.containerEl.empty()
 
 		// Cancel any pending syncs
@@ -481,5 +484,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				this.render()
 			})
 		})
+
+		// Restore scroll position
+		this.containerEl.scrollTop = scrollPosition
 	}
 }
