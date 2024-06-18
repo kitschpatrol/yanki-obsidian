@@ -280,21 +280,29 @@ When enabled, notes matching the name of their parent folder will not be synced.
 
 _Default: Enabled_
 
-#### Automatic note names
+#### Automatic note name settings
 
-##### Automatically name flashcard notes
+##### Automatic note names
 
-When enabled, local note files will be renamed to match their content. This is useful if you want to feel have semantically reasonable note file names without managing them by hand. The "Prompt" option will attempt to create the filename based on the what Anki would show you first — usually the front of the card. The while "Response" option will prioritize whatever Anki would show you second — usually the back of the card, or the elided text in the case of a cloze card, or the type-in part of a type in the answer card.
+When enabled, local note files will be renamed to match their content. This is useful if you want to feel have semantically reasonable note file names without managing them by hand.
 
 If the prompt or response has multiple lines, only the first line is considered.
-
-For edge cases, like notes with empty prompt content or no response content, Yanki will fall back to the other parts of the card to try to . If, after every effort, no reasonable title can be identified, then "Untitled" will be used.
 
 The file renaming pass runs as part of every sync to Anki, and only affects notes in side a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names.
 
 There are some great community plugins dedicated to content-driven file naming, like Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin, but the feature is built into Yanki since the renaming process can be more precise when it understands the structure of flashcard notes.
 
 _Default: Off_
+
+##### Name model
+
+If [Automatic note names](#automatic-note-names) is enabled, this setting allows you to prioritize which part of the flashcard note should be used for the automatic note file name.
+
+The "Prompt" option will attempt to create the filename based on the what Anki would show you first — usually the front of the card. The while "Response" option will prioritize whatever Anki would show you second — usually the back of the card, or the elided text in the case of a cloze card, or the type-in part of a type in the answer card.
+
+For edge cases, like notes with empty prompt content or no response content, Yanki will fall back to the other parts of the card to try to . If, after every effort, no reasonable title can be identified, then "Untitled" will be used.
+
+_Default: Prompt_
 
 ##### Maximum note name length
 

@@ -10,10 +10,15 @@ export function formatRenameReport(renameReport: RenameFilesReport): DocumentFra
 	).length
 
 	if (renameCount > 0) {
-		return sanitizeHTMLToDom(html`${renameCount} local ${plur('note', renameCount)} renamed`)
+		return sanitizeHTMLToDom(
+			html`<strong>Anki note file rename:</strong><br />${renameCount} local
+				${plur('note', renameCount)} renamed`,
+		)
 	}
 
-	return sanitizeHTMLToDom(html`No local notes renamed`)
+	return sanitizeHTMLToDom(
+		html`<strong>Anki note file rename:</strong><br />No local notes renamed`,
+	)
 }
 
 export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
@@ -29,8 +34,8 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 
 	if (ankiUnreachable) {
 		return sanitizeHTMLToDom(
-			html`<strong>Anki sync failed:</strong> Could not connect to Anki<br /><br />Please make sure
-				that Anki is running, and that it has the
+			html`<strong>Anki sync failed:</strong><br />Could not connect to Anki<br /><br />Please make
+				sure that the Anki desktop application is running, and that it has the
 				<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on installed and
 				<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
 					>configured</a
@@ -40,7 +45,7 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 
 	const reportLines: string[] = []
 	reportLines.push(
-		'<strong>Successfully synced to Anki.</strong>',
+		html`<strong>Successfully synced to Anki:</strong>`,
 		`Found ${synced.length} flashcard ${plur('note', synced.length)} in vault.`,
 		'',
 		'Sync report:',
@@ -58,7 +63,7 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 		reportLines.push(`\t${renameCount} local ${plur('note', renameCount)} renamed`)
 	}
 
-	return sanitizeHTMLToDom(reportLines.join('<br>'))
+	return sanitizeHTMLToDom(reportLines.join(html`<br />`))
 }
 
 export function arraysEqual<T>(a: T[], b: T[]): boolean {

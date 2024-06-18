@@ -75,7 +75,8 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 		ankiWeb: true,
 		defaultDeckName: 'Yanki Obsidian Default',
 		dryRun: false,
-		manageFilenames: 'off',
+		filenameMode: 'prompt',
+		manageFilenames: false,
 		maxFilenameLength: 60,
 		namespace: 'Yanki Obsidian Plugin', // To be overwritten with deck name
 		obsidianVault: undefined,
@@ -256,7 +257,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.addButton((button) => {
 				button.setButtonText('Sync now')
 				button.onClick(() => {
-					this.plugin.syncFlashcardNotesToAnki.trigger()
+					void this.plugin.syncFlashcardNotesToAnki(true)
+					this.plugin.syncFlashcardNotesToAnki.flush()
 				})
 			})
 			.setDesc(sanitizeHTMLToDom(html`Last synced: <em>${capitalize(syncTime)}</em>`))
@@ -337,7 +339,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				await this.plugin.saveSettings()
 				this.render()
 
-				new Notice("Reset Yanki's Anki-Connect settings to defaults.")
+				new Notice(
+					sanitizeHTMLToDom(
+						html`<strong>Yanki plugin:</strong><br />Reset Yanki's Anki-Connect settings to
+							defaults.`,
+					),
+				)
 			})
 		})
 
@@ -346,45 +353,67 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Note filename management
 
 		new Setting(this.containerEl)
-			.setName('Automatic note names')
+			.setName('Automatic note name settings')
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
 					html`Yanki can automatically set the file name of flashcard notes to a snippet of text
-						derived from either the <em>prompt</em> or <em>response</em> of the note. If enabled,
-						note file names are updated whenever notes are synced to Anki.`,
+					derived from the note's contents. If enabled, note file names are updated whenever notes
+					are synced to Anki.`,
 				),
 			)
 
 		new Setting(this.containerEl)
-			.setName('Automatically name flashcard notes')
+			.setName('Automatic note names')
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.syncOptions.manageFilenames)
+				toggle.onChange(async (value) => {
+					this.plugin.settings.syncOptions.manageFilenames = value
+					await this.plugin.saveSettings()
+					this.render()
+				})
+			})
+			.setDisabled(!this.plugin.settings.autoSyncEnabled)
+
+		new Setting(this.containerEl)
+			.setName('Name mode')
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Derive the automatic note file name from either the <em>prompt</em> or
+						<em>response</em> portion of the note.`,
+				),
+			)
 			.addDropdown((dropdown) => {
 				dropdown
 					.addOptions({
-						off: 'Off',
 						prompt: 'Prompt',
 						response: 'Response',
 					})
-					.setValue(this.plugin.settings.syncOptions.manageFilenames)
+					.setValue(this.plugin.settings.syncOptions.filenameMode)
 					.onChange(async (value) => {
-						this.plugin.settings.syncOptions.manageFilenames =
-							value as YankiPluginSettings['syncOptions']['manageFilenames']
+						this.plugin.settings.syncOptions.filenameMode =
+							value as YankiPluginSettings['syncOptions']['filenameMode']
 						await this.plugin.saveSettings()
-						this.render()
 					})
 			})
 
+		new Setting(this.containerEl).setName('Maximum note name length').addText((text) => {
+			text.setPlaceholder(String(yankiPluginDefaultSettings.syncOptions.maxFilenameLength))
+			text.setValue(String(this.plugin.settings.syncOptions.maxFilenameLength))
+			text.onChange(async (value) => {
+				this.plugin.settings.syncOptions.maxFilenameLength = Number(value)
+				await this.plugin.saveSettings()
+			})
+		})
+
 		new Setting(this.containerEl)
-			.setName('Maximum note name length')
-			.addText((text) => {
-				text.setPlaceholder(String(yankiPluginDefaultSettings.syncOptions.maxFilenameLength))
-				text.setValue(String(this.plugin.settings.syncOptions.maxFilenameLength))
-				text.onChange(async (value) => {
-					this.plugin.settings.syncOptions.maxFilenameLength = Number(value)
-					await this.plugin.saveSettings()
+			.addButton((button) => {
+				button.setButtonText('Rename now')
+				button.onClick(async () => {
+					await this.plugin.updateNoteFilenames(true)
 				})
 			})
-			.setDisabled(this.plugin.settings.syncOptions.manageFilenames === 'off')
+			.setDisabled(!this.plugin.settings.syncOptions.manageFilenames)
 
 		// ----------------------------------------------------
 

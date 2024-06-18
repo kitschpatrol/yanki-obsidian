@@ -18,7 +18,7 @@
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.3.0",
+	"packageManager": "pnpm@9.4.0",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=8.0.0"
@@ -47,7 +47,7 @@
 	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.7.2",
-		"@types/node": "^20.14.2",
+		"@types/node": "^20.14.4",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
 		"debounce": "^2.1.0",
@@ -56,9 +56,9 @@
 		"obsidian": "latest",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.0.0",
-		"tsx": "^4.15.4",
-		"type-fest": "^4.20.0",
-		"yanki": "^0.5.0"
+		"tsx": "^4.15.6",
+		"type-fest": "^4.20.1",
+		"yanki": "^0.6.0"
 	},
 	"obsidian": {
 		"description": "Ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",

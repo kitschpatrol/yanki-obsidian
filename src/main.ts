@@ -16,7 +16,7 @@ import {
 	sanitizeNamespace,
 } from './utilities'
 import sindreDebounce from 'debounce'
-import path from 'node:path'
+import path from 'node:path' // Assuming polyfilled
 import {
 	Notice,
 	Plugin,
@@ -55,7 +55,12 @@ export default class YankiPlugin extends Plugin {
 
 		this.addCommand({
 			callback: () => {
-				this.syncFlashcardNotesToAnki.trigger()
+				// Trigger is not receiving a default `userInitiated` value on the
+				// first invocation for some reason... so we specify it manually
+				// and then flush to invoke without delay.
+				// this.plugin.syncFlashcardNotesToAnki.trigger()
+				void this.syncFlashcardNotesToAnki(true)
+				this.syncFlashcardNotesToAnki.flush()
 			},
 			id: 'sync-yanki-obsidian',
 			name: 'Sync flashcard notes to Anki',
@@ -135,10 +140,11 @@ export default class YankiPlugin extends Plugin {
 		return this.app.vault.rename(file, newPath)
 	}
 
-	// This never seems to fire?
+	// This never seems to fire, even after manually editing the settings file?
 	async onExternalSettingsChange() {
 		if (this.settings.verboseLogging) {
-			new Notice('External settings changed')
+			// TODO when is this called?
+			// new Notice('External settings changed')
 		}
 
 		const originalSettings = structuredClone(this.settings)
@@ -178,8 +184,8 @@ export default class YankiPlugin extends Plugin {
 		}
 	}
 
-	private async updateNoteFilenames(): Promise<void> {
-		if (this.settings.folders.length === 0 || this.settings.syncOptions.manageFilenames === 'off') {
+	public async updateNoteFilenames(userInitiated = true): Promise<void> {
+		if (this.settings.folders.length === 0 || !this.settings.syncOptions.manageFilenames) {
 			return
 		}
 
@@ -201,12 +207,12 @@ export default class YankiPlugin extends Plugin {
 			this.fileAdapterRename,
 		)
 
-		if (this.settings.verboseLogging) {
+		if (userInitiated || this.settings.verboseLogging) {
 			new Notice(formatRenameReport(report), 5000)
 		}
 	}
 
-	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated = true): Promise<void> => {
+	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated): Promise<void> => {
 		if (!userInitiated && !this.settings.autoSyncEnabled) {
 			return
 		}
@@ -223,8 +229,9 @@ export default class YankiPlugin extends Plugin {
 			if (userInitiated || this.settings.verboseLogging) {
 				new Notice(
 					sanitizeHtmlToDomWithFunction(
-						html`<strong>Anki sync failed:</strong> No flashcard folders to sync. You can specify
-							flashcard folders in the Yanki plugin's <a class="settings">settings tab</a>.`,
+						html`<strong>Anki sync failed:</strong><br />No flashcard folders to sync. You can
+							specify flashcard folders in the Yanki plugin's
+							<a class="settings">settings tab</a>.`,
 						'settings',
 						this.openSettingsTab,
 					),
@@ -242,8 +249,8 @@ export default class YankiPlugin extends Plugin {
 		if (files.length === 0) {
 			if (userInitiated || this.settings.verboseLogging) {
 				sanitizeHtmlToDomWithFunction(
-					html`<strong>Anki sync failed:</strong> No flashcard notes found. Check your flashcard
-						folders in the Yanki plugin's <a class="settings">settings tab</a>.`,
+					html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
+						flashcard folders in the Yanki plugin's <a class="settings">settings tab</a>.`,
 					'settings',
 					this.openSettingsTab,
 				)
@@ -398,7 +405,7 @@ export default class YankiPlugin extends Plugin {
 
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
 			// Rename right away
-			await this.updateNoteFilenames()
+			await this.updateNoteFilenames(false)
 			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
