@@ -157,9 +157,11 @@ export default class YankiPlugin extends Plugin {
 	 * @param previousSettings
 	 */
 	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
+		// This could be more concise...
 		const {
 			ankiConnectOptions: { host: oldHost, key: oldKey, port: oldPort },
 			ankiWeb: oldAnkiWeb,
+			filenameMode: oldFilenameMode,
 			manageFilenames: oldManageFilenames,
 			maxFilenameLength: oldMaxFilenameLength,
 		} = previousSettings.syncOptions
@@ -167,6 +169,7 @@ export default class YankiPlugin extends Plugin {
 		const {
 			ankiConnectOptions: { host, key, port },
 			ankiWeb,
+			filenameMode,
 			manageFilenames,
 			maxFilenameLength,
 		} = this.settings.syncOptions
@@ -176,11 +179,19 @@ export default class YankiPlugin extends Plugin {
 			host !== oldHost ||
 			port !== oldPort ||
 			ankiWeb !== oldAnkiWeb ||
-			manageFilenames !== oldManageFilenames ||
-			maxFilenameLength !== oldMaxFilenameLength ||
 			!arraysEqual(previousSettings.folders, this.settings.folders)
 		) {
 			await this.syncFlashcardNotesToAnki(false)
+		}
+
+		// Local file names have no effect on Anki's database,
+		// so just update them without syncing if settings have changed
+		if (
+			manageFilenames !== oldManageFilenames ||
+			filenameMode !== oldFilenameMode ||
+			maxFilenameLength !== oldMaxFilenameLength
+		) {
+			await this.updateNoteFilenames(false)
 		}
 	}
 
