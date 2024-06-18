@@ -220,7 +220,16 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		// Sync
 
-		new Setting(this.containerEl).setName('Sync settings').setHeading()
+		new Setting(this.containerEl)
+			.setName('Sync settings')
+			.setHeading()
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`To manually sync notes to Anki, perform the
+						<strong>Sync flashcard notes to Anki</strong> command, or select the
+						<strong>Sync now</strong> button below.`,
+				),
+			)
 
 		new Setting(this.containerEl)
 			.setName('Automatic sync')
@@ -344,8 +353,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 				new Notice(
 					sanitizeHTMLToDom(
-						html`<strong>Yanki plugin:</strong><br />Reset Yanki's Anki-Connect settings to
-							defaults.`,
+						html`<strong>Yanki:</strong><br />Reset Yanki's Anki-Connect settings to defaults.`,
 					),
 				)
 			})
@@ -482,6 +490,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				this.plugin.settings.stats.sync = structuredClone(yankiPluginDefaultSettings.stats.sync)
 				await this.plugin.saveSettings()
 				this.render()
+
+				new Notice(sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki's sync stats.`))
 			})
 		})
 
