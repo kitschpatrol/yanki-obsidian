@@ -162,6 +162,10 @@ But when you do want to delete something, it's as simple as deleting it from Obs
 
 If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yanki will also trigger this next step in the sync, automating the flow from Markdown → Anki → AnkiWeb in one shot. (Configurable via a [setting](#push-to-ankiweb).)
 
+### Automatic syncing
+
+When the Automatic Sync option is enabled, Yanki will automatically updated notes to Anki whenever flashcard notes are created, deleted, or updated in Obsidian.
+
 ### Existing notes are untouched
 
 Yanki tags the notes it's in charge of with a hidden field, so it will never touch your existing Anki notes. (_But please exercise caution until the 1.0 release..._)
