@@ -52,7 +52,7 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	)
 
 	for (const [action, count] of Object.entries(actionCounts)) {
-		reportLines.push(`\t${count} Anki ${plur('card', count)} ${action}`)
+		reportLines.push(`\t${count} Anki ${plur('note', count)} ${action}`)
 	}
 
 	const renameCount = synced.filter(
