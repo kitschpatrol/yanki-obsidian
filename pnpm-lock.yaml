@@ -12,8 +12,8 @@ importers:
         specifier: ^4.7.2
         version: 4.7.2(cspell@8.8.4)(eslint@8.57.0)(mdat@0.7.2(typescript@5.4.5))(postcss-html@1.7.0)(prettier@3.3.2)(stylelint@16.6.1(typescript@5.4.5))(svelte-eslint-parser@0.37.0(svelte@4.2.18))(svelte@4.2.18)(typescript@5.4.5)
       '@types/node':
-        specifier: ^20.14.5
-        version: 20.14.5
+        specifier: ^20.14.6
+        version: 20.14.6
       builtin-modules:
         specifier: ^4.0.0
         version: 4.0.0
@@ -45,8 +45,8 @@ importers:
         specifier: ^4.20.1
         version: 4.20.1
       yanki:
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.7.1
+        version: 0.7.1
 
 packages:
 
@@ -695,8 +695,8 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@20.14.5':
-    resolution: {integrity: sha512-aoRR+fJkZT2l0aGOJhuA8frnCSoNX6W7U2mpNq63+BxBIj5BQFt8rHy627kijCmm63ijdSdwvGgpUsU6MBsZZA==}
+  '@types/node@20.14.6':
+    resolution: {integrity: sha512-JbA0XIJPL1IiNnU7PFxDXyfAwcwVVrOoqyzzyQTyMeVhBzkJVMSkC1LlVsRQ2lpqiY4n6Bb9oCS6lzDKVQxbZw==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -4183,8 +4183,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  yanki@0.7.0:
-    resolution: {integrity: sha512-hCfdBz+HGxrsIheMyZ35RntC1B010L7mFvloRxMUnR2Sb1jl+giytacVYjMDT7F8JuJZH0Lotb42tyuKYkOTVg==}
+  yanki@0.7.1:
+    resolution: {integrity: sha512-/m9V4h3MQLAPvpbzkfq3w+E5K177YQSB4+0/YPuKzocbp//8pxcXYXhSNq2FjHjnNGwd0ehA1s4aTpCM4SyEDw==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     hasBin: true
 
@@ -4937,7 +4937,7 @@ snapshots:
 
   '@types/concat-stream@2.0.3':
     dependencies:
-      '@types/node': 20.14.5
+      '@types/node': 20.14.6
 
   '@types/debug@4.1.12':
     dependencies:
@@ -4975,7 +4975,7 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
-  '@types/node@20.14.5':
+  '@types/node@20.14.6':
     dependencies:
       undici-types: 5.26.5
 
@@ -5003,7 +5003,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 20.14.5
+      '@types/node': 20.14.6
     optional: true
 
   '@typescript-eslint/eslint-plugin@7.13.0(@typescript-eslint/parser@7.13.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)':
@@ -5539,9 +5539,9 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@5.0.0(@types/node@20.14.5)(cosmiconfig@9.0.0(typescript@5.4.5))(typescript@5.4.5):
+  cosmiconfig-typescript-loader@5.0.0(@types/node@20.14.6)(cosmiconfig@9.0.0(typescript@5.4.5))(typescript@5.4.5):
     dependencies:
-      '@types/node': 20.14.5
+      '@types/node': 20.14.6
       cosmiconfig: 9.0.0(typescript@5.4.5)
       jiti: 1.21.6
       typescript: 5.4.5
@@ -7293,12 +7293,12 @@ snapshots:
       '@clack/prompts': 0.7.0
       '@kitschpatrol/tldraw-cli': 4.6.3(typescript@5.4.5)
       '@types/mdast': 4.0.4
-      '@types/node': 20.14.5
+      '@types/node': 20.14.6
       '@types/unist': 3.0.2
       '@types/which': 3.0.4
       '@types/yargs': 17.0.32
       cosmiconfig: 9.0.0(typescript@5.4.5)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.14.5)(cosmiconfig@9.0.0(typescript@5.4.5))(typescript@5.4.5)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.14.6)(cosmiconfig@9.0.0(typescript@5.4.5))(typescript@5.4.5)
       execa: 9.2.0
       globby: 14.0.1
       read-pkg: 9.0.1
@@ -9253,7 +9253,7 @@ snapshots:
       '@types/concat-stream': 2.0.3
       '@types/debug': 4.1.12
       '@types/is-empty': 1.2.3
-      '@types/node': 20.14.5
+      '@types/node': 20.14.6
       '@types/unist': 3.0.2
       concat-stream: 2.0.0
       debug: 4.3.5
@@ -9543,12 +9543,12 @@ snapshots:
 
   yaml@2.4.5: {}
 
-  yanki@0.7.0:
+  yanki@0.7.1:
     dependencies:
       '@types/hast': 3.0.4
       '@types/lodash-es': 4.17.12
       '@types/mdast': 4.0.4
-      '@types/node': 20.14.5
+      '@types/node': 20.14.6
       '@types/unist': 3.0.2
       '@types/yargs': 17.0.32
       chalk: 5.3.0

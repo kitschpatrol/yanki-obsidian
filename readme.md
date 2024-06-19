@@ -27,7 +27,7 @@
 <!-- /short-description -->
 
 > \[!IMPORTANT]
-> The Yanki Obsidian plugin is feature-complete but will remain zero-versioned until it's been thoroughly tested. Please Exercise caution and make backups of your Anki notes until the 1.0.0 release.
+> The Yanki Obsidian plugin is feature-complete but will remain zero-versioned until it's been thoroughly tested. Please exercise caution and make backups of your Anki notes until the 1.0.0 release.
 >
 > The plugin is currently available for download and installation directly from GitHub for advanced users. It will be submitted for review and potential inclusion as an Obsidian community plugin once I am completely confident in its design and reliability. _(Expected in July, 2024.)_
 >
