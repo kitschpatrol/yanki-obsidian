@@ -274,6 +274,50 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				})
 			})
 
+		new Setting(this.containerEl)
+			.setName('Sync media assets')
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Yanki can automatically sync image, audio, and video assets in your Obsidian notes to
+					Anki's media asset library.`,
+				),
+			)
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.syncMedia.enabled)
+				toggle.onChange(async (value) => {
+					this.plugin.settings.syncMedia.enabled = value
+					await this.plugin.saveSettings()
+					this.render()
+				})
+			})
+
+		new Setting(this.containerEl)
+			.setName('Media asset sync mode')
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Choose whether to sync local media (attachments in your Obsidian vault, or
+						<code>file://</code> protocol links), remote media (anything linked via
+						<code>http://</code> protocol, or both.
+						<em
+							>Note that syncing remote media may slow down syncing since assets must be
+							downloaded.</em
+						>`,
+				),
+			)
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOptions({
+						all: 'Both local and remote',
+						local: 'Local only',
+						remote: 'Remote only',
+					})
+					.setValue(this.plugin.settings.syncMedia.mode)
+					.onChange(async (value) => {
+						this.plugin.settings.syncMedia.mode = value as YankiPluginSettings['syncMedia']['mode']
+						await this.plugin.saveSettings()
+					})
+			})
+
 		const { latestSyncTime } = this.plugin.settings.stats.sync
 		const syncTime = latestSyncTime === undefined ? 'Never' : moment.unix(latestSyncTime).fromNow()
 
@@ -370,56 +414,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				)
 			})
 		})
-
-		// ----------------------------------------------------
-
-		// Media asset sync management
-
-		new Setting(this.containerEl)
-			.setName('Media asset settings')
-			.setHeading()
-			.setDesc(
-				sanitizeHTMLToDom(
-					html`Yanki can automatically sync image, audio, and video assets in your Obsidian notes to
-					Anki's media asset library.`,
-				),
-			)
-
-		new Setting(this.containerEl).setName('Sync media assets to Anki').addToggle((toggle) => {
-			toggle.setValue(this.plugin.settings.syncMedia.enabled)
-			toggle.onChange(async (value) => {
-				this.plugin.settings.syncMedia.enabled = value
-				await this.plugin.saveSettings()
-				this.render()
-			})
-		})
-
-		new Setting(this.containerEl)
-			.setName('Media asset sync mode')
-			.setDesc(
-				sanitizeHTMLToDom(
-					html`Choose whether to sync local media (attachments in your Obsidian vault, or
-						<code>file://</code> protocol links), remote media (anything linked via
-						<code>http://</code> protocol, or both.
-						<em
-							>Note that syncing remote media may slow down syncing since assets must be
-							downloaded.</em
-						>`,
-				),
-			)
-			.addDropdown((dropdown) => {
-				dropdown
-					.addOptions({
-						all: 'Both local and remote',
-						local: 'Local only',
-						remote: 'Remote only',
-					})
-					.setValue(this.plugin.settings.syncMedia.mode)
-					.onChange(async (value) => {
-						this.plugin.settings.syncMedia.mode = value as YankiPluginSettings['syncMedia']['mode']
-						await this.plugin.saveSettings()
-					})
-			})
 
 		// ----------------------------------------------------
 
