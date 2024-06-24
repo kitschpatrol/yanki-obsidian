@@ -11,14 +11,21 @@ import {
 	sanitizeHTMLToDom,
 } from 'obsidian'
 import prettyMilliseconds from 'pretty-ms'
-import { type SyncOptions, hostAndPortToUrl, urlToHostAndPort } from 'yanki'
-
-export const yankiDebounceInterval = 4000
+import { hostAndPortToUrl, urlToHostAndPort } from 'yanki'
 
 export type YankiPluginSettings = {
-	autoSyncEnabled: boolean
+	ankiConnect: {
+		host: string
+		key: string | undefined
+		port: number
+	}
 	folders: string[]
 	ignoreFolderNotes: boolean
+	manageFilenames: {
+		enabled: boolean
+		maxLength: number
+		mode: 'prompt' | 'response'
+	}
 	stats: {
 		sync: {
 			auto: number
@@ -37,14 +44,31 @@ export type YankiPluginSettings = {
 			}
 		}
 	}
-	syncOptions: SyncOptions
-	verboseLogging: boolean
+	sync: {
+		autoSyncDebounceInterval: number // Note exposed in settings
+		autoSyncEnabled: boolean
+		pushToAnkiWeb: boolean
+	}
+	syncMedia: {
+		enabled: boolean
+		mode: 'all' | 'local' | 'remote'
+	}
+	verboseNotices: boolean
 }
 
 export const yankiPluginDefaultSettings: YankiPluginSettings = {
-	autoSyncEnabled: true,
+	ankiConnect: {
+		host: 'http://localhost',
+		key: undefined,
+		port: 8765,
+	},
 	folders: [],
 	ignoreFolderNotes: true,
+	manageFilenames: {
+		enabled: false,
+		maxLength: 60,
+		mode: 'prompt',
+	},
 	stats: {
 		sync: {
 			auto: 0,
@@ -63,25 +87,16 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 			},
 		},
 	},
-	syncOptions: {
-		ankiConnectOptions: {
-			autoLaunch: false,
-			customFetch: undefined,
-			host: 'http://localhost',
-			key: undefined,
-			port: 8765,
-			version: 6,
-		},
-		ankiWeb: true,
-		defaultDeckName: 'Yanki Obsidian Default',
-		dryRun: false,
-		filenameMode: 'prompt',
-		manageFilenames: false,
-		maxFilenameLength: 60,
-		namespace: 'Yanki Obsidian Plugin', // To be overwritten with deck name
-		obsidianVault: undefined,
+	sync: {
+		autoSyncDebounceInterval: 4000,
+		autoSyncEnabled: false,
+		pushToAnkiWeb: false,
 	},
-	verboseLogging: false,
+	syncMedia: {
+		enabled: true,
+		mode: 'local',
+	},
+	verboseNotices: false,
 }
 
 export class YankiPluginSettingTab extends PluginSettingTab {
@@ -237,9 +252,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				'Sync to the local Anki database whenever flashcard notes are changed and the Anki desktop application is open.',
 			)
 			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.autoSyncEnabled)
+				toggle.setValue(this.plugin.settings.sync.autoSyncEnabled)
 				toggle.onChange(async (value) => {
-					this.plugin.settings.autoSyncEnabled = value
+					this.plugin.settings.sync.autoSyncEnabled = value
 					await this.plugin.saveSettings()
 					this.render()
 				})
@@ -251,16 +266,13 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				'Sync changes to the AnkiWeb "cloud" in addition to the local Anki database. This is like pressing the "Sync" button in the Anki desktop app.',
 			)
 			.addToggle((toggle) => {
-				toggle.setValue(
-					this.plugin.settings.autoSyncEnabled ? this.plugin.settings.syncOptions.ankiWeb : false,
-				)
+				toggle.setValue(this.plugin.settings.sync.pushToAnkiWeb)
 				toggle.onChange(async (value) => {
-					this.plugin.settings.syncOptions.ankiWeb = value
+					this.plugin.settings.sync.pushToAnkiWeb = value
 					await this.plugin.saveSettings()
 					this.render()
 				})
 			})
-			.setDisabled(!this.plugin.settings.autoSyncEnabled)
 
 		const { latestSyncTime } = this.plugin.settings.stats.sync
 		const syncTime = latestSyncTime === undefined ? 'Never' : moment.unix(latestSyncTime).fromNow()
@@ -302,13 +314,13 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setDesc('Set the host and port to match your Anki-Connect configuration.')
 			.addText((text) => {
 				text.setPlaceholder('Host Name and Port')
-				const { host, port } = this.plugin.settings.syncOptions.ankiConnectOptions
+				const { host, port } = this.plugin.settings.ankiConnect
 				text.setValue(hostAndPortToUrl(host, port))
 
 				text.onChange(async (value) => {
 					const { host, port } = urlToHostAndPort(value)
-					this.plugin.settings.syncOptions.ankiConnectOptions.host = host
-					this.plugin.settings.syncOptions.ankiConnectOptions.port = port
+					this.plugin.settings.ankiConnect.host = host
+					this.plugin.settings.ankiConnect.port = port
 					await this.plugin.saveSettings()
 				})
 			})
@@ -319,10 +331,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.addText((text) => {
 				text.setPlaceholder('API Key')
 
-				text.setValue(this.plugin.settings.syncOptions.ankiConnectOptions.key ?? '')
+				text.setValue(this.plugin.settings.ankiConnect.key ?? '')
 				text.onChange(async (value) => {
-					this.plugin.settings.syncOptions.ankiConnectOptions.key =
-						value.trim().length > 0 ? value.trim() : undefined
+					this.plugin.settings.ankiConnect.key = value.trim().length > 0 ? value.trim() : undefined
 					await this.plugin.saveSettings()
 				})
 			})
@@ -334,10 +345,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// 		'Experimental Mac-only feature to automatically launch the Anki desktop application when syncing.',
 		// 	)
 		// 	.addToggle(async (toggle) => {
-		// 		const { autoLaunch } = this.plugin.settings.syncOptions.ankiConnectOptions
+		// 		const { autoLaunch } = this.plugin.settings.ankiConnect
 
 		// 		toggle.setValue(autoLaunch).onChange(async (enabled) => {
-		// 			this.plugin.settings.syncOptions.ankiConnectOptions.autoLaunch = enabled
+		// 			this.plugin.settings.syncOptions.ankiConnect.autoLaunch = enabled
 		// 			await this.plugin.saveSettings()
 		// 		})
 		// 	})
@@ -345,8 +356,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl).addButton((button) => {
 			button.setButtonText('Reset to Anki-Connect defaults')
 			button.onClick(async () => {
-				this.plugin.settings.syncOptions.ankiConnectOptions =
-					yankiPluginDefaultSettings.syncOptions.ankiConnectOptions
+				this.plugin.settings.ankiConnect = {
+					...yankiPluginDefaultSettings.ankiConnect,
+				}
 
 				await this.plugin.saveSettings()
 				this.render()
@@ -358,6 +370,56 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				)
 			})
 		})
+
+		// ----------------------------------------------------
+
+		// Media asset sync management
+
+		new Setting(this.containerEl)
+			.setName('Media asset settings')
+			.setHeading()
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Yanki can automatically sync image, audio, and video assets in your Obsidian notes to
+					Anki's media asset library.`,
+				),
+			)
+
+		new Setting(this.containerEl).setName('Sync media assets to Anki').addToggle((toggle) => {
+			toggle.setValue(this.plugin.settings.syncMedia.enabled)
+			toggle.onChange(async (value) => {
+				this.plugin.settings.syncMedia.enabled = value
+				await this.plugin.saveSettings()
+				this.render()
+			})
+		})
+
+		new Setting(this.containerEl)
+			.setName('Media asset sync mode')
+			.setDesc(
+				sanitizeHTMLToDom(
+					html`Choose whether to sync local media (attachments in your Obsidian vault, or
+						<code>file://</code> protocol links), remote media (anything linked via
+						<code>http://</code> protocol, or both.
+						<em
+							>Note that syncing remote media may slow down syncing since assets must be
+							downloaded.</em
+						>`,
+				),
+			)
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOptions({
+						all: 'Both local and remote',
+						local: 'Local only',
+						remote: 'Remote only',
+					})
+					.setValue(this.plugin.settings.syncMedia.mode)
+					.onChange(async (value) => {
+						this.plugin.settings.syncMedia.mode = value as YankiPluginSettings['syncMedia']['mode']
+						await this.plugin.saveSettings()
+					})
+			})
 
 		// ----------------------------------------------------
 
@@ -374,17 +436,14 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				),
 			)
 
-		new Setting(this.containerEl)
-			.setName('Automatic note names')
-			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.syncOptions.manageFilenames)
-				toggle.onChange(async (value) => {
-					this.plugin.settings.syncOptions.manageFilenames = value
-					await this.plugin.saveSettings()
-					this.render()
-				})
+		new Setting(this.containerEl).setName('Automatic note names').addToggle((toggle) => {
+			toggle.setValue(this.plugin.settings.manageFilenames.enabled)
+			toggle.onChange(async (value) => {
+				this.plugin.settings.manageFilenames.enabled = value
+				await this.plugin.saveSettings()
+				this.render()
 			})
-			.setDisabled(!this.plugin.settings.autoSyncEnabled)
+		})
 
 		new Setting(this.containerEl)
 			.setName('Name mode')
@@ -400,19 +459,19 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						prompt: 'Prompt',
 						response: 'Response',
 					})
-					.setValue(this.plugin.settings.syncOptions.filenameMode)
+					.setValue(this.plugin.settings.manageFilenames.mode)
 					.onChange(async (value) => {
-						this.plugin.settings.syncOptions.filenameMode =
-							value as YankiPluginSettings['syncOptions']['filenameMode']
+						this.plugin.settings.manageFilenames.mode =
+							value as YankiPluginSettings['manageFilenames']['mode']
 						await this.plugin.saveSettings()
 					})
 			})
 
 		new Setting(this.containerEl).setName('Maximum note name length').addText((text) => {
-			text.setPlaceholder(String(yankiPluginDefaultSettings.syncOptions.maxFilenameLength))
-			text.setValue(String(this.plugin.settings.syncOptions.maxFilenameLength))
+			text.setPlaceholder(String(yankiPluginDefaultSettings.manageFilenames.maxLength))
+			text.setValue(String(this.plugin.settings.manageFilenames.maxLength))
 			text.onChange(async (value) => {
-				this.plugin.settings.syncOptions.maxFilenameLength = Number(value)
+				this.plugin.settings.manageFilenames.maxLength = Number(value)
 				await this.plugin.saveSettings()
 			})
 		})
@@ -424,7 +483,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					await this.plugin.updateNoteFilenames(true)
 				})
 			})
-			.setDisabled(!this.plugin.settings.syncOptions.manageFilenames)
+			.setDisabled(!this.plugin.settings.manageFilenames.enabled)
 
 		// ----------------------------------------------------
 
@@ -434,16 +493,16 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Options to facilitate development and debugging of Yanki.<br />Trouble with the
-						plugin? Please
+					html`Options to facilitate development and debugging of early releases of Yanki.<br />Trouble
+						with the plugin? Please
 						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				),
 			)
 
 		new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
-			toggle.setValue(this.plugin.settings.verboseLogging)
+			toggle.setValue(this.plugin.settings.verboseNotices)
 			toggle.onChange(async (value) => {
-				this.plugin.settings.verboseLogging = value
+				this.plugin.settings.verboseNotices = value
 				await this.plugin.saveSettings()
 			})
 		})

@@ -1,8 +1,8 @@
 import { sanitizeHTMLToDom } from 'obsidian'
 import plur from 'plur'
-import { type RenameFilesReport, type SyncReport } from 'yanki'
+import { type RenameFilesResult, type SyncFilesResult } from 'yanki'
 
-export function formatRenameReport(renameReport: RenameFilesReport): DocumentFragment {
+export function formatRenameResult(renameReport: RenameFilesResult): DocumentFragment {
 	const { notes } = renameReport
 
 	const renameCount = notes.filter(
@@ -21,7 +21,7 @@ export function formatRenameReport(renameReport: RenameFilesReport): DocumentFra
 	)
 }
 
-export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
+export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment {
 	const { synced } = syncReport
 
 	// Aggregate the counts of each action:
@@ -66,6 +66,22 @@ export function formatSyncReport(syncReport: SyncReport): DocumentFragment {
 	return sanitizeHTMLToDom(reportLines.join(html`<br />`))
 }
 
+export function objectsEqual<T extends Record<string, unknown>>(a: T, b: T): boolean {
+	if (a === b) return true
+	if (a === undefined || b === undefined) return false
+
+	const aKeys = Object.keys(a)
+	const bKeys = Object.keys(b)
+
+	if (aKeys.length !== bKeys.length) return false
+
+	for (const key of aKeys) {
+		if (a[key] !== b[key]) return false
+	}
+
+	return true
+}
+
 export function arraysEqual<T>(a: T[], b: T[]): boolean {
 	if (a === b) return true
 	if (a === undefined || b === undefined) return false
@@ -83,6 +99,7 @@ export function capitalize(text: string): string {
 }
 
 export function sanitizeNamespace(namespace: string): string {
+	// Additional sanitization also happens inside Yanki
 	// Stuck with es2020?
 	// eslint-disable-next-line unicorn/prefer-string-replace-all
 	return namespace.replace(/[*:]/g, '')

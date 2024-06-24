@@ -4,14 +4,14 @@
 import {
 	YankiPluginSettingTab,
 	type YankiPluginSettings,
-	yankiDebounceInterval,
 	yankiPluginDefaultSettings,
 } from './settings/settings'
 import {
 	arraysEqual,
-	formatRenameReport,
-	formatSyncReport,
+	formatRenameResult,
+	formatSyncResult,
 	html,
+	objectsEqual,
 	sanitizeHtmlToDomWithFunction,
 	sanitizeNamespace,
 } from './utilities'
@@ -28,7 +28,17 @@ import {
 	requestUrl,
 	sanitizeHTMLToDom,
 } from 'obsidian'
-import { renameFiles, syncFiles } from 'yanki'
+import {
+	type FetchAdapter,
+	type RenameFilesOptions,
+	type SyncFilesOptions,
+	renameFiles,
+	syncFiles,
+} from 'yanki'
+
+type CommonProperties<T, U> = {
+	[K in keyof T & keyof U]: T[K] extends U[K] ? T[K] : never
+}
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings
@@ -40,7 +50,15 @@ export default class YankiPlugin extends Plugin {
 	async onload() {
 		this.fileAdapterWrite = this.fileAdapterWrite.bind(this)
 		this.fileAdapterRead = this.fileAdapterRead.bind(this)
+		this.fileAdapterReadBuffer = this.fileAdapterReadBuffer.bind(this)
+		this.fileAdapterStat = this.fileAdapterStat.bind(this)
 		this.fileAdapterRename = this.fileAdapterRename.bind(this)
+		this.fetchAdapter = this.fetchAdapter.bind(this)
+
+		this.getSharedOptions = this.getSharedOptions.bind(this)
+		this.getRenameFilesOptions = this.getRenameFilesOptions.bind(this)
+		this.getSyncFilesOptions = this.getSyncFilesOptions.bind(this)
+
 		this.getWatchedFiles = this.getWatchedFiles.bind(this)
 		this.getSanitizedFolders = this.getSanitizedFolders.bind(this)
 		this.openSettingsTab = this.openSettingsTab.bind(this)
@@ -102,11 +120,64 @@ export default class YankiPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = { ...this.settings, ...(await this.loadData()) }
-		this.settings.syncOptions.obsidianVault = this.app.vault.getName()
-		// Using vault ID instead of name should be more robust to vault renaming... why is this private?
-		// https://forum.obsidian.md/t/is-there-any-way-to-derive-the-vault-id-from-the-vault-directory/5573/4
-		// Warning: changing the static components of this value can result in data loss...
-		this.settings.syncOptions.namespace = `Yanki Obsidian - Vault ID ${sanitizeNamespace((this.app as unknown as { appId: string }).appId)}`
+	}
+
+	/**
+	 * Translates YankiPluginSettings into a shared options object for use in Yanki library functions
+	 * @param settings - YankiPluginSettings object
+	 * @returns Options object with fields common to both RenameFilesOptions and SyncFilesOptions
+	 */
+	private getSharedOptions(
+		settings: YankiPluginSettings,
+	): CommonProperties<RenameFilesOptions, SyncFilesOptions> {
+		return {
+			dryRun: false,
+			fetchAdapter: this.fetchAdapter,
+			fileAdapter: {
+				readFile: this.fileAdapterRead,
+				readFileBuffer: this.fileAdapterReadBuffer,
+				rename: this.fileAdapterRename,
+				stat: this.fileAdapterStat,
+				writeFile: this.fileAdapterWrite,
+			},
+			manageFilenames: settings.manageFilenames.enabled ? settings.manageFilenames.mode : 'off',
+			maxFilenameLength: settings.manageFilenames.maxLength,
+			// Using vault ID instead of name should be more robust to vault renaming... why is this private?
+			// https://forum.obsidian.md/t/is-there-any-way-to-derive-the-vault-id-from-the-vault-directory/5573/4
+			// Warning: changing the static components of this value can result in data loss...
+			namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace((this.app as unknown as { appId: string }).appId)}`,
+			obsidianVault: this.app.vault.getName(),
+			syncMediaAssets: settings.syncMedia.enabled ? settings.syncMedia.mode : 'off',
+		}
+	}
+
+	/**
+	 * Translates YankiPluginSettings into an options object for use in the Yanki library's `renameFiles` function
+	 * @param settings - YankiPluginSettings object
+	 * @returns RenameFilesOptions object
+	 */
+	private getRenameFilesOptions(settings: YankiPluginSettings): RenameFilesOptions {
+		return this.getSharedOptions(settings)
+	}
+
+	/**
+	 * Translates YankiPluginSettings into an options object for use in the Yanki library's `syncFiles` function
+	 * @param settings - YankiPluginSettings object
+	 * @returns SyncFilesOptions object
+	 */
+	private getSyncFilesOptions(settings: YankiPluginSettings): SyncFilesOptions {
+		return {
+			...this.getSharedOptions(settings),
+			ankiConnectOptions: {
+				autoLaunch: false,
+				fetchAdapter: this.fetchAdapter,
+				host: settings.ankiConnect.host,
+				key: settings.ankiConnect.key,
+				port: settings.ankiConnect.port,
+				version: 6,
+			},
+			ankiWeb: settings.sync.pushToAnkiWeb,
+		}
 	}
 
 	async saveSettings() {
@@ -122,6 +193,31 @@ export default class YankiPlugin extends Plugin {
 		return this.app.vault.read(file)
 	}
 
+	async fileAdapterReadBuffer(path: string): Promise<Uint8Array> {
+		const file = this.app.vault.getFileByPath(path)
+		if (file === null) {
+			throw new Error(`File not found: ${path}`)
+		}
+
+		const content = await this.app.vault.readBinary(file)
+		return new Uint8Array(content)
+	}
+
+	async fileAdapterStat(path: string): Promise<{ ctimeMs: number; mtimeMs: number; size: number }> {
+		const file = this.app.vault.getFileByPath(path)
+		if (file === null) {
+			throw new Error(`File not found: ${path}`)
+		}
+
+		return new Promise((resolve) => {
+			resolve({
+				ctimeMs: file.stat.ctime,
+				mtimeMs: file.stat.mtime,
+				size: file.stat.size,
+			})
+		})
+	}
+
 	async fileAdapterWrite(path: string, data: string): Promise<void> {
 		const file = this.app.vault.getFileByPath(path)
 		if (file === null) {
@@ -133,6 +229,7 @@ export default class YankiPlugin extends Plugin {
 
 	async fileAdapterRename(oldPath: string, newPath: string): Promise<void> {
 		const file = this.app.vault.getFileByPath(oldPath)
+
 		if (file === null) {
 			throw new Error(`File not found: ${oldPath}`)
 		}
@@ -140,9 +237,32 @@ export default class YankiPlugin extends Plugin {
 		return this.app.vault.rename(file, newPath)
 	}
 
+	async fetchAdapter(
+		input: Parameters<FetchAdapter>[0],
+		init: Parameters<FetchAdapter>[1],
+	): ReturnType<FetchAdapter> {
+		const response = await requestUrl({
+			body: init?.body,
+			headers: init?.headers,
+			method: init?.method,
+			url: input,
+		})
+
+		return {
+			headers: response.headers,
+			async json() {
+				// Wrapped to satisfy fetch definition
+				return new Promise((resolve) => {
+					resolve(response.json)
+				})
+			},
+			status: response.status,
+		}
+	}
+
 	// This never seems to fire, even after manually editing the settings file?
 	async onExternalSettingsChange() {
-		if (this.settings.verboseLogging) {
+		if (this.settings.verboseNotices) {
 			// TODO when is this called?
 			// new Notice('External settings changed')
 		}
@@ -153,50 +273,31 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	/**
-	 * Certain settings changes require a sync to Anki
+	 * Certain settings changes should trigger a sync to Anki, (but only fires if auto sync is enabled)
 	 * @param previousSettings
 	 */
 	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
 		// This could be more concise...
-		const {
-			ankiConnectOptions: { host: oldHost, key: oldKey, port: oldPort },
-			ankiWeb: oldAnkiWeb,
-			filenameMode: oldFilenameMode,
-			manageFilenames: oldManageFilenames,
-			maxFilenameLength: oldMaxFilenameLength,
-		} = previousSettings.syncOptions
-
-		const {
-			ankiConnectOptions: { host, key, port },
-			ankiWeb,
-			filenameMode,
-			manageFilenames,
-			maxFilenameLength,
-		} = this.settings.syncOptions
-
-		if (
-			key !== oldKey ||
-			host !== oldHost ||
-			port !== oldPort ||
-			ankiWeb !== oldAnkiWeb ||
-			!arraysEqual(previousSettings.folders, this.settings.folders)
-		) {
-			await this.syncFlashcardNotesToAnki(false)
-		}
 
 		// Local file names have no effect on Anki's database,
 		// so just update them without syncing if settings have changed
-		if (
-			manageFilenames !== oldManageFilenames ||
-			filenameMode !== oldFilenameMode ||
-			maxFilenameLength !== oldMaxFilenameLength
-		) {
+		if (!objectsEqual(previousSettings.manageFilenames, this.settings.manageFilenames)) {
 			await this.updateNoteFilenames(false)
+		}
+
+		if (
+			!objectsEqual(previousSettings.ankiConnect, this.settings.ankiConnect) ||
+			!objectsEqual(previousSettings.sync, this.settings.sync) ||
+			!objectsEqual(previousSettings.syncMedia, this.settings.syncMedia) ||
+			!arraysEqual(previousSettings.folders, this.settings.folders) ||
+			previousSettings.ignoreFolderNotes !== this.settings.ignoreFolderNotes
+		) {
+			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
 
 	public async updateNoteFilenames(userInitiated = true): Promise<void> {
-		if (this.settings.folders.length === 0 || !this.settings.syncOptions.manageFilenames) {
+		if (this.settings.folders.length === 0 || !this.settings.manageFilenames.enabled) {
 			return
 		}
 
@@ -208,27 +309,19 @@ export default class YankiPlugin extends Plugin {
 
 		const filePaths = files.map((file) => file.path)
 
-		const report = await renameFiles(
-			filePaths,
-			{
-				...this.settings.syncOptions,
-			},
-			this.fileAdapterRead,
-			this.fileAdapterWrite,
-			this.fileAdapterRename,
-		)
+		const report = await renameFiles(filePaths, this.getRenameFilesOptions(this.settings))
 
-		if (userInitiated || this.settings.verboseLogging) {
-			new Notice(formatRenameReport(report), 5000)
+		if (userInitiated || this.settings.verboseNotices) {
+			new Notice(formatRenameResult(report), 5000)
 		}
 	}
 
 	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated): Promise<void> => {
-		if (!userInitiated && !this.settings.autoSyncEnabled) {
+		if (!userInitiated && !this.settings.sync.autoSyncEnabled) {
 			return
 		}
 
-		if (userInitiated || this.settings.verboseLogging) {
+		if (userInitiated || this.settings.verboseNotices) {
 			new Notice(
 				sanitizeHTMLToDom(
 					html`<strong>${userInitiated ? '' : 'Automatic '}Anki sync starting...</strong>`,
@@ -237,7 +330,7 @@ export default class YankiPlugin extends Plugin {
 		}
 
 		if (this.settings.folders.length === 0) {
-			if (userInitiated || this.settings.verboseLogging) {
+			if (userInitiated || this.settings.verboseNotices) {
 				new Notice(
 					sanitizeHtmlToDomWithFunction(
 						html`<strong>Anki sync failed:</strong><br />No flashcard folders to sync. You can
@@ -257,7 +350,7 @@ export default class YankiPlugin extends Plugin {
 		const files: TFile[] = this.getWatchedFiles()
 
 		if (files.length === 0) {
-			if (userInitiated || this.settings.verboseLogging) {
+			if (userInitiated || this.settings.verboseNotices) {
 				sanitizeHtmlToDomWithFunction(
 					html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
 						flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
@@ -274,39 +367,10 @@ export default class YankiPlugin extends Plugin {
 		const filePaths = files.map((file) => file.path)
 
 		try {
-			const report = await syncFiles(
-				filePaths,
-				{
-					...this.settings.syncOptions,
-					ankiConnectOptions: {
-						// Use Obsidian's fetch implementation
-						async customFetch(input, init) {
-							const response = await requestUrl({
-								body: init.body,
-								headers: init.headers,
-								method: init.method,
-								url: input,
-							})
+			const report = await syncFiles(filePaths, this.getSyncFilesOptions(this.settings))
 
-							return {
-								async json() {
-									// Wrapped to satisfy fetch definition
-									return new Promise((resolve) => {
-										resolve(response.json)
-									})
-								},
-								status: response.status,
-							}
-						},
-					},
-				},
-				this.fileAdapterRead,
-				this.fileAdapterWrite,
-				this.fileAdapterRename,
-			)
-
-			if (userInitiated || this.settings.verboseLogging) {
-				new Notice(formatSyncReport(report), 15_000)
+			if (userInitiated || this.settings.verboseNotices) {
+				new Notice(formatSyncResult(report), 15_000)
 			}
 
 			// Dev stats
@@ -351,7 +415,7 @@ export default class YankiPlugin extends Plugin {
 		this.settingsTab.render()
 
 		// This.syncInProgress = false
-	}, yankiDebounceInterval)
+	}, this.settings.sync.autoSyncDebounceInterval)
 
 	// Watch for changes, but only folders!
 	private async handleRename(fileOrFolder: TAbstractFile, oldPath: string) {
