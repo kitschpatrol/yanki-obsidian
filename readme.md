@@ -178,6 +178,14 @@ Yanki looks inside each note, and extracts either the text of the "prompt" (e.g.
 
 Edge cases are carefully managed to ensure that there's always _some kind_ of best-effort semantically valuable file name assigned.
 
+### Media asset synchronization
+
+Yanki can sync images, videos, and audio files embedded in your Obsidian notes to Anki's media asset management system. At your option, it can sync local assets, or assets linked via URL, or both, or none.
+
+Yanki automatically manages clean-up of synced media assets in Anki when you delete your Obsidian notes, or when specific assets are removed from your Obsidian notes.
+
+Both wiki-style `![[something.png]]` and `![markdown](style.png)` asset embedding syntaxes are supported.
+
 ## Markdown note types
 
 Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain element in your Markdown notes.
@@ -284,36 +292,6 @@ When enabled, notes matching the name of their parent folder will not be synced.
 
 _Default: Enabled_
 
-#### Automatic note name settings
-
-##### Automatic note names
-
-When enabled, local note files will be renamed to match their content. This is useful if you want to feel have semantically reasonable note file names without managing them by hand.
-
-If the prompt or response has multiple lines, only the first line is considered.
-
-The file renaming pass runs as part of every sync to Anki, and only affects notes in side a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names.
-
-There are some great community plugins dedicated to content-driven file naming, like Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin, but the feature is built into Yanki since the renaming process can be more precise when it understands the structure of flashcard notes.
-
-_Default: Off_
-
-##### Name model
-
-If [Automatic note names](#automatic-note-names) is enabled, this setting allows you to prioritize which part of the flashcard note should be used for the automatic note file name.
-
-The "Prompt" option will attempt to create the filename based on the what Anki would show you first — usually the front of the card. The while "Response" option will prioritize whatever Anki would show you second — usually the back of the card, or the elided text in the case of a cloze card, or the type-in part of a type in the answer card.
-
-For edge cases, like notes with empty prompt content or no response content, Yanki will fall back to the other parts of the card to try to . If, after every effort, no reasonable title can be identified, then "Untitled" will be used.
-
-_Default: Prompt_
-
-##### Maximum note name length
-
-Yanki will truncate long automatic file names with ellipses. This setting allows you to specify, in characters, how long of an automatic title you would like (exclusive of the truncation ellipses and file extension). Note that a (generous) upper limit is enforced to comply with operating system limitations.
-
-_Default: 60 characters_
-
 #### Sync settings
 
 ##### Automatic sync
@@ -338,9 +316,65 @@ This happens on a best-effort basis, and Yanki doesn't get any feedback on wheth
 
 _Default: Enabled_
 
+##### Sync media assets
+
+Copy any images, videos, or audio file assets linked in your Obsidian notes to Anki's media asset library. This ensures that your media will be visible in Anki desktop application, and sync to the Anki mobile app.
+
+A media asset is effectively any file referenced inside wither wiki-style `![[something.png]]` or `![markdown](style.png)` asset embedding syntax in your notes.
+
+Internally, Yanki hashes assets before they're copied into Anki to make sure they're only copied when necessary. Yanki also takes care of cleaning up and unreferenced media assets automatically on every sync.
+
+Options:
+
+- **All**  
+  Sync all media assets linked in your notes.
+
+- **Local only**  
+  Only sync assets from your vault's attachments directory or other local path. This includes any assets linked with the `file:` protocol, and any `paths/to/local/assets.png`.
+
+- **Remote only**  
+  Only sync assets that are "hot-linked" from a remote URL. This includes any assets linked with the `http:` or `https:` protocols. other local path. This includes any assets linked with the `file:` protocol, and any `paths/to/local/assets.png`.
+
+  _Note that syncing remote media assets can slow down the sync process, since each asset has to be downloaded. If you usually have access to the web where / when you're using Anki, syncing remote assets is probably not necessary._
+
+- **None**  
+  Don't sync any media assets. Any assets in your vault that are only available locally via a relative path will _not_ appear in the Anki desktop application and mobile app.
+
+_Default: Local only_
+
 #### Anki-Connect settings
 
 These are advanced settings to accommodate custom Anki-Connect configurations. The defaults are almost certainly fine.
+
+#### Automatic note name settings
+
+##### Automatic note names
+
+When enabled, local note files will be renamed to match their content. This is useful if you want to feel have semantically reasonable note file names without managing them by hand.
+
+If the prompt or response has multiple lines, only the first line is considered.
+
+The file renaming pass runs as part of every sync to Anki, and only affects notes in side a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names.
+
+There are some great community plugins dedicated to content-driven file naming, like Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin, but the feature is built into Yanki since the renaming process can be more precise when it understands the structure of flashcard notes.
+
+_Default: Off_
+
+##### Name mode
+
+If [Automatic note names](#automatic-note-names) is enabled, this setting allows you to prioritize which part of the flashcard note should be used for the automatic note file name.
+
+The "Prompt" option will attempt to create the filename based on the what Anki would show you first — usually the front of the card. The while "Response" option will prioritize whatever Anki would show you second — usually the back of the card, or the elided text in the case of a cloze card, or the type-in part of a type in the answer card.
+
+For edge cases, like notes with empty prompt content or no response content, Yanki will fall back to the other parts of the card to try to . If, after every effort, no reasonable title can be identified, then "Untitled" will be used.
+
+_Default: Prompt_
+
+##### Maximum note name length
+
+Yanki will truncate long automatic file names with ellipses. This setting allows you to specify, in characters, how long of an automatic title you would like (exclusive of the truncation ellipses and file extension). Note that a (generous) upper limit is enforced to comply with operating system limitations.
+
+_Default: 60 characters_
 
 ## FAQ
 

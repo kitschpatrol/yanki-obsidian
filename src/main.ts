@@ -147,7 +147,7 @@ export default class YankiPlugin extends Plugin {
 			// Warning: changing the static components of this value can result in data loss...
 			namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace((this.app as unknown as { appId: string }).appId)}`,
 			obsidianVault: this.app.vault.getName(),
-			syncMediaAssets: settings.syncMedia.enabled ? settings.syncMedia.mode : 'off',
+			syncMediaAssets: settings.sync.mediaMode,
 		}
 	}
 
@@ -288,7 +288,6 @@ export default class YankiPlugin extends Plugin {
 		if (
 			!objectsEqual(previousSettings.ankiConnect, this.settings.ankiConnect) ||
 			!objectsEqual(previousSettings.sync, this.settings.sync) ||
-			!objectsEqual(previousSettings.syncMedia, this.settings.syncMedia) ||
 			!arraysEqual(previousSettings.folders, this.settings.folders) ||
 			previousSettings.ignoreFolderNotes !== this.settings.ignoreFolderNotes
 		) {

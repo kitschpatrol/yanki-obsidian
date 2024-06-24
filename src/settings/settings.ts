@@ -47,11 +47,8 @@ export type YankiPluginSettings = {
 	sync: {
 		autoSyncDebounceInterval: number // Note exposed in settings
 		autoSyncEnabled: boolean
+		mediaMode: 'all' | 'local' | 'off' | 'remote'
 		pushToAnkiWeb: boolean
-	}
-	syncMedia: {
-		enabled: boolean
-		mode: 'all' | 'local' | 'remote'
 	}
 	verboseNotices: boolean
 }
@@ -90,11 +87,8 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 	sync: {
 		autoSyncDebounceInterval: 4000,
 		autoSyncEnabled: false,
+		mediaMode: 'local',
 		pushToAnkiWeb: false,
-	},
-	syncMedia: {
-		enabled: true,
-		mode: 'local',
 	},
 	verboseNotices: false,
 }
@@ -279,25 +273,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setDesc(
 				sanitizeHTMLToDom(
 					html`Yanki can automatically sync image, audio, and video assets in your Obsidian notes to
-					Anki's media asset library.`,
-				),
-			)
-			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.syncMedia.enabled)
-				toggle.onChange(async (value) => {
-					this.plugin.settings.syncMedia.enabled = value
-					await this.plugin.saveSettings()
-					this.render()
-				})
-			})
-
-		new Setting(this.containerEl)
-			.setName('Media asset sync mode')
-			.setDesc(
-				sanitizeHTMLToDom(
-					html`Choose whether to sync local media (attachments in your Obsidian vault, or
-						<code>file://</code> protocol links), remote media (anything linked via
-						<code>http://</code> protocol, or both.
+						Anki's media asset library.
 						<em
 							>Note that syncing remote media may slow down syncing since assets must be
 							downloaded.</em
@@ -307,13 +283,15 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.addDropdown((dropdown) => {
 				dropdown
 					.addOptions({
-						all: 'Both local and remote',
+						all: 'All',
 						local: 'Local only',
 						remote: 'Remote only',
+						// eslint-disable-next-line perfectionist/sort-objects
+						none: 'None',
 					})
-					.setValue(this.plugin.settings.syncMedia.mode)
+					.setValue(this.plugin.settings.sync.mediaMode)
 					.onChange(async (value) => {
-						this.plugin.settings.syncMedia.mode = value as YankiPluginSettings['syncMedia']['mode']
+						this.plugin.settings.sync.mediaMode = value as YankiPluginSettings['sync']['mediaMode']
 						await this.plugin.saveSettings()
 					})
 			})
