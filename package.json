@@ -61,9 +61,10 @@
 		"yanki": "^0.8.3"
 	},
 	"obsidian": {
-		"description": "Automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
+		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
+		"id": "yanki",
+		"isDesktopOnly": true,
 		"minAppVersion": "1.5.0",
-		"name": "Yanki",
-		"isDesktopOnly": true
+		"name": "Yanki"
 	}
 }
