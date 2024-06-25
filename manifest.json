@@ -1,7 +1,7 @@
 {
   "author": "Eric Mika",
   "authorUrl": "https://ericmika.com",
-  "description": "Ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.",
+  "description": "Automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
   "id": "yanki-obsidian",
   "version": "0.8.0",
   "minAppVersion": "1.5.0",

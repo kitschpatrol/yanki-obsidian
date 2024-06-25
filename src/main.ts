@@ -7,6 +7,7 @@ import {
 	yankiPluginDefaultSettings,
 } from './settings/settings'
 import {
+	type CommonProperties,
 	arraysEqual,
 	formatRenameResult,
 	formatSyncResult,
@@ -37,16 +38,13 @@ import {
 	syncFiles,
 } from 'yanki'
 
-type CommonProperties<T, U> = {
-	[K in keyof T & keyof U]: T[K] extends U[K] ? T[K] : never
-}
-
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = yankiPluginDefaultSettings
 	private readonly settingsTab: YankiPluginSettingTab = new YankiPluginSettingTab(this.app, this)
 
-	// Where is "unregisterEvent"?
-	// private readonly syncInProgress = false
+	// ----------------------------------------------------
+
+	// Initialization
 
 	async onload() {
 		this.fileAdapterWrite = this.fileAdapterWrite.bind(this)
@@ -59,19 +57,18 @@ export default class YankiPlugin extends Plugin {
 		this.getSharedOptions = this.getSharedOptions.bind(this)
 		this.getRenameFilesOptions = this.getRenameFilesOptions.bind(this)
 		this.getSyncFilesOptions = this.getSyncFilesOptions.bind(this)
+		this.openSettingsTab = this.openSettingsTab.bind(this)
 
 		this.getWatchedFiles = this.getWatchedFiles.bind(this)
 		this.getSanitizedFolders = this.getSanitizedFolders.bind(this)
-		this.openSettingsTab = this.openSettingsTab.bind(this)
-
-		this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
 
 		this.getVaultBasePath = this.getVaultBasePath.bind(this)
 		this.vaultPathToAbsolutePath = this.vaultPathToAbsolutePath.bind(this)
 		this.absolutePathToVaultPath = this.absolutePathToVaultPath.bind(this)
 
-		// Pretty sure sindreDebounce handles binding
+		// The debounce library we're using handles binding internally
 		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
+		// this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
 
 		await this.loadSettings()
 		this.addSettingTab(this.settingsTab)
@@ -90,6 +87,7 @@ export default class YankiPlugin extends Plugin {
 		})
 
 		// Spot any changes since last session
+		// Where is "unregisterEvent"?
 		this.app.workspace.onLayoutReady(async () => {
 			await this.syncFlashcardNotesToAnki(false)
 			this.registerEvent(this.app.vault.on('create', this.handleCreate.bind(this)))
@@ -105,13 +103,21 @@ export default class YankiPlugin extends Plugin {
 		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
 	}
 
+	// Typed override
+	async loadData(): Promise<YankiPluginSettings> {
+		return super.loadData() as Promise<YankiPluginSettings>
+	}
+
 	// Nothing to do?
 	// onunload() {
 	// }
 
-	// Typed override
-	async loadData(): Promise<YankiPluginSettings> {
-		return super.loadData() as Promise<YankiPluginSettings>
+	// ----------------------------------------------------
+
+	// Settings
+
+	async loadSettings() {
+		this.settings = { ...this.settings, ...(await this.loadData()) }
 	}
 
 	async openSettingsTab() {
@@ -123,8 +129,39 @@ export default class YankiPlugin extends Plugin {
 		setting.openTabById(this.manifest.id)
 	}
 
-	async loadSettings() {
-		this.settings = { ...this.settings, ...(await this.loadData()) }
+	/**
+	 * Certain settings changes should trigger a sync to Anki, (but only fires if auto sync is enabled)
+	 * @param previousSettings
+	 */
+	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
+		// This could be more concise...
+
+		// Local file names have no effect on Anki's database,
+		// so just update them without syncing if settings have changed
+		if (!objectsEqual(previousSettings.manageFilenames, this.settings.manageFilenames)) {
+			await this.updateNoteFilenames(false)
+		}
+
+		if (
+			!objectsEqual(previousSettings.ankiConnect, this.settings.ankiConnect) ||
+			!objectsEqual(previousSettings.sync, this.settings.sync) ||
+			!arraysEqual(previousSettings.folders, this.settings.folders) ||
+			previousSettings.ignoreFolderNotes !== this.settings.ignoreFolderNotes
+		) {
+			await this.syncFlashcardNotesToAnki(false)
+		}
+	}
+
+	// This never seems to fire, even after manually editing the settings file?
+	async onExternalSettingsChange() {
+		if (this.settings.verboseNotices) {
+			// TODO when is this actually called?
+			new Notice('External settings changed')
+		}
+
+		const originalSettings = structuredClone(this.settings)
+		await this.loadSettings()
+		await this.settingsChangeSyncCheck(originalSettings)
 	}
 
 	/**
@@ -190,6 +227,131 @@ export default class YankiPlugin extends Plugin {
 		await this.saveData(this.settings)
 	}
 
+	// ----------------------------------------------------
+
+	// Primary commands
+
+	updateNoteFilenames = sindreDebounce(async (userInitiated): Promise<void> => {
+		if (this.settings.folders.length === 0 || !this.settings.manageFilenames.enabled) {
+			return
+		}
+
+		const files: TFile[] = this.getWatchedFiles()
+
+		if (files.length === 0) {
+			return
+		}
+
+		const filePaths = files.map((file) => file.path)
+
+		const report = await renameFiles(filePaths, this.getRenameFilesOptions(this.settings))
+
+		if (userInitiated || this.settings.verboseNotices) {
+			new Notice(formatRenameResult(report), 5000)
+		}
+	}, this.settings.manageFilenames.debounceIntervalMs)
+
+	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated): Promise<void> => {
+		if (!userInitiated && !this.settings.sync.autoSyncEnabled) {
+			return
+		}
+
+		if (userInitiated || this.settings.verboseNotices) {
+			new Notice(
+				sanitizeHTMLToDom(
+					html`<strong>${userInitiated ? '' : 'Automatic '}Anki sync starting...</strong>`,
+				),
+			)
+		}
+
+		if (this.settings.folders.length === 0) {
+			if (userInitiated || this.settings.verboseNotices) {
+				new Notice(
+					sanitizeHtmlToDomWithFunction(
+						html`<strong>Anki sync failed:</strong><br />No flashcard folders to sync. You can
+							specify flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
+						'settings',
+						this.openSettingsTab,
+					),
+				)
+			}
+
+			this.settings.stats.sync.invalid++
+			return
+		}
+
+		const files: TFile[] = this.getWatchedFiles()
+
+		if (files.length === 0) {
+			if (userInitiated || this.settings.verboseNotices) {
+				sanitizeHtmlToDomWithFunction(
+					html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
+						flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
+					'settings',
+					this.openSettingsTab,
+				)
+			}
+
+			this.settings.stats.sync.invalid++
+
+			return
+		}
+
+		const filePaths = files.map((file) => file.path)
+
+		try {
+			const report = await syncFiles(filePaths, this.getSyncFilesOptions(this.settings))
+
+			if (userInitiated || this.settings.verboseNotices) {
+				new Notice(formatSyncResult(report), 15_000)
+			}
+
+			// Dev stats
+			this.settings.stats.sync.latestSyncTime = moment().unix()
+			this.settings.stats.sync.duration =
+				this.settings.stats.sync.duration === 0
+					? report.duration
+					: (this.settings.stats.sync.duration + report.duration) / 2
+
+			for (const syncedFile of report.synced) {
+				this.settings.stats.sync.notes[syncedFile.action] += 1
+			}
+
+			if (userInitiated) {
+				this.settings.stats.sync.manual++
+			} else {
+				this.settings.stats.sync.auto++
+			}
+		} catch (error) {
+			this.settings.stats.sync.errors++
+
+			// Connection errors are caught in the Yanki library, and surfaced to Obsidian in the sync report
+			// by detecting `ankiUnreachable` sync actions
+
+			// Always notice on weird errors
+			const fragment = sanitizeHtmlToDomWithFunction(
+				html`<strong>Anki sync failed:</strong>
+					<pre style="white-space: pre-wrap;">${String(error)}</pre>
+					Please check <a class="settings">the plugin settings</a>, review the
+					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again.
+					If trouble persists, you can open
+					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the
+					Yanki plugin repository.`,
+				'settings',
+				this.openSettingsTab,
+			)
+			new Notice(fragment, 15_000)
+		}
+
+		// Save stats and update the settings tab
+		await this.saveSettings()
+		this.settingsTab.render()
+	}, this.settings.sync.autoSyncDebounceIntervalMs)
+
+	// ----------------------------------------------------
+
+	// Yanki FileAdapter implementations
+
 	async fileAdapterRead(filePath: string): Promise<string> {
 		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
@@ -248,6 +410,10 @@ export default class YankiPlugin extends Plugin {
 		return this.app.vault.rename(file, vaultFileNewPath)
 	}
 
+	// ----------------------------------------------------
+
+	// Yanki and Yanki-Connect FetchAdapter implementations
+
 	async fetchAdapter(
 		input: Parameters<FetchAdapter>[0],
 		init: Parameters<FetchAdapter>[1],
@@ -271,168 +437,12 @@ export default class YankiPlugin extends Plugin {
 		}
 	}
 
-	// This never seems to fire, even after manually editing the settings file?
-	async onExternalSettingsChange() {
-		if (this.settings.verboseNotices) {
-			// TODO when is this called?
-			// new Notice('External settings changed')
-		}
+	// ----------------------------------------------------
 
-		const originalSettings = structuredClone(this.settings)
-		await this.loadSettings()
-		await this.settingsChangeSyncCheck(originalSettings)
-	}
-
-	/**
-	 * Certain settings changes should trigger a sync to Anki, (but only fires if auto sync is enabled)
-	 * @param previousSettings
-	 */
-	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
-		// This could be more concise...
-
-		// Local file names have no effect on Anki's database,
-		// so just update them without syncing if settings have changed
-		if (!objectsEqual(previousSettings.manageFilenames, this.settings.manageFilenames)) {
-			await this.updateNoteFilenames(false)
-		}
-
-		if (
-			!objectsEqual(previousSettings.ankiConnect, this.settings.ankiConnect) ||
-			!objectsEqual(previousSettings.sync, this.settings.sync) ||
-			!arraysEqual(previousSettings.folders, this.settings.folders) ||
-			previousSettings.ignoreFolderNotes !== this.settings.ignoreFolderNotes
-		) {
-			await this.syncFlashcardNotesToAnki(false)
-		}
-	}
-
-	public async updateNoteFilenames(userInitiated = true): Promise<void> {
-		if (this.settings.folders.length === 0 || !this.settings.manageFilenames.enabled) {
-			return
-		}
-
-		const files: TFile[] = this.getWatchedFiles()
-
-		if (files.length === 0) {
-			return
-		}
-
-		const filePaths = files.map((file) => file.path)
-
-		const report = await renameFiles(filePaths, this.getRenameFilesOptions(this.settings))
-
-		if (userInitiated || this.settings.verboseNotices) {
-			new Notice(formatRenameResult(report), 5000)
-		}
-	}
-
-	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated): Promise<void> => {
-		if (!userInitiated && !this.settings.sync.autoSyncEnabled) {
-			return
-		}
-
-		if (userInitiated || this.settings.verboseNotices) {
-			new Notice(
-				sanitizeHTMLToDom(
-					html`<strong>${userInitiated ? '' : 'Automatic '}Anki sync starting...</strong>`,
-				),
-			)
-		}
-
-		if (this.settings.folders.length === 0) {
-			if (userInitiated || this.settings.verboseNotices) {
-				new Notice(
-					sanitizeHtmlToDomWithFunction(
-						html`<strong>Anki sync failed:</strong><br />No flashcard folders to sync. You can
-							specify flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
-						'settings',
-						this.openSettingsTab,
-					),
-				)
-			}
-
-			this.settings.stats.sync.invalid++
-			return
-		}
-
-		// This.syncInProgress = true
-
-		const files: TFile[] = this.getWatchedFiles()
-
-		if (files.length === 0) {
-			if (userInitiated || this.settings.verboseNotices) {
-				sanitizeHtmlToDomWithFunction(
-					html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
-						flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
-					'settings',
-					this.openSettingsTab,
-				)
-			}
-
-			this.settings.stats.sync.invalid++
-			// This.syncInProgress = false
-			return
-		}
-
-		const filePaths = files.map((file) => file.path)
-
-		try {
-			const report = await syncFiles(filePaths, this.getSyncFilesOptions(this.settings))
-
-			if (userInitiated || this.settings.verboseNotices) {
-				new Notice(formatSyncResult(report), 15_000)
-			}
-
-			// Dev stats
-			this.settings.stats.sync.latestSyncTime = moment().unix()
-			this.settings.stats.sync.duration =
-				this.settings.stats.sync.duration === 0
-					? report.duration
-					: (this.settings.stats.sync.duration + report.duration) / 2
-
-			for (const syncedFile of report.synced) {
-				this.settings.stats.sync.notes[syncedFile.action] += 1
-			}
-
-			if (userInitiated) {
-				this.settings.stats.sync.manual++
-			} else {
-				this.settings.stats.sync.auto++
-			}
-		} catch (error) {
-			this.settings.stats.sync.errors++
-
-			// Connection errors are caught in the Yanki library, and surfaced to Obsidian in the sync report
-			// by detecting `ankiUnreachable` sync actions
-
-			// Always notice on weird errors
-			const fragment = sanitizeHtmlToDomWithFunction(
-				html`<strong>Anki sync failed:</strong>
-					<pre style="white-space: pre-wrap;">${String(error)}</pre>
-					Please check <a class="settings">the plugin settings</a>, review the
-					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again.
-					If trouble persists, you can open
-					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the
-					Yanki plugin repository.`,
-				'settings',
-				this.openSettingsTab,
-			)
-			new Notice(fragment, 15_000)
-		}
-
-		// Save stats and update the settings tab
-		await this.saveSettings()
-		this.settingsTab.render()
-
-		// This.syncInProgress = false
-	}, this.settings.sync.autoSyncDebounceInterval)
+	// Vault observation
 
 	// Watch for changes, but only folders!
 	private async handleRename(fileOrFolder: TAbstractFile, oldPath: string) {
-		// If (this.syncInProgress) {
-		// 	return
-		// }
-
 		if (fileOrFolder instanceof TFile) {
 			return
 		}
@@ -456,10 +466,6 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	private async handleCreate(fileOrFolder: TAbstractFile) {
-		// If (this.syncInProgress) {
-		// 	return
-		// }
-
 		// Don't care about folders
 		if (fileOrFolder instanceof TFile && this.isInsideWatchedFolders(fileOrFolder)) {
 			await this.syncFlashcardNotesToAnki(false)
@@ -483,10 +489,6 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	private async handleModify(fileOrFolder: TAbstractFile) {
-		// If (this.syncInProgress) {
-		// 	return
-		// }
-
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
 			// Rename right away
 			await this.updateNoteFilenames(false)
@@ -526,6 +528,10 @@ export default class YankiPlugin extends Plugin {
 	public getSanitizedFolders(): string[] {
 		return [...new Set(this.settings.folders.filter((folder) => folder.trim().length > 0))]
 	}
+
+	// ----------------------------------------------------
+
+	// Paths
 
 	private getVaultBasePath(): string | undefined {
 		// https://forum.obsidian.md/t/how-to-get-vault-absolute-path/22965/3

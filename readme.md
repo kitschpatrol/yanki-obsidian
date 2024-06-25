@@ -22,7 +22,7 @@
 
 <!-- short-description -->
 
-**An Obsidian plugin for ultra-simple automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. Minimal configuration. No fuss.**
+**An Obsidian plugin for automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. No fuss.**
 
 <!-- /short-description -->
 
@@ -43,6 +43,7 @@
 - [Markdown note types](#markdown-note-types)
 - [Usage](#usage)
 - [FAQ](#faq)
+- [Privacy and security](#privacy-and-security)
 - [The future](#the-future)
 - [Background](#background)
 - [Maintainers](#maintainers)
@@ -194,7 +195,7 @@ The rules were designed with the semantic and visual nature of Markdown in mind.
 
 The most minimal examples to "trigger" different note types are shown below, but the implementation can handle additional weirdness and will generally do the right thing if it encounters elements that might indicate conflicting note types.
 
-You're free to use additional Markdown in your notes to style and structure the front and back of your flashcard notes. Image markup will work, but currently assets must be hosted externally and are not copied into Anki's media storage system.
+You're free to use additional Markdown in your notes to style and structure the front and back of your flashcard notes.
 
 ### Basic
 
@@ -326,25 +327,21 @@ Internally, Yanki hashes assets before they're copied into Anki to make sure the
 
 Options:
 
-- **All**  
+- **All**\
   Sync all media assets linked in your notes.
 
-- **Local only**  
+- **Local only**\
   Only sync assets from your vault's attachments directory or other local path. This includes any assets linked with the `file:` protocol, and any `paths/to/local/assets.png`.
 
-- **Remote only**  
+- **Remote only**\
   Only sync assets that are "hot-linked" from a remote URL. This includes any assets linked with the `http:` or `https:` protocols. other local path. This includes any assets linked with the `file:` protocol, and any `paths/to/local/assets.png`.
 
   _Note that syncing remote media assets can slow down the sync process, since each asset has to be downloaded. If you usually have access to the web where / when you're using Anki, syncing remote assets is probably not necessary._
 
-- **None**  
+- **None**\
   Don't sync any media assets. Any assets in your vault that are only available locally via a relative path will _not_ appear in the Anki desktop application and mobile app.
 
 _Default: Local only_
-
-#### Anki-Connect settings
-
-These are advanced settings to accommodate custom Anki-Connect configurations. The defaults are almost certainly fine.
 
 #### Automatic note name settings
 
@@ -376,6 +373,10 @@ Yanki will truncate long automatic file names with ellipses. This setting allows
 
 _Default: 60 characters_
 
+#### Anki-Connect settings
+
+These are advanced settings to accommodate custom Anki-Connect configurations. The defaults are almost certainly fine.
+
 ## FAQ
 
 ### Why do I have to come up with a name for every note
@@ -384,7 +385,7 @@ You don't! Enable the [automatic note naming](#automatic-note-names) setting.
 
 ### Does Yanki work on Obsidian's mobile apps?
 
-No, and it probably never will since it needs to communicate with a running instance of the Anki desktop app. (It's technically feasible with some network contortions, but that's not anything I'd wish on anyone.)
+No, and it probably never will since it needs to communicate with a running instance of the Anki desktop app. (I suppose it's technically feasible with some network contortions, but that's not anything I'd wish on anyone.)
 
 ### Do I really have to have to launch Anki for syncing to work?
 
@@ -408,7 +409,7 @@ No, Obsidian is the source of truth. Any changes to or deletions of Yanki-manage
 
 ### Can I embed images in my notes?
 
-Not yet, at least not using Obsidian's asset model. Remote-linked images work fine for the time being.
+Yes — and sound, and video. See the [media asset syncing options](#sync-media-assets).
 
 ### Can I create custom note types / models?
 
@@ -446,7 +447,7 @@ Yanki will try to preserve the `noteId` of the note that matches what's been syn
 
 ### If I use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin, will my folder notes become Anki notes?
 
-The Yanki Plugin has a settings option to ignore folder notes. It's enabled by default.
+The Yanki Plugin has a [settings option](#ignore-folder-notes) to ignore folder notes. It's enabled by default.
 
 ### I've installed Anki-Connect, but am still getting connection errors
 
@@ -466,14 +467,37 @@ In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ fro
 }
 ```
 
+## Privacy and security
+
+### Network use
+
+By default, the Yanki Obsidian plugin sends the content and linked media assets of any Obsidian notes in a [configured folder](#watched-folder-list) to the Anki desktop application via local loopback networking.
+
+From there, both Anki and Obsidian may send this data on to other networks, such as the [AnkiWeb](https://ankiweb.net/about) synchronization service or [Obsidian Sync](https://obsidian.md/sync). Please see the AnkiWeb [terms](https://ankiweb.net/account/terms) and [privacy policy](https://ankiweb.net/account/privacy), and Obsidian's [terms](https://obsidian.md/terms) and [privacy policy](https://obsidian.md/privacy) for more details.
+
+If ["remote" asset syncing](#sync-media-assets) is enabled, Yanki Obsidian will fetch the headers for any linked media URLs in your flashcard notes to detect changes.
+
+Network communication is implemented with Obsidian's [request APIs](https://docs.obsidian.md/Reference/TypeScript+API/requestUrl).
+
+### File access
+
+Yanki Obsidian will only access files outside of your vault when they're explicitly linked as absolute paths inside your flashcard notes. It needs to access these files to check them for changes via a temporary content hash, and for asset syncing.
+
+When [asset syncing](#sync-media-assets) syncing is enabled, the Yanki Obsidian plugin aggregates paths to any asset files linked in your flashcard notes — some of which could be absolute paths to files _outside_ of your local vault on your local filesystem, or links to files on remote servers. These paths and assets may be passed on to other networks, as described in the [Network use](#network-use) section.
+
+File access is implemented with Obsidian's [vault APIs](https://docs.obsidian.md/Reference/TypeScript+API/Vault).
+
+### Local logging
+
+For debugging purposes, Yanki Obsidian maintains simple local counters of how many notes have been synced successfully. Yanki Obsidian doesn't send these statistics anywhere, and they are accessible to you in the plugin's `data.json` file.
+
 ## The future
 
 A few features are under consideration:
 
-- [ ] Integration with Obsidian's image asset system.
+- [ ] Sync Anki's review statistics back to Obsidian.
 - [ ] Links back to the Obsidian source note on each card in Anki.
 - [ ] Nicer stylesheets / theming for notes in both Anki and Obsidian.
-- [ ] Sync Anki's review statistics back to Obsidian.
 - [ ] Render Markdown → HTML with Obsidian's pipeline + stylesheets.
 
 If you have others in mind, feel free to [open an issue](https://github.com/kitschpatrol/yanki-obsidian/issues) with a suggestion.
@@ -482,7 +506,9 @@ If you have others in mind, feel free to [open an issue](https://github.com/kits
 
 ### Implementation notes
 
-The Yanki plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a command line tool and TypeScript library that handles all the Markdown wrangling and communication with Anki. If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, `yanki` implements the same features (plus a few extras). Using the `yanki` CLI tool will not interfere with syncing from the Yanki Obsidian plugin.
+The Yanki Obsidian plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a command line tool and TypeScript library that handles all the Markdown wrangling and communication with Anki, and it also includes extensive automated tests approaching 100% coverage, plus some additional documentation.
+
+If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, the stand-alone [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library implements all of the same core features (plus a few extras). Using the `yanki` CLI tool directly will not interfere with syncing from the Yanki Obsidian plugin.
 
 In turn, `yanki` is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://foosoft.net/projects/anki-connect/) API.
 

@@ -22,10 +22,12 @@ export type YankiPluginSettings = {
 	folders: string[]
 	ignoreFolderNotes: boolean
 	manageFilenames: {
+		debounceIntervalMs: number // Not exposed in settings
 		enabled: boolean
 		maxLength: number
 		mode: 'prompt' | 'response'
 	}
+	showDevelopmentSettings: boolean // Not exposed in settings
 	stats: {
 		sync: {
 			auto: number
@@ -45,7 +47,7 @@ export type YankiPluginSettings = {
 		}
 	}
 	sync: {
-		autoSyncDebounceInterval: number // Note exposed in settings
+		autoSyncDebounceIntervalMs: number // Not exposed in settings
 		autoSyncEnabled: boolean
 		mediaMode: 'all' | 'local' | 'off' | 'remote'
 		pushToAnkiWeb: boolean
@@ -62,10 +64,12 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 	folders: [],
 	ignoreFolderNotes: true,
 	manageFilenames: {
+		debounceIntervalMs: 250,
 		enabled: false,
 		maxLength: 60,
 		mode: 'prompt',
 	},
+	showDevelopmentSettings: false,
 	stats: {
 		sync: {
 			auto: 0,
@@ -85,10 +89,10 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 		},
 	},
 	sync: {
-		autoSyncDebounceInterval: 4000,
+		autoSyncDebounceIntervalMs: 4000,
 		autoSyncEnabled: false,
 		mediaMode: 'local',
-		pushToAnkiWeb: false,
+		pushToAnkiWeb: true,
 	},
 	verboseNotices: false,
 }
@@ -162,7 +166,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						.setValue(folder)
 						.onChange((value) => {
 							this.plugin.settings.folders[index] = value
-							// Only really update on blur
 						})
 
 					callback.inputEl.addEventListener('blur', async () => {
@@ -256,7 +259,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl)
 			.setName('Push to AnkiWeb')
 			.setDesc(
-				'Sync changes to the AnkiWeb "cloud" in addition to the local Anki database. This is like pressing the "Sync" button in the Anki desktop app.',
+				'Also sync changes to the AnkiWeb "cloud" in addition to the local Anki database. This is like pressing the "Sync" button in the Anki desktop app.',
 			)
 			.addToggle((toggle) => {
 				toggle.setValue(this.plugin.settings.sync.pushToAnkiWeb)
@@ -271,8 +274,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setName('Sync media assets')
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Yanki can automatically sync image, audio, and video assets in your Obsidian notes to
-						Anki's media asset library.
+					html`Also sync image, audio, and video assets in your Obsidian notes to Anki's media asset
+						library.
 						<em
 							>Note that syncing remote media may slow down syncing since assets must be
 							downloaded.</em
@@ -310,89 +313,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 			.setDesc(sanitizeHTMLToDom(html`Last synced: <em>${capitalize(syncTime)}</em>`))
 			.setClass('description-is-button-annotation')
-
-		// ----------------------------------------------------
-
-		// Anki-Connect
-
-		const ankiConnectSetting = new Setting(this.containerEl)
-			.setName('Anki-Connect settings')
-			.setHeading()
-
-		ankiConnectSetting.setDesc(
-			sanitizeHTMLToDom(
-				html`Anki-Connect is the Anki add-on that enables communication between Obsidian and Anki.
-					See the
-					<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
-						>Yanki quick start guide</a
-					>
-					for instructions on how to set up Anki-Connect, and the
-					<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect documentation</a> for
-					more information. The default settings below are usually fine.`,
-			),
-		)
-
-		new Setting(this.containerEl)
-			.setName('Host')
-			.setDesc('Set the host and port to match your Anki-Connect configuration.')
-			.addText((text) => {
-				text.setPlaceholder('Host Name and Port')
-				const { host, port } = this.plugin.settings.ankiConnect
-				text.setValue(hostAndPortToUrl(host, port))
-
-				text.onChange(async (value) => {
-					const { host, port } = urlToHostAndPort(value)
-					this.plugin.settings.ankiConnect.host = host
-					this.plugin.settings.ankiConnect.port = port
-					await this.plugin.saveSettings()
-				})
-			})
-
-		new Setting(this.containerEl)
-			.setName('Key')
-			.setDesc('Optional API security key to match your custom Anki-Connect configuration.')
-			.addText((text) => {
-				text.setPlaceholder('API Key')
-
-				text.setValue(this.plugin.settings.ankiConnect.key ?? '')
-				text.onChange(async (value) => {
-					this.plugin.settings.ankiConnect.key = value.trim().length > 0 ? value.trim() : undefined
-					await this.plugin.saveSettings()
-				})
-			})
-
-		// Needs Node environment
-		// new Setting(this.containerEl)
-		// 	.setName('Auto-Launch Anki')
-		// 	.setDesc(
-		// 		'Experimental Mac-only feature to automatically launch the Anki desktop application when syncing.',
-		// 	)
-		// 	.addToggle(async (toggle) => {
-		// 		const { autoLaunch } = this.plugin.settings.ankiConnect
-
-		// 		toggle.setValue(autoLaunch).onChange(async (enabled) => {
-		// 			this.plugin.settings.syncOptions.ankiConnect.autoLaunch = enabled
-		// 			await this.plugin.saveSettings()
-		// 		})
-		// 	})
-
-		new Setting(this.containerEl).addButton((button) => {
-			button.setButtonText('Reset to Anki-Connect defaults')
-			button.onClick(async () => {
-				this.plugin.settings.ankiConnect = {
-					...yankiPluginDefaultSettings.ankiConnect,
-				}
-
-				await this.plugin.saveSettings()
-				this.render()
-
-				new Notice(
-					sanitizeHTMLToDom(
-						html`<strong>Yanki:</strong><br />Reset Yanki's Anki-Connect settings to defaults.`,
-					),
-				)
-			})
-		})
 
 		// ----------------------------------------------------
 
@@ -443,8 +363,11 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl).setName('Maximum note name length').addText((text) => {
 			text.setPlaceholder(String(yankiPluginDefaultSettings.manageFilenames.maxLength))
 			text.setValue(String(this.plugin.settings.manageFilenames.maxLength))
-			text.onChange(async (value) => {
+			text.onChange((value) => {
 				this.plugin.settings.manageFilenames.maxLength = Number(value)
+			})
+
+			text.inputEl.addEventListener('blur', async () => {
 				await this.plugin.saveSettings()
 			})
 		})
@@ -460,72 +383,183 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		// ----------------------------------------------------
 
-		// Development (temporary)
+		// Anki-Connect
+
+		const ankiConnectSetting = new Setting(this.containerEl)
+			.setName('Anki-Connect settings')
+			.setHeading()
+
+		ankiConnectSetting.setDesc(
+			sanitizeHTMLToDom(
+				html`Anki-Connect is the Anki add-on that enables communication between Obsidian and Anki.
+					See the
+					<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
+						>Yanki quick start guide</a
+					>
+					for instructions on how to set up Anki-Connect, and the
+					<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect documentation</a> for
+					more information. The default settings below are usually fine.`,
+			),
+		)
+
+		new Setting(this.containerEl)
+			.setName('Host')
+			.setDesc('Set the host and port to match your Anki-Connect configuration.')
+			.addText((text) => {
+				text.setPlaceholder('Host Name and Port')
+				const { host, port } = this.plugin.settings.ankiConnect
+				text.setValue(hostAndPortToUrl(host, port))
+
+				text.onChange((value) => {
+					const { host, port } = urlToHostAndPort(value)
+					this.plugin.settings.ankiConnect.host = host
+					this.plugin.settings.ankiConnect.port = port
+				})
+
+				text.inputEl.addEventListener('blur', async () => {
+					await this.plugin.saveSettings()
+				})
+			})
+
+		new Setting(this.containerEl)
+			.setName('Key')
+			.setDesc('Optional API security key to match your custom Anki-Connect configuration.')
+			.addText((text) => {
+				text.setPlaceholder('API Key')
+
+				text.setValue(this.plugin.settings.ankiConnect.key ?? '')
+				text.onChange((value) => {
+					this.plugin.settings.ankiConnect.key = value.trim().length > 0 ? value.trim() : undefined
+				})
+
+				text.inputEl.addEventListener('blur', async () => {
+					await this.plugin.saveSettings()
+				})
+			})
+
+		// Needs Node environment
+		// new Setting(this.containerEl)
+		// 	.setName('Auto-Launch Anki')
+		// 	.setDesc(
+		// 		'Experimental Mac-only feature to automatically launch the Anki desktop application when syncing.',
+		// 	)
+		// 	.addToggle(async (toggle) => {
+		// 		const { autoLaunch } = this.plugin.settings.ankiConnect
+
+		// 		toggle.setValue(autoLaunch).onChange(async (enabled) => {
+		// 			this.plugin.settings.syncOptions.ankiConnect.autoLaunch = enabled
+		// 			await this.plugin.saveSettings()
+		// 		})
+		// 	})
+
+		new Setting(this.containerEl).addButton((button) => {
+			button.setButtonText('Reset to Anki-Connect defaults')
+			button.onClick(async () => {
+				this.plugin.settings.ankiConnect = structuredClone(yankiPluginDefaultSettings.ankiConnect)
+
+				await this.plugin.saveSettings()
+				this.render()
+
+				new Notice(
+					sanitizeHTMLToDom(
+						html`<strong>Yanki:</strong><br />Reset Yanki's Anki-Connect settings to defaults.`,
+					),
+				)
+			})
+		})
+
+		// ----------------------------------------------------
+
 		new Setting(this.containerEl)
 			.setName('Development')
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Options to facilitate development and debugging of early releases of Yanki.<br />Trouble
+					html`Show settings to facilitate development and debugging of early releases of Yanki.<br />Trouble
 						with the plugin? Please
 						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				),
 			)
-
-		new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
-			toggle.setValue(this.plugin.settings.verboseNotices)
-			toggle.onChange(async (value) => {
-				this.plugin.settings.verboseNotices = value
-				await this.plugin.saveSettings()
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.showDevelopmentSettings)
+				toggle.onChange(async (value) => {
+					this.plugin.settings.showDevelopmentSettings = value
+					await this.plugin.saveSettings()
+					this.render()
+				})
 			})
-		})
 
-		const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
-		const { ankiUnreachable, created, deleted, recreated, unchanged, updated } =
-			this.plugin.settings.stats.sync.notes
+		if (this.plugin.settings.showDevelopmentSettings) {
+			// Development (temporary)
 
-		new Setting(this.containerEl)
-			.setName('Sync stats')
-			.setClass('stats')
-			.setDesc(
-				sanitizeHTMLToDom(
-					html`<div>
-							<p>Overall</p>
-							<ul>
-								<li>Total syncs: ${String(auto + manual)}</li>
+			new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.verboseNotices)
+				toggle.onChange(async (value) => {
+					this.plugin.settings.verboseNotices = value
+					await this.plugin.saveSettings()
+				})
+			})
+
+			const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
+			const { ankiUnreachable, created, deleted, recreated, unchanged, updated } =
+				this.plugin.settings.stats.sync.notes
+
+			new Setting(this.containerEl)
+				.setName('Sync stats')
+				.setClass('stats')
+				.setDesc(
+					sanitizeHTMLToDom(
+						html`<div>
+								<p>Overall</p>
 								<ul>
-									<li>Auto: ${String(auto)}</li>
-									<li>Manual: ${String(manual)}</li>
-									<li>Errors: ${String(errors)}</li>
-									<li>Invalid: ${String(invalid)}</li>
-									<li>Duration: ${prettyMilliseconds(duration)} (average)</li>
+									<li>Total syncs: ${String(auto + manual)}</li>
+									<ul>
+										<li>Auto: ${String(auto)}</li>
+										<li>Manual: ${String(manual)}</li>
+										<li>Errors: ${String(errors)}</li>
+										<li>Invalid: ${String(invalid)}</li>
+										<li>Duration: ${prettyMilliseconds(duration)} (average)</li>
+									</ul>
 								</ul>
-							</ul>
-						</div>
-						<div>
-							<p>Note actions</p>
-							<ul>
-								<li>Created: ${String(created)}</li>
-								<li>Deleted: ${String(deleted)}</li>
-								<li>Recreated: ${String(recreated)}</li>
-								<li>Unchanged: ${String(unchanged)}</li>
-								<li>Updated: ${String(updated)}</li>
-								<li>Anki Unreachable: ${String(ankiUnreachable)}</li>
-							</ul>
-						</div>`,
-				),
-			)
+							</div>
+							<div>
+								<p>Note actions</p>
+								<ul>
+									<li>Created: ${String(created)}</li>
+									<li>Deleted: ${String(deleted)}</li>
+									<li>Recreated: ${String(recreated)}</li>
+									<li>Unchanged: ${String(unchanged)}</li>
+									<li>Updated: ${String(updated)}</li>
+									<li>Anki Unreachable: ${String(ankiUnreachable)}</li>
+								</ul>
+							</div>`,
+					),
+				)
 
-		new Setting(this.containerEl).addButton((button) => {
-			button.setButtonText('Reset sync stats')
-			button.onClick(async () => {
-				this.plugin.settings.stats.sync = structuredClone(yankiPluginDefaultSettings.stats.sync)
-				await this.plugin.saveSettings()
-				this.render()
+			new Setting(this.containerEl).addButton((button) => {
+				button.setButtonText('Reset sync stats')
+				button.onClick(async () => {
+					this.plugin.settings.stats.sync = structuredClone(yankiPluginDefaultSettings.stats.sync)
+					await this.plugin.saveSettings()
+					this.render()
 
-				new Notice(sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki's sync stats.`))
+					new Notice(
+						sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki's sync stats.`),
+					)
+				})
 			})
-		})
+
+			new Setting(this.containerEl).addButton((button) => {
+				button.setButtonText('Reset all settings')
+				button.onClick(async () => {
+					this.plugin.settings = structuredClone(yankiPluginDefaultSettings)
+					await this.plugin.saveSettings()
+					this.render()
+
+					new Notice(sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki's settings.`))
+				})
+			})
+		}
 
 		// Restore scroll position
 		this.containerEl.scrollTop = scrollPosition
