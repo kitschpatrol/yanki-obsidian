@@ -27,6 +27,7 @@ import {
 	TFolder,
 	Vault,
 	moment,
+	normalizePath,
 	requestUrl,
 	sanitizeHTMLToDom,
 } from 'obsidian'
@@ -527,7 +528,13 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	public getSanitizedFolders(): string[] {
-		return [...new Set(this.settings.folders.filter((folder) => folder.trim().length > 0))]
+		return [
+			...new Set(
+				this.settings.folders
+					.map((folderPath) => normalizePath(folderPath))
+					.filter((folder) => folder.trim().length > 0),
+			),
+		]
 	}
 
 	// ----------------------------------------------------
