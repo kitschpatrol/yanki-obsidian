@@ -3,7 +3,7 @@
   "authorUrl": "https://ericmika.com",
   "description": "Automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
   "id": "yanki-obsidian",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "minAppVersion": "1.5.0",
   "name": "Yanki",
   "isDesktopOnly": true
