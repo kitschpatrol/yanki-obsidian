@@ -18,6 +18,7 @@ import {
 import sindreDebounce from 'debounce'
 import path from 'node:path' // Assuming polyfilled
 import {
+	FileSystemAdapter,
 	Notice,
 	Plugin,
 	type TAbstractFile,
@@ -64,6 +65,10 @@ export default class YankiPlugin extends Plugin {
 		this.openSettingsTab = this.openSettingsTab.bind(this)
 
 		this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
+
+		this.getVaultBasePath = this.getVaultBasePath.bind(this)
+		this.vaultPathToAbsolutePath = this.vaultPathToAbsolutePath.bind(this)
+		this.absolutePathToVaultPath = this.absolutePathToVaultPath.bind(this)
 
 		// Pretty sure sindreDebounce handles binding
 		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
@@ -131,6 +136,7 @@ export default class YankiPlugin extends Plugin {
 		settings: YankiPluginSettings,
 	): CommonProperties<RenameFilesOptions, SyncFilesOptions> {
 		return {
+			basePath: this.getVaultBasePath(),
 			dryRun: false,
 			fetchAdapter: this.fetchAdapter,
 			fileAdapter: {
@@ -184,29 +190,32 @@ export default class YankiPlugin extends Plugin {
 		await this.saveData(this.settings)
 	}
 
-	async fileAdapterRead(path: string): Promise<string> {
-		const file = this.app.vault.getFileByPath(path)
+	async fileAdapterRead(filePath: string): Promise<string> {
+		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
-			throw new Error(`File not found: ${path}`)
+			throw new Error(`Read failed. File not found: ${filePath}`)
 		}
 
 		return this.app.vault.read(file)
 	}
 
-	async fileAdapterReadBuffer(path: string): Promise<Uint8Array> {
-		const file = this.app.vault.getFileByPath(path)
+	async fileAdapterReadBuffer(filePath: string): Promise<Uint8Array> {
+		filePath = this.absolutePathToVaultPath(filePath)
+		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
-			throw new Error(`File not found: ${path}`)
+			throw new Error(`Read buffer failed. File not found: ${filePath}`)
 		}
 
 		const content = await this.app.vault.readBinary(file)
 		return new Uint8Array(content)
 	}
 
-	async fileAdapterStat(path: string): Promise<{ ctimeMs: number; mtimeMs: number; size: number }> {
-		const file = this.app.vault.getFileByPath(path)
+	async fileAdapterStat(
+		filePath: string,
+	): Promise<{ ctimeMs: number; mtimeMs: number; size: number }> {
+		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
-			throw new Error(`File not found: ${path}`)
+			throw new Error(`Stat failed. File not found: ${filePath}`)
 		}
 
 		return new Promise((resolve) => {
@@ -218,23 +227,25 @@ export default class YankiPlugin extends Plugin {
 		})
 	}
 
-	async fileAdapterWrite(path: string, data: string): Promise<void> {
-		const file = this.app.vault.getFileByPath(path)
+	async fileAdapterWrite(filePath: string, data: string): Promise<void> {
+		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
-			throw new Error(`File not found: ${path}`)
+			throw new Error(`Write failed. File not found: ${filePath}`)
 		}
 
 		return this.app.vault.modify(file, data)
 	}
 
 	async fileAdapterRename(oldPath: string, newPath: string): Promise<void> {
-		const file = this.app.vault.getFileByPath(oldPath)
+		const vaultFileOldPath = this.absolutePathToVaultPath(oldPath)
+		const file = this.app.vault.getFileByPath(vaultFileOldPath)
 
 		if (file === null) {
-			throw new Error(`File not found: ${oldPath}`)
+			throw new Error(`Rename failed. File not found: ${vaultFileOldPath}`)
 		}
 
-		return this.app.vault.rename(file, newPath)
+		const vaultFileNewPath = this.absolutePathToVaultPath(newPath)
+		return this.app.vault.rename(file, vaultFileNewPath)
 	}
 
 	async fetchAdapter(
@@ -514,5 +525,31 @@ export default class YankiPlugin extends Plugin {
 
 	public getSanitizedFolders(): string[] {
 		return [...new Set(this.settings.folders.filter((folder) => folder.trim().length > 0))]
+	}
+
+	private getVaultBasePath(): string | undefined {
+		// https://forum.obsidian.md/t/how-to-get-vault-absolute-path/22965/3
+		const { adapter } = this.app.vault
+		if (adapter instanceof FileSystemAdapter) {
+			return adapter.getBasePath()
+		}
+	}
+
+	private vaultPathToAbsolutePath(vaultPath: string): string {
+		const vaultBasePath = this.getVaultBasePath() ?? ''
+		return path.join(vaultBasePath, vaultPath)
+	}
+
+	private absolutePathToVaultPath(absolutePath: string): string {
+		// Strip any leading vault path
+		const vaultPath = this.getVaultBasePath()
+
+		if (vaultPath === undefined) {
+			console.warn('Vault path not found')
+			return absolutePath
+		}
+
+		const basePathRegex = new RegExp(`^${vaultPath}/?`)
+		return absolutePath.replace(basePathRegex, '')
 	}
 }

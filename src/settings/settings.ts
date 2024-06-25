@@ -192,7 +192,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				button
 					.setTooltip('Add folder')
 					.setButtonText('Add folder')
-					.setCta()
 					// .setIcon('plus')
 					.onClick(async () => {
 						this.plugin.settings.folders.push('')
@@ -301,12 +300,14 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.addButton((button) => {
+				button.setCta()
 				button.setButtonText('Sync now')
 				button.onClick(() => {
 					void this.plugin.syncFlashcardNotesToAnki(true)
 					this.plugin.syncFlashcardNotesToAnki.flush()
 				})
 			})
+
 			.setDesc(sanitizeHTMLToDom(html`Last synced: <em>${capitalize(syncTime)}</em>`))
 			.setClass('description-is-button-annotation')
 

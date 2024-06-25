@@ -45,8 +45,8 @@ importers:
         specifier: ^4.20.1
         version: 4.20.1
       yanki:
-        specifier: ^0.8.0
-        version: 0.8.0
+        specifier: ^0.8.1
+        version: 0.8.1
 
 packages:
 
@@ -4183,8 +4183,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  yanki@0.8.0:
-    resolution: {integrity: sha512-0OYTzYrMNaEvbZKHTt3LbOeXXOJTVGb/gxXtW0Qot+O+7Q5Oxte706D9E0UNq2/8Zny3SgtIrr2lCJZiM7FfzQ==}
+  yanki@0.8.1:
+    resolution: {integrity: sha512-MLhiBLuTuFtz+/Xk7dNwnbGi3IwPhPfxySOS4yqVNm0fFK9smXgrDOB9q3pymrHGn0AKEUfY/pBKvvFy7fdtrA==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     hasBin: true
 
@@ -9543,7 +9543,7 @@ snapshots:
 
   yaml@2.4.5: {}
 
-  yanki@0.8.0:
+  yanki@0.8.1:
     dependencies:
       '@types/hast': 3.0.4
       '@types/lodash-es': 4.17.12
