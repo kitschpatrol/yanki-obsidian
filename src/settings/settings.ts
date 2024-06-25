@@ -468,12 +468,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// ----------------------------------------------------
 
 		new Setting(this.containerEl)
-			.setName('Development')
+			.setName('Advanced')
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Show settings to facilitate development and debugging of early releases of Yanki.<br />Trouble
-						with the plugin? Please
+					html`Show advanced settings to facilitate development and debugging of early releases of
+						Yanki.<br />Trouble with the plugin? Please
 						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				),
 			)

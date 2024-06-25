@@ -531,8 +531,8 @@ export default class YankiPlugin extends Plugin {
 		return [
 			...new Set(
 				this.settings.folders
-					.map((folderPath) => normalizePath(folderPath))
-					.filter((folder) => folder.trim().length > 0),
+					.filter((folder) => folder.trim().length > 0)
+					.map((folderPath) => normalizePath(folderPath)),
 			),
 		]
 	}
