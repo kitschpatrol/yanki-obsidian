@@ -156,7 +156,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		}
 
 		for (const [index, folder] of this.plugin.settings.folders.entries()) {
-			new Setting(this.containerEl)
+			const searchSetting = new Setting(this.containerEl)
 				.addSearch((callback) => {
 					new FolderSuggest(callback.inputEl, this.app)
 					callback
@@ -171,7 +171,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						this.render()
 					})
 				})
-				.addExtraButton((callback) => {
+				.setClass('folder-setting')
+
+			searchSetting.infoEl.remove()
+
+			if (index > 0) {
+				searchSetting.addExtraButton((callback) => {
 					callback
 						.setIcon('cross')
 						.setTooltip('Delete')
@@ -180,12 +185,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 							await this.plugin.saveSettings()
 							this.render()
 						})
-
-					if (index === 0) {
-						callback.extraSettingsEl.style.visibility = 'hidden'
-					}
 				})
-				.infoEl.remove()
+			}
 		}
 
 		new Setting(this.containerEl)
@@ -230,7 +231,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Sync
 
 		new Setting(this.containerEl)
-			.setName('Sync settings')
+			.setName('Sync')
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
@@ -317,7 +318,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Note filename management
 
 		new Setting(this.containerEl)
-			.setName('Automatic note name settings')
+			.setName('Automatic note names')
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
@@ -327,7 +328,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				),
 			)
 
-		new Setting(this.containerEl).setName('Automatic note names').addToggle((toggle) => {
+		new Setting(this.containerEl).setName('Automatic renaming').addToggle((toggle) => {
 			toggle.setValue(this.plugin.settings.manageFilenames.enabled)
 			toggle.onChange(async (value) => {
 				this.plugin.settings.manageFilenames.enabled = value
@@ -383,9 +384,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		// Anki-Connect
 
-		const ankiConnectSetting = new Setting(this.containerEl)
-			.setName('Anki-Connect settings')
-			.setHeading()
+		const ankiConnectSetting = new Setting(this.containerEl).setName('Anki-Connect').setHeading()
 
 		ankiConnectSetting.setDesc(
 			sanitizeHTMLToDom(
