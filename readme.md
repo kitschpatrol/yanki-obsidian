@@ -142,9 +142,9 @@ Jump back to sources in Obsidian while studying in Anki.
 
 The Yanki plugin detects your vault's name, and automatically turns any internal `[[WikiLinks]]` in your notes into `obsidian://` protocol links, which you can click through in Anki to get back to the source in Obsidian.
 
-### Fancy markdown
+### Fancy Markdown
 
-An extended palette of markdown syntax is available out of the box:
+An extended palette of Markdown syntax is available out of the box:
 
 - [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-throughs~~`, `- [x] task lists`, and autolinks.
 - Syntax highlighting via [Shiki](https://shiki.style).
@@ -155,7 +155,7 @@ An extended palette of markdown syntax is available out of the box:
 
 ### Intelligent syncing
 
-Your local Obsidian markdown notes are the single point of truth for what will and up in Anki, but Yanki knows to leave your other Anki notes alone.
+Your local Obsidian Markdown notes are the single point of truth for what will and up in Anki, but Yanki knows to leave your other Anki notes alone.
 
 When you edit a local Obsidian note, Yanki makes every effort to update rather than delete it in the Anki database so that review progress is preserved.
 
@@ -179,7 +179,7 @@ Yanki looks inside each note, and extracts either the text of the "prompt" (e.g.
 
 Edge cases are carefully managed to ensure that there's always _some kind_ of best-effort semantically valuable file name assigned.
 
-### Media asset synchronization
+### Media asset sync
 
 Yanki can sync images, videos, and audio files embedded in your Obsidian notes to Anki's media asset management system. At your option, it can sync local assets, or assets linked via URL, or both, or none.
 
@@ -473,7 +473,7 @@ In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ fro
 
 By default, the Yanki Obsidian plugin sends the content and linked media assets of any Obsidian notes in a [configured folder](#watched-folder-list) to the Anki desktop application via local loopback networking.
 
-From there, both Anki and Obsidian may send this data on to other networks, such as the [AnkiWeb](https://ankiweb.net/about) synchronization service or [Obsidian Sync](https://obsidian.md/sync). Please see the AnkiWeb [terms](https://ankiweb.net/account/terms) and [privacy policy](https://ankiweb.net/account/privacy), and Obsidian's [terms](https://obsidian.md/terms) and [privacy policy](https://obsidian.md/privacy) for more details.
+From there, both Anki and Obsidian may send this data on to other networks, such as the [AnkiWeb](https://ankiweb.net/about) synchronization service or [Obsidian Sync](https://obsidian.md/sync). Please see AnkiWeb's [terms](https://ankiweb.net/account/terms) and [privacy policy](https://ankiweb.net/account/privacy), and Obsidian's [terms](https://obsidian.md/terms) and [privacy policy](https://obsidian.md/privacy) for more details.
 
 If ["remote" asset syncing](#sync-media-assets) is enabled, Yanki Obsidian will fetch the headers for any linked media URLs in your flashcard notes to detect changes.
 

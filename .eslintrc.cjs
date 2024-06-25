@@ -22,11 +22,17 @@ module.exports = {
 			},
 		},
 		{
-			files: ['*/**'],
+			files: ['src/**/*.ts'],
 			rules: {
 				'no-new': 'off',
 				'perfectionist/sort-classes': 'off',
 				'@typescript-eslint/member-ordering': 'off',
+			},
+		},
+		{
+			files: ['examples/**/*.md'],
+			rules: {
+				'unicorn/filename-case': 'off',
 			},
 		},
 	],
