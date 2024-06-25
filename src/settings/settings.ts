@@ -22,7 +22,6 @@ export type YankiPluginSettings = {
 	folders: string[]
 	ignoreFolderNotes: boolean
 	manageFilenames: {
-		debounceIntervalMs: number // Not exposed in settings
 		enabled: boolean
 		maxLength: number
 		mode: 'prompt' | 'response'
@@ -64,7 +63,6 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 	folders: [],
 	ignoreFolderNotes: true,
 	manageFilenames: {
-		debounceIntervalMs: 250,
 		enabled: false,
 		maxLength: 60,
 		mode: 'prompt',

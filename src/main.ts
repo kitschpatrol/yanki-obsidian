@@ -66,9 +66,10 @@ export default class YankiPlugin extends Plugin {
 		this.vaultPathToAbsolutePath = this.vaultPathToAbsolutePath.bind(this)
 		this.absolutePathToVaultPath = this.absolutePathToVaultPath.bind(this)
 
+		this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
+
 		// The debounce library we're using handles binding internally
 		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
-		// this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
 
 		await this.loadSettings()
 		this.addSettingTab(this.settingsTab)
@@ -231,7 +232,7 @@ export default class YankiPlugin extends Plugin {
 
 	// Primary commands
 
-	updateNoteFilenames = sindreDebounce(async (userInitiated): Promise<void> => {
+	public async updateNoteFilenames(userInitiated: boolean): Promise<void> {
 		if (this.settings.folders.length === 0 || !this.settings.manageFilenames.enabled) {
 			return
 		}
@@ -249,7 +250,7 @@ export default class YankiPlugin extends Plugin {
 		if (userInitiated || this.settings.verboseNotices) {
 			new Notice(formatRenameResult(report), 5000)
 		}
-	}, this.settings.manageFilenames.debounceIntervalMs)
+	}
 
 	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated): Promise<void> => {
 		if (!userInitiated && !this.settings.sync.autoSyncEnabled) {
