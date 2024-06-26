@@ -286,11 +286,13 @@ export default class YankiPlugin extends Plugin {
 
 		if (files.length === 0) {
 			if (userInitiated || this.settings.verboseNotices) {
-				sanitizeHtmlToDomWithFunction(
-					html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
-						flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
-					'settings',
-					this.openSettingsTab,
+				new Notice(
+					sanitizeHtmlToDomWithFunction(
+						html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
+							flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
+						'settings',
+						this.openSettingsTab,
+					),
 				)
 			}
 
