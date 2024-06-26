@@ -48,9 +48,14 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	}
 
 	const reportLines: string[] = []
+
+	const localCount = synced.filter((syncedNote) =>
+		['created', 'recreated', 'unchanged', 'updated'].includes(syncedNote.action),
+	).length
+
 	reportLines.push(
 		html`<strong>Successfully synced to Anki:</strong>`,
-		`Found ${synced.length} flashcard ${plur('note', synced.length)} in vault.`,
+		`Found ${localCount} flashcard ${plur('note', localCount)} in vault.`,
 		'',
 		'Sync report:',
 	)
