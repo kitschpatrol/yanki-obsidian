@@ -50,7 +50,7 @@
 
 ## Overview
 
-The Yanki plugin automatically syncs a folder (or folders) of notes from your Obsidian vault to Anki.
+Yanki is a plugin for Obsidian that automatically syncs a folder (or folders) of notes from your vault to Anki.
 
 The primary novelty of its approach is in how Markdown is translated into Anki notes, and how folders are translated into Anki decks:
 
@@ -164,7 +164,7 @@ When the Automatic Sync option is enabled, Yanki will automatically updated note
 
 ### Existing notes are untouched
 
-Yanki tags the notes it's in charge of with a hidden field, so it will never touch your existing Anki notes. (_But please exercise caution until the 1.0 release..._)
+Yanki tags the notes it's in charge of with a hidden field, so it will never touch your existing Anki notes.
 
 ### Note name management
 

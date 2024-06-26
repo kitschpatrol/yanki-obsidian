@@ -8,7 +8,7 @@ div.yanki-settings {
 		max-width: 70ch;
 	}
 
-	/* Development only */
+	/* Lay out sync stats */
 	div.stats {
 		div.setting-item-info {
 			width: 100%;

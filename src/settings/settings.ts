@@ -26,7 +26,7 @@ export type YankiPluginSettings = {
 		maxLength: number
 		mode: 'prompt' | 'response'
 	}
-	showDevelopmentSettings: boolean // Not exposed in settings
+	showAdvancedSettings: boolean // Not exposed in settings
 	stats: {
 		sync: {
 			auto: number
@@ -67,7 +67,7 @@ export const yankiPluginDefaultSettings: YankiPluginSettings = {
 		maxLength: 60,
 		mode: 'prompt',
 	},
-	showDevelopmentSettings: false,
+	showAdvancedSettings: false,
 	stats: {
 		sync: {
 			auto: 0,
@@ -478,17 +478,15 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				),
 			)
 			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.showDevelopmentSettings)
+				toggle.setValue(this.plugin.settings.showAdvancedSettings)
 				toggle.onChange(async (value) => {
-					this.plugin.settings.showDevelopmentSettings = value
+					this.plugin.settings.showAdvancedSettings = value
 					await this.plugin.saveSettings()
 					this.render()
 				})
 			})
 
-		if (this.plugin.settings.showDevelopmentSettings) {
-			// Development (temporary)
-
+		if (this.plugin.settings.showAdvancedSettings) {
 			new Setting(this.containerEl).setName('Verbose notices').addToggle((toggle) => {
 				toggle.setValue(this.plugin.settings.verboseNotices)
 				toggle.onChange(async (value) => {
