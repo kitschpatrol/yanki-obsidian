@@ -515,9 +515,11 @@ export default class YankiPlugin extends Plugin {
 
 			if (folder instanceof TFolder) {
 				Vault.recurseChildren(folder, (file) => {
+					// Only allow at Markdown
 					// Optionally ignore folder notes
 					if (
 						file instanceof TFile &&
+						file.extension === 'md' &&
 						(!ignoreFolderNotes || file.parent?.name !== file.basename)
 					) {
 						files.push(file)
