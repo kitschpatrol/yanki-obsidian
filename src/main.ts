@@ -549,7 +549,7 @@ export default class YankiPlugin extends Plugin {
 		// https://forum.obsidian.md/t/how-to-get-vault-absolute-path/22965/3
 		const { adapter } = this.app.vault
 		if (adapter instanceof FileSystemAdapter) {
-			return adapter.getBasePath()
+			return normalizePath(adapter.getBasePath())
 		}
 	}
 
