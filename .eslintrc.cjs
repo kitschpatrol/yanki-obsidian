@@ -6,6 +6,12 @@ module.exports = {
 	// Overrides
 	overrides: [
 		{
+			files: ['README.md'],
+			rules: {
+				'unicorn/filename-case': 'off',
+			},
+		},
+		{
 			files: ['*.ts'],
 			rules: {
 				// TODO move this to shared-config

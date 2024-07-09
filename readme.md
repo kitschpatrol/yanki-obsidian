@@ -580,10 +580,6 @@ Figuring out Obsidian's [AbstractInputSuggest](https://docs.obsidian.md/Referenc
 
 <!-- /contributing -->
 
-<!-- license -->
-
 ## License
 
-[MIT](license.txt) © Eric Mika
-
-<!-- /license -->
+[MIT](LICENSE) © Eric Mika
