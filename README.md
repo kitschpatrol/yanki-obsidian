@@ -78,7 +78,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 2. **Plugin installation**
 
-   Search for `yanki` in Obsidian's community plugins browser, or open [this link](obsidian://show-plugin?id=yanki), then click the "Install" button.
+   Search for `yanki` in Obsidian's community plugins browser, or open [obsidian://show-plugin?id=yanki](obsidian://show-plugin?id=yanki), then click the "Install" button.
 
 3. **Setup**
 
