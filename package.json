@@ -18,10 +18,10 @@
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.4.0",
+	"packageManager": "pnpm@9.5.0",
 	"engines": {
 		"node": ">=18.0.0",
-		"pnpm": ">=8.0.0"
+		"pnpm": ">=9.0.0"
 	},
 	"main": "./dist/main.js",
 	"keywords": [
@@ -36,31 +36,31 @@
 	],
 	"scripts": {
 		"build": "rimraf -rf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
-		"clean": "git clean -fdX && rimraf ./pnpm-lock.yaml",
+		"clean": "rimraf ./pnpm-lock.yaml && git clean -fdX",
 		"dev": "rimraf -rf ./dist && pnpm run manifest && touch ./dist/.hotreload && tsx ./scripts/build.ts",
 		"fix": "shared-config --fix",
 		"lint": "shared-config --lint",
 		"manifest": "tsx ./scripts/generate-manifest.ts",
 		"obsidian:link": "pnpm obsidian:unlink && ln -s $(pwd)/dist ~/Notes/Vault/.obsidian/plugins/yanki",
-		"obsidian:unlink": "rimraf -f ~/Notes/Vault/.obsidian/plugins/yanki",
+		"obsidian:unlink": "rimraf -rf ~/Notes/Vault/.obsidian/plugins/yanki",
 		"release": "pnpm run manifest && pnpm bumpp package.json manifest.json --commit \"Release: %s\" --tag \"%s\""
 	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.7.2",
-		"@types/node": "^20.14.9",
+		"@types/node": "^20.14.10",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
 		"debounce": "^2.1.0",
-		"esbuild": "^0.21.5",
+		"esbuild": "^0.23.0",
 		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.0.0",
-		"rimraf": "^5.0.7",
-		"tsx": "^4.15.7",
-		"type-fest": "^4.20.1",
-		"typescript": "^5.5.2",
-		"yanki": "^0.8.4"
+		"rimraf": "^6.0.0",
+		"tsx": "^4.16.2",
+		"type-fest": "^4.21.0",
+		"typescript": "^5.5.3",
+		"yanki": "^0.8.5"
 	},
 	"obsidian": {
 		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
