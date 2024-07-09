@@ -66,10 +66,11 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 1. **Prerequisites**
 
-- The [Anki desktop app](https://apps.ankiweb.net)
+- The [Obsidian desktop application](https://obsidian.md/download)
+- The [Anki desktop application](https://apps.ankiweb.net)
 - The [Anki-Connect](https://foosoft.net/projects/anki-connect/) add-on
 
-  If you need to install it, select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
+  To install the Anki-Connect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
 
   Anki-Connect may ask for your permission in the Anki application to connect to Obsidian on the first sync.
 
@@ -77,13 +78,11 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 2. **Plugin installation**
 
-   For now, download the latest release from GitHub and drag it in your vault's `.obsidian/plugins`.
-
-   Restart Obsidian.
+   Search for `yanki` in Obsidian's community plugins browser, or open [this link](obsidian://show-plugin?id=yanki), then click the "Install" button.
 
 3. **Setup**
 
-   Enable the plugin, and go to its settings tab to select which folders of notes you'd like to sync to Anki. See the section \[Markdown note types]]\(#markdown-note-types) on how to format your notes to create different types of Anki cards.
+   Enable the plugin, and go to its settings tab to select which folders of notes you'd like to sync to Anki. See the section [Markdown note types](#markdown-note-types) on how to format your notes to create different types of Anki cards.
 
 4. **Sync**
 
