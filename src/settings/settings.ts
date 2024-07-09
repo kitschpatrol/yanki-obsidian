@@ -26,7 +26,7 @@ export type YankiPluginSettings = {
 		maxLength: number
 		mode: 'prompt' | 'response'
 	}
-	showAdvancedSettings: boolean // Not exposed in settings
+	showAdvancedSettings: boolean
 	stats: {
 		sync: {
 			auto: number

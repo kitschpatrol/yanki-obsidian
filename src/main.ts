@@ -16,6 +16,14 @@ import {
 	sanitizeHtmlToDomWithFunction,
 	sanitizeNamespace,
 } from './utilities'
+
+// An alternate debounce library with a `trigger` method is used instead of the
+// Obsidian API's built-in implementation. The `trigger` method allows
+// user-initiated actions to be executed immediately, and also clears any
+// scheduled future invocations. This prevents multiple invocations if one is
+// already scheduled at the time of the user-initiated invocation. The import is
+// named with a prefix so there's no ambiguity vs the built-in Obsidian
+// implementation.
 import sindreDebounce from 'debounce'
 import path from 'node:path' // Assuming polyfilled
 import {
