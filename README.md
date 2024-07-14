@@ -78,7 +78,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 2. **Plugin installation**
 
-   Search for `yanki` in Obsidian's community plugins browser, or open [obsidian://show-plugin?id=yanki](obsidian://show-plugin?id=yanki), then click the "Install" button.
+   Search for `yanki` in Obsidian's community plugins browser, then click the "Install". Or, install it from [the Obsidian website](https://obsidian.md/plugins?id=yanki).
 
 3. **Setup**
 
@@ -498,6 +498,8 @@ In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ fro
   "webCorsOriginList": ["http://localhost", "app://obsidian.md"]
 }
 ```
+
+### I've installed Anki-Connect, but am still getting connection errors
 
 ## Privacy and security
 
