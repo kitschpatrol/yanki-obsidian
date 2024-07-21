@@ -86,7 +86,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 4. **Sync**
 
-   Initiate a sync from Obsidian to Anki using the `Yanki: Sync flashcard notes to Anki`. You can also trigger a sync manually via the button in the Yanki settings tab, or enable automatic syncing to sync whenever notes in your watched vault folders change.
+   Initiate a sync from Obsidian to Anki using the `Yanki: Sync flashcard notes to Anki` command. You can also trigger a sync manually via the button in the Yanki settings tab, or enable automatic syncing to sync whenever notes in your watched vault folders change.
 
 5. **Study**
 
@@ -498,8 +498,6 @@ In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ fro
   "webCorsOriginList": ["http://localhost", "app://obsidian.md"]
 }
 ```
-
-### I've installed Anki-Connect, but am still getting connection errors
 
 ## Privacy and security
 

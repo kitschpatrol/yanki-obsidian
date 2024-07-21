@@ -346,9 +346,8 @@ export default class YankiPlugin extends Plugin {
 					<pre style="white-space: pre-wrap;">${String(error)}</pre>
 					Please check <a class="settings">the plugin settings</a>, review the
 					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again.
-					If trouble persists, you can open
-					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a> in the
-					Yanki plugin repository.`,
+					If trouble persists, please
+					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				'settings',
 				this.openSettingsTab,
 			)
@@ -413,7 +412,6 @@ export default class YankiPlugin extends Plugin {
 	async fileAdapterRename(oldPath: string, newPath: string): Promise<void> {
 		const vaultFileOldPath = this.absolutePathToVaultPath(oldPath)
 		const file = this.app.vault.getFileByPath(vaultFileOldPath)
-
 		if (file === null) {
 			throw new Error(`Rename failed. File not found: ${vaultFileOldPath}`)
 		}
