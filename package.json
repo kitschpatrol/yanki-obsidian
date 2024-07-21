@@ -47,7 +47,7 @@
 	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^4.7.2",
-		"@types/node": "^20.14.10",
+		"@types/node": "^20.14.11",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.4.1",
 		"debounce": "^2.1.0",
@@ -56,11 +56,11 @@
 		"obsidian": "latest",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.0.0",
-		"rimraf": "^6.0.0",
+		"rimraf": "^6.0.1",
 		"tsx": "^4.16.2",
-		"type-fest": "^4.21.0",
+		"type-fest": "^4.22.1",
 		"typescript": "^5.5.3",
-		"yanki": "^0.8.5"
+		"yanki": "^0.9.1"
 	},
 	"obsidian": {
 		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
