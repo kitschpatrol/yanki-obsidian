@@ -41,8 +41,8 @@
 		"fix": "shared-config --fix",
 		"lint": "shared-config --lint",
 		"manifest": "tsx ./scripts/generate-manifest.ts",
-		"obsidian:link": "pnpm obsidian:unlink && ln -s $(pwd)/dist ~/Notes/Vault/.obsidian/plugins/yanki",
-		"obsidian:unlink": "rimraf -rf ~/Notes/Vault/.obsidian/plugins/yanki",
+		"obsidian:link": "pnpm obsidian:unlink && mkdir -p \"$(pwd)/examples/Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
+		"obsidian:unlink": "rimraf -rf \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
 		"release": "pnpm run manifest && pnpm bumpp package.json manifest.json --commit \"Release: %s\" --tag \"%s\""
 	},
 	"devDependencies": {
