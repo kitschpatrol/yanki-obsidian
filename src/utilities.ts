@@ -133,6 +133,15 @@ export function sanitizeHtmlToDomWithFunction(
  * Mainly for nice formatting with prettier. But the line wrapping means we have to strip surplus whitespace.
  */
 export function html(strings: TemplateStringsArray, ...values: unknown[]): string {
+	const conjoined = strings.reduce(
+		(result, text, i) => `${result}${text}${String(values[i] ?? '')}`,
+		'',
+	)
+	return conjoined.replaceAll(/\s+/g, ' ')
+}
+
+// TODO test why this is breaking notice formatting
+export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): string {
 	return trimLeadingIndentation(strings, ...values)
 }
 

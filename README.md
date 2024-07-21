@@ -501,7 +501,7 @@ In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ fro
 
 ### Will `$SOME_FANCY_PLUGIN` work with Yanki?
 
-It depends, if the plugin parses non-standard Markdown and renders complex or interactive HTML in your notes in Obsidian, then they it not translate correctly to Anki.
+It depends, if the plugin parses non-standard Markdown and renders complex or interactive HTML in your notes in Obsidian, then it might not translate correctly to Anki.
 
 Under the hood, Yanki uses its own Markdown → HTML rendering pipeline, and its own CSS stylesheets, so what you see in Obsidian is not always exactly what you'll get in Anki. See the [supported Markdown features](#fancy-markdown) for a sense of what's possible.
 
