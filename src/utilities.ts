@@ -133,9 +133,18 @@ export function sanitizeHtmlToDomWithFunction(
  * Mainly for nice formatting with prettier. But the line wrapping means we have to strip surplus whitespace.
  */
 export function html(strings: TemplateStringsArray, ...values: unknown[]): string {
-	const conjoined = strings.reduce(
-		(result, text, i) => `${result}${text}${String(values[i] ?? '')}`,
-		'',
-	)
-	return conjoined.replaceAll(/\s+/g, ' ')
+	return trimLeadingIndentation(strings, ...values)
+}
+
+function trimLeadingIndentation(strings: TemplateStringsArray, ...values: unknown[]): string {
+	const lines = strings
+		.reduce((result, text, i) => `${result}${text}${String(values[i] ?? '')}`, '')
+		.split(/\r?\n/)
+		.filter((line) => line.trim() !== '')
+
+	// Get leading white space of first line, and trim that much white space
+	// from subsequent lines
+	const leadingSpace = /^(\s+)/.exec(lines[0])?.[0] ?? ''
+	const leadingSpaceRegex = new RegExp(`^${leadingSpace}`)
+	return lines.map((line) => line.replace(leadingSpaceRegex, '').trimEnd()).join('\n')
 }
