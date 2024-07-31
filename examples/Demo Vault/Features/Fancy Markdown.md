@@ -45,7 +45,7 @@ const processor = unified()
 
 **WikiLinks to your Obsidian notes:**
 
-\[\[One Obsidian note is one Anki note]]
+[[One Obsidian note is one Anki note]]
 
 ---
 
