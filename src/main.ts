@@ -252,13 +252,28 @@ export default class YankiPlugin extends Plugin {
 	// Primary commands
 
 	public async updateNoteFilenames(userInitiated: boolean): Promise<void> {
-		if (this.settings.folders.length === 0 || !this.settings.manageFilenames.enabled) {
+		if (
+			this.settings.folders.length === 0 ||
+			(!this.settings.manageFilenames.enabled && !userInitiated)
+		) {
 			return
 		}
 
 		const files: TFile[] = this.getWatchedFiles()
 
 		if (files.length === 0) {
+			// Too noisy for verbose to override...
+			if (userInitiated) {
+				new Notice(
+					sanitizeHtmlToDomWithFunction(
+						html`<strong>Anki note file rename:</strong><br />No flashcard notes found to rename.
+							Check your flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
+						'settings',
+						this.openSettingsTab,
+					),
+				)
+			}
+
 			return
 		}
 

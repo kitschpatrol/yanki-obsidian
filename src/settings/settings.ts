@@ -371,14 +371,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 		})
 
-		new Setting(this.containerEl)
-			.addButton((button) => {
-				button.setButtonText('Rename now')
-				button.onClick(async () => {
-					await this.plugin.updateNoteFilenames(true)
-				})
+		new Setting(this.containerEl).addButton((button) => {
+			button.setButtonText('Rename now')
+			button.onClick(async () => {
+				await this.plugin.updateNoteFilenames(true)
 			})
-			.setDisabled(!this.plugin.settings.manageFilenames.enabled)
+		})
 
 		// ----------------------------------------------------
 
