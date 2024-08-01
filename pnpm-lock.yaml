@@ -51,8 +51,8 @@ importers:
         specifier: ^5.5.3
         version: 5.5.3
       yanki:
-        specifier: ^0.9.1
-        version: 0.9.1
+        specifier: ^0.10.0
+        version: 0.10.0
 
 packages:
 
@@ -830,8 +830,8 @@ packages:
   '@types/lodash-es@4.17.12':
     resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
 
-  '@types/lodash@4.17.6':
-    resolution: {integrity: sha512-OpXEVoCKSS3lQqjx9GGGOapBeuW5eUboYHRlHP9urXPX25IKZ6AnP5ZRxtVf63iieUbsHxLn8NQ5Nlftc6yzAA==}
+  '@types/lodash@4.17.7':
+    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
 
   '@types/mathjax@0.0.40':
     resolution: {integrity: sha512-rHusx08LCg92WJxrsM3SPjvLTSvK5C+gealtSuhKbEOcUZfWlwigaFoPLf6Dfxhg4oryN5qP9Sj7zOQ4HYXINw==}
@@ -847,6 +847,9 @@ packages:
 
   '@types/node@20.14.11':
     resolution: {integrity: sha512-kprQpL8MMeszbz6ojB5/tU8PLN4kesnN8Gjzw349rDlNgsSzg90lAVj3llK99Dh7JON+t9AuscPPFW6mPbTnSA==}
+
+  '@types/node@22.0.2':
+    resolution: {integrity: sha512-yPL6DyFwY5PiMVEwymNeqUTKsDczQBJ/5T7W/46RwLU/VH+AA8aT5TZkvBviLKLbbm0hlfftEkGrNzfRk/fofQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -4148,6 +4151,9 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
+  undici-types@6.11.1:
+    resolution: {integrity: sha512-mIDEX2ek50x0OlRgxryxsenE5XaQD4on5U2inY7RApK3SOJpofyw7uW2AyfMKkhAxXIceo2DeWGVGwyvng1GNQ==}
+
   unicorn-magic@0.1.0:
     resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
     engines: {node: '>=18'}
@@ -4390,8 +4396,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  yanki@0.9.1:
-    resolution: {integrity: sha512-HdTuf/2ethorwXQPpvWqDYgirFSgckFigxSxV5aZxMFxupz4asvoPFMjj8cU0VnjBRkAgKGe0XifzAQKMcy0+w==}
+  yanki@0.10.0:
+    resolution: {integrity: sha512-CwoxBidZo0C5dGnSP9mRMevC0dZF8qtn64AICrF9LGdjUPe6gSuPWra//WLv4ziFzO0SZZawjUTIoxRa4XXslw==}
     engines: {node: '>=20.0.0', pnpm: '>=9.0.0'}
     hasBin: true
 
@@ -5236,9 +5242,9 @@ snapshots:
 
   '@types/lodash-es@4.17.12':
     dependencies:
-      '@types/lodash': 4.17.6
+      '@types/lodash': 4.17.7
 
-  '@types/lodash@4.17.6': {}
+  '@types/lodash@4.17.7': {}
 
   '@types/mathjax@0.0.40': {}
 
@@ -5255,6 +5261,10 @@ snapshots:
   '@types/node@20.14.11':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/node@22.0.2':
+    dependencies:
+      undici-types: 6.11.1
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -9624,6 +9634,8 @@ snapshots:
 
   undici-types@5.26.5: {}
 
+  undici-types@6.11.1: {}
+
   unicorn-magic@0.1.0: {}
 
   unified-args@11.0.1:
@@ -9935,19 +9947,18 @@ snapshots:
 
   yaml@2.4.5: {}
 
-  yanki@0.9.1:
+  yanki@0.10.0:
     dependencies:
       '@types/hast': 3.0.4
       '@types/lodash-es': 4.17.12
       '@types/mdast': 4.0.4
-      '@types/node': 20.14.11
+      '@types/node': 22.0.2
       '@types/unist': 3.0.2
       '@types/yargs': 17.0.32
       chalk: 5.3.0
       globby: 14.0.2
       rehype-mathjax: 6.0.0
       rehype-parse: 9.0.0
-      slash: 5.1.0
       yargs: 17.7.2
     transitivePeerDependencies:
       - bufferutil

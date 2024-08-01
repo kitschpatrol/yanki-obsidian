@@ -66,7 +66,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 1. **Prerequisites**
 
-- The [Obsidian desktop application](https://obsidian.md/download)
+- The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6+ on Windows, macOS, and Linux.)
 - The [Anki desktop application](https://apps.ankiweb.net)
 - The [Anki-Connect](https://foosoft.net/projects/anki-connect/) add-on
 

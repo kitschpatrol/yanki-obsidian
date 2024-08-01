@@ -408,9 +408,19 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				text.setValue(hostAndPortToUrl(host, port))
 
 				text.onChange((value) => {
-					const { host, port } = urlToHostAndPort(value)
-					this.plugin.settings.ankiConnect.host = host
-					this.plugin.settings.ankiConnect.port = port
+					const parsedUrl = urlToHostAndPort(value)
+
+					if (parsedUrl === undefined) {
+						new Notice(
+							sanitizeHTMLToDom(
+								html`<strong>Yanki:</strong><br />Invalid Anki-Connect host and port.`,
+							),
+						)
+					} else {
+						const { host, port } = parsedUrl
+						this.plugin.settings.ankiConnect.host = host
+						this.plugin.settings.ankiConnect.port = port
+					}
 				})
 
 				text.inputEl.addEventListener('blur', async () => {

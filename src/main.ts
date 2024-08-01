@@ -72,6 +72,7 @@ export default class YankiPlugin extends Plugin {
 		this.getSanitizedFolders = this.getSanitizedFolders.bind(this)
 
 		this.getVaultBasePath = this.getVaultBasePath.bind(this)
+		this.getAllFilePaths = this.getAllFilePaths.bind(this)
 		this.vaultPathToAbsolutePath = this.vaultPathToAbsolutePath.bind(this)
 		this.absolutePathToVaultPath = this.absolutePathToVaultPath.bind(this)
 
@@ -183,6 +184,7 @@ export default class YankiPlugin extends Plugin {
 		settings: YankiPluginSettings,
 	): CommonProperties<RenameFilesOptions, SyncFilesOptions> {
 		return {
+			allFilePaths: [],
 			basePath: this.getVaultBasePath(),
 			dryRun: false,
 			fetchAdapter: this.fetchAdapter,
@@ -195,7 +197,7 @@ export default class YankiPlugin extends Plugin {
 			},
 			manageFilenames: settings.manageFilenames.enabled ? settings.manageFilenames.mode : 'off',
 			maxFilenameLength: settings.manageFilenames.maxLength,
-			// Using vault ID instead of name should be more robust to vault renaming... why is this private?
+			// Using vault ID instead of name is more robust to vault renaming... why is this private?
 			// https://forum.obsidian.md/t/is-there-any-way-to-derive-the-vault-id-from-the-vault-directory/5573/4
 			// Warning: changing the static components of this value can result in data loss...
 			namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace((this.app as unknown as { appId: string }).appId)}`,
@@ -206,11 +208,18 @@ export default class YankiPlugin extends Plugin {
 
 	/**
 	 * Translates YankiPluginSettings into an options object for use in the Yanki library's `renameFiles` function
+	 *
+	 * Overrides some parameters to improve performance and avoid unnecessary operations.
+	 *
 	 * @param settings - YankiPluginSettings object
 	 * @returns RenameFilesOptions object
 	 */
 	private getRenameFilesOptions(settings: YankiPluginSettings): RenameFilesOptions {
-		return this.getSharedOptions(settings)
+		return {
+			...this.getSharedOptions(settings),
+			allFilePaths: [],
+			syncMediaAssets: 'off',
+		}
 	}
 
 	/**
@@ -221,6 +230,7 @@ export default class YankiPlugin extends Plugin {
 	private getSyncFilesOptions(settings: YankiPluginSettings): SyncFilesOptions {
 		return {
 			...this.getSharedOptions(settings),
+			allFilePaths: this.getAllFilePaths(),
 			ankiConnectOptions: {
 				autoLaunch: false,
 				fetchAdapter: this.fetchAdapter,
@@ -252,7 +262,8 @@ export default class YankiPlugin extends Plugin {
 			return
 		}
 
-		const filePaths = files.map((file) => file.path)
+		// All watched files as absolute paths
+		const filePaths = files.map((file) => this.vaultPathToAbsolutePath(file.path))
 
 		const report = await renameFiles(filePaths, this.getRenameFilesOptions(this.settings))
 
@@ -309,7 +320,10 @@ export default class YankiPlugin extends Plugin {
 			return
 		}
 
-		const filePaths = files.map((file) => file.path)
+		// All watched files as absolute paths.
+		// Additionally, getSyncFilesOptions pulls paths to ALL assets in the vault
+		// to support resolving wiki links.
+		const filePaths = files.map((file) => this.vaultPathToAbsolutePath(file.path))
 
 		try {
 			const report = await syncFiles(filePaths, this.getSyncFilesOptions(this.settings))
@@ -364,7 +378,9 @@ export default class YankiPlugin extends Plugin {
 	// Yanki FileAdapter implementations
 
 	async fileAdapterRead(filePath: string): Promise<string> {
+		filePath = this.absolutePathToVaultPath(filePath)
 		const file = this.app.vault.getFileByPath(filePath)
+
 		if (file === null) {
 			throw new Error(`Read failed. File not found: ${filePath}`)
 		}
@@ -386,6 +402,7 @@ export default class YankiPlugin extends Plugin {
 	async fileAdapterStat(
 		filePath: string,
 	): Promise<{ ctimeMs: number; mtimeMs: number; size: number }> {
+		filePath = this.absolutePathToVaultPath(filePath)
 		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
 			throw new Error(`Stat failed. File not found: ${filePath}`)
@@ -401,7 +418,7 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	async fileAdapterWrite(filePath: string, data: string): Promise<void> {
-		const file = this.app.vault.getFileByPath(filePath)
+		const file = this.app.vault.getFileByPath(this.absolutePathToVaultPath(filePath))
 		if (file === null) {
 			throw new Error(`Write failed. File not found: ${filePath}`)
 		}
@@ -551,11 +568,31 @@ export default class YankiPlugin extends Plugin {
 
 	// Paths
 
+	private getAllFilePaths(): string[] {
+		const vaultBasePath = this.getVaultBasePath() ?? ''
+		return this.app.vault.getFiles().map((file) => path.join(vaultBasePath, file.path))
+	}
+
+	// Does not have a trailing slash
 	private getVaultBasePath(): string | undefined {
-		// https://forum.obsidian.md/t/how-to-get-vault-absolute-path/22965/3
 		const { adapter } = this.app.vault
 		if (adapter instanceof FileSystemAdapter) {
-			return normalizePath(adapter.getBasePath())
+			// We want the Windows slash-reversing effects of normalize, but not the
+			// removal of the leading / from the path on POSIX systems. Split the
+			// difference, detect drive letters and append if missing. Forsake Windows
+			// extended paths for now.
+			// https://forum.obsidian.md/t/how-to-get-vault-absolute-path/22965/3
+			// https://forum.obsidian.md/t/normalizepath-removes-a-leading/24713
+			// https://github.com/Taitava/obsidian-shellcommands/issues/44
+			//
+			// Desired form is:
+			// - Windows: "C:/path/to/vault"
+			// - POSIX: "/path/to/vault"
+			const possiblyBarePath = normalizePath(adapter.getBasePath())
+
+			return /^[A-Za-z]:/.test(possiblyBarePath)
+				? possiblyBarePath
+				: path.join(path.sep, possiblyBarePath)
 		}
 	}
 
