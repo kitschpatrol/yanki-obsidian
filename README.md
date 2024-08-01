@@ -151,7 +151,7 @@ An extended palette of Markdown syntax is available out of the box, mirroring (a
 
 ### Intelligent syncing
 
-Your local Obsidian Markdown notes are the single point of truth for what will and up in Anki, but Yanki knows to leave your other Anki notes alone.
+Your local Obsidian Markdown notes are the single point of truth for what will end up in Anki, but Yanki knows to leave your other Anki notes alone.
 
 When you edit a local Obsidian note, Yanki makes every effort to update rather than delete it in the Anki database so that review progress is preserved.
 
