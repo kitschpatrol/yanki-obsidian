@@ -539,7 +539,7 @@ export default class YankiPlugin extends Plugin {
 
 	private isInsideWatchedFolders(fileOrFolder: TAbstractFile): boolean {
 		// Use dirname to find parent folder even if file has been deleted
-		const folderPath = `${fileOrFolder instanceof TFolder ? fileOrFolder.path : fileOrFolder.parent?.path ?? path.dirname(fileOrFolder.path)}/`
+		const folderPath = `${fileOrFolder instanceof TFolder ? fileOrFolder.path : (fileOrFolder.parent?.path ?? path.dirname(fileOrFolder.path))}/`
 		return this.getSanitizedFolders().some((watchedFolder) => folderPath.startsWith(watchedFolder))
 	}
 

@@ -142,7 +142,7 @@ The Yanki plugin detects your vault's name, and automatically turns any internal
 
 An extended palette of Markdown syntax is available out of the box, mirroring (almost) all the features supported by Obsidian:
 
-- [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-throughs~~`, `- [x] task lists`, and autolinks.
+- [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-throughs~~`, `- [x] task lists`. (Autolinks are not currently supported.)
 - Syntax highlighting via [Shiki](https://shiki.style).
 - GitHub-style [Alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
 - The aforementioned [WikiLinks](https://github.com/Python-Markdown/markdown/blob/master/docs/extensions/wikilinks.md).
