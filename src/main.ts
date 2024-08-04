@@ -262,8 +262,7 @@ export default class YankiPlugin extends Plugin {
 		const files: TFile[] = this.getWatchedFiles()
 
 		if (files.length === 0) {
-			// Too noisy for verbose to override...
-			if (userInitiated) {
+			if (userInitiated || this.settings.verboseNotices) {
 				new Notice(
 					sanitizeHtmlToDomWithFunction(
 						html`<strong>Anki note file rename:</strong><br />No flashcard notes found to rename.
