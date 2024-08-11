@@ -142,11 +142,11 @@ The Yanki plugin detects your vault's name, and automatically turns any internal
 
 An extended palette of Markdown syntax is available out of the box, mirroring (almost) all the features supported by Obsidian:
 
-- [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-throughs~~`, `- [x] task lists`. (Autolinks are not currently supported.)
+- [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-throughs~~`, `- [x] task lists`, and autolinks.
 - Syntax highlighting via [Shiki](https://shiki.style).
 - GitHub-style [Alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
 - The aforementioned [WikiLinks](https://github.com/Python-Markdown/markdown/blob/master/docs/extensions/wikilinks.md).
-- [LaTeX formatted mathematical expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) via [MathJax](https://www.mathjax.org).
+- [LaTeX formatted mathematical expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) via Anki's built-in [MathJax](https://www.mathjax.org) rendering support.
 - Support for the [`==highlights==`](https://github.com/ipikuka/remark-flexible-markers) syntax.
 
 ### Intelligent syncing
