@@ -54,8 +54,8 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
       yanki:
-        specifier: ^0.12.0
-        version: 0.12.0
+        specifier: ^0.12.1
+        version: 0.12.1
 
 packages:
 
@@ -742,9 +742,6 @@ packages:
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
-
-  '@types/yargs@17.0.32':
-    resolution: {integrity: sha512-xQ67Yc/laOG5uMfX/093MRlGGCIBzZMarVa+gfNKJxWAIgykYpVGkBdbqEzGDDfCrVUj6Hiff4mTZ5BA6TmAog==}
 
   '@types/yargs@17.0.33':
     resolution: {integrity: sha512-WpxBCKWPLr4xSsHgz511rFJAM+wS28w2zEO1QDNY5zM/S8ok70NNfztH0xwhqKyaK0OHCbN98LDAZuy1ctxDkA==}
@@ -4117,8 +4114,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  yanki@0.12.0:
-    resolution: {integrity: sha512-J6/uWehhbdn9f6lSVgUZDcMPIAcj/3UJuqu/i2r2HoZrWZFns5uvigBhmR6wq2Pj7UjAPyUCzBvYxWudqeLGlQ==}
+  yanki@0.12.1:
+    resolution: {integrity: sha512-dPVGkC2tNhBV1FN5uOYjZQyADI+8phaihDvL1TT+RC1H7ZXy6OLSgK5PG10mGkM3fv0PrQ4j1xucy16fBylSKA==}
     engines: {node: ^18.19.0 || >=20.5.0, pnpm: '>=9.0.0'}
     hasBin: true
 
@@ -4958,10 +4955,6 @@ snapshots:
   '@types/which@3.0.4': {}
 
   '@types/yargs-parser@21.0.3': {}
-
-  '@types/yargs@17.0.32':
-    dependencies:
-      '@types/yargs-parser': 21.0.3
 
   '@types/yargs@17.0.33':
     dependencies:
@@ -7223,7 +7216,7 @@ snapshots:
       '@types/node': 20.14.15
       '@types/unist': 3.0.2
       '@types/which': 3.0.4
-      '@types/yargs': 17.0.32
+      '@types/yargs': 17.0.33
       cosmiconfig: 9.0.0(typescript@5.5.4)
       cosmiconfig-typescript-loader: 5.0.0(@types/node@20.14.15)(cosmiconfig@9.0.0(typescript@5.5.4))(typescript@5.5.4)
       execa: 9.3.0
@@ -9433,7 +9426,7 @@ snapshots:
 
   yaml@2.5.0: {}
 
-  yanki@0.12.0:
+  yanki@0.12.1:
     dependencies:
       '@types/hast': 3.0.4
       '@types/lodash-es': 4.17.12
