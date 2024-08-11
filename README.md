@@ -161,7 +161,7 @@ If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yank
 
 ### Automatic syncing
 
-When the Automatic Sync option is enabled, Yanki will automatically updated notes to Anki whenever flashcard notes are created, deleted, or updated in Obsidian.
+When the Automatic Sync option is enabled, Yanki will automatically update notes to Anki whenever flashcard notes are created, deleted, or updated in Obsidian.
 
 ### Existing notes are untouched
 
@@ -539,9 +539,9 @@ A few features are under consideration:
 
 - [ ] Optionally render Markdown → HTML with Obsidian's pipeline + stylesheets.
 
-If you have others in mind, feel free to [open an issue](https://github.com/kitschpatrol/yanki-obsidian/issues) with a suggestion.
-
 - [ ] Nicer stylesheets / theming for notes in both Anki and Obsidian.
+
+If you have others in mind, feel free to [open an issue](https://github.com/kitschpatrol/yanki-obsidian/issues) with a suggestion.
 
 ## Background
 
