@@ -393,6 +393,13 @@ Please see the [Anki-Connect documentation](https://foosoft.net/projects/anki-co
 
 Toggle the advanced section to reveal options related to synchronization statistics and verbose logging.
 
+### Additional resources
+
+[@emisjerry](https://github.com/emisjerry) has published two very thorough Mandarin-language videos walking through Yanki and illustrating some advanced use-cases:
+
+- [Obs162｜Obsidian's simple and easy-to-use new Anki plugin: Yanki](https://youtu.be/CE6iNxBGBTc)
+- [Obs163｜Yanki Plugin for Creating Anki Cloze Deletion Flashcards, and the Fill-in-the-Blank Template](https://youtu.be/DQ9DFKPugpQ)
+
 ## FAQ
 
 ### Why do I have to come up with a name for every note
