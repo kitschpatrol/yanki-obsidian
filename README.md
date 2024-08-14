@@ -245,21 +245,49 @@ _Mnemonic: The `~~strike through~~` implies redaction._
 All will be ~~revealed~~.
 ```
 
-Multiple clozes are supported, which will create additional cards.
-
-You can add a `---` to include back-of-card information as well.
-
-Hints are also supported, and are indicated by giving the hint text `_emphasis_` at the end of the cloze strike-through:
+Multiple clozes are supported, which will create additional cards. You can add a `---` to include back-of-card information as well. Hints are also supported, and are indicated by giving the hint text `_emphasis_` at the end of the cloze strike-through:
 
 ```md
-~~All~~ will be ~~revealed _but here's a hint_~~.
+~~All~~ will be ~~revealed _here's a hint_~~.
 
 ---
 
 Additional revelations on the back of the card.
 ```
 
-Clozing a block element is not currently supported.
+#### Advanced cloze numbering
+
+By default, clozes are numbered incrementally. For example, the Markdown:
+
+```md
+~~All~~ will be ~~revealed _here's a hint_~~.
+```
+
+Is turned into the following Anki markup behind the scenes:
+
+```text
+{{c1::All}} will be {{c2::revealed::<em>here's a hint</em>}}
+```
+
+In [rare cases](https://github.com/kitschpatrol/yanki-obsidian/issues/4), you might want to take control over cloze numbering — perhaps you want to reveal multiple clozes simultaneously on a single card, or group certain clozes together on a particularly cloze-heavy note.
+
+To support this, Yanki offers some optional extra syntax. A leading one- or two-digit a number at the front of your clozed content will be interpreted as the cloze number:
+
+For example:
+
+```md
+~~1 All~~ will be ~~1 revealed _here's a hint_~~.
+```
+
+Yields the following Anki markup:
+
+```text
+{{c1::All}} will be {{c1::revealed::<em>here's a hint</em>}}
+```
+
+The difference is subtle, but note the matching `{{c1`s. This markup yields a single card where both `All` and `revealed` are revealed simultaneously.
+
+_Note: While you can encloze images, math equations, and other inline-styled syntax, clozing over multiple lines or block elements is not currently supported._
 
 ## Usage
 
