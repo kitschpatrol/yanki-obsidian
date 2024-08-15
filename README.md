@@ -223,6 +223,22 @@ Sometimes the answer is the question
 Sometimes the question is the answer
 ```
 
+Yanki also supports adding "extra" content that will appear on the the back of both generated cards:
+
+```md
+Sometimes the answer is the question
+
+---
+
+---
+
+Sometimes the question is the answer
+
+---
+
+This will appear on the back of both generated cards
+```
+
 ### Basic (type in the answer)
 
 If the last statement in the Markdown file is `_emphasized like this_`, it becomes the type-in-the-answer text in Anki.
