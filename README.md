@@ -106,7 +106,7 @@ Yanki uses your Obsidian note's parent folder name as the deck name. Complex fol
 
 More note types, more problems.
 
-Yanki _only_ supports turning Markdown into the "Basic", "Basic (and reversed card)", "Basic (type in the answer)", and "Cloze" note types that ship as defaults in the Anki App.
+Yanki _only_ supports turning Markdown into the "Basic", "Basic (and reversed card with extra)", "Basic (type in the answer)", and "Cloze" note types that ship as defaults in the Anki App.
 
 ### Infer Anki note type from Markdown structure
 
@@ -187,7 +187,7 @@ Both wiki-style `![[something.png]]` and `![markdown](style.png)` asset embeddin
 
 Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain element in your Markdown notes.
 
-The rules were designed with Markdown's semantic precedents and visual nature in mind.
+The rules were designed with Markdown's semantic precedents and visual nature in mind, and are based on the note types that are included as defaults in a fresh installation of Anki. Yanki creates and manages the required note types automatically. Do not create or edit them manually.
 
 The most minimal examples to "trigger" different note types are shown below, but the implementation can handle additional weirdness and will generally do the right thing if it encounters elements that might indicate conflicting note types.
 
@@ -207,7 +207,7 @@ This is the front of the card
 This is the back of the card
 ```
 
-### Basic (and reversed card)
+### Basic (and reversed card with extra)
 
 Doubling up the `---` identifies the note as being **reversible** (and will result in the generation of two cards in Anki).
 
@@ -223,7 +223,7 @@ Sometimes the answer is the question
 Sometimes the question is the answer
 ```
 
-Yanki also supports adding "extra" content that will appear on the the back of both generated cards:
+Yanki deviates slightly from the default Anki reversed card note type by supporting adding optional "extra" content that will appear on the the back of both generated cards:
 
 ```md
 Sometimes the answer is the question
