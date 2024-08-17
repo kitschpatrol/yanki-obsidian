@@ -439,10 +439,11 @@ Toggle the advanced section to reveal options related to synchronization statist
 
 ### Additional resources
 
-[@emisjerry](https://github.com/emisjerry) has published two very thorough Mandarin-language videos walking through Yanki and illustrating some advanced use-cases:
+[@emisjerry](https://github.com/emisjerry) has published several very thorough Mandarin-language videos walking through Yanki and illustrating some advanced use-cases:
 
 - [Obs162｜Obsidian's simple and easy-to-use new Anki plugin: Yanki](https://youtu.be/CE6iNxBGBTc)
 - [Obs163｜Yanki Plugin for Creating Anki Cloze Deletion Flashcards, and the Fill-in-the-Blank Template](https://youtu.be/DQ9DFKPugpQ)
+- [Obs164｜Steps to create Anki flashcards from an English article, using Yanki, ChatGPT, Note Splitter](https://www.youtube.com/watch?v=Gu6B7nqUV9o)
 
 ## FAQ
 
