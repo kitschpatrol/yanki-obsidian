@@ -54,8 +54,8 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
       yanki:
-        specifier: ^0.14.0
-        version: 0.14.0
+        specifier: ^0.14.1
+        version: 0.14.1
 
 packages:
 
@@ -736,6 +736,9 @@ packages:
 
   '@types/unist@3.0.2':
     resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
+
+  '@types/unist@3.0.3':
+    resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
 
   '@types/which@3.0.4':
     resolution: {integrity: sha512-liyfuo/106JdlgSchJzXEQCVArk0CvevqPote8F8HgWgJ3dRCcTHgJIsLDuee0kxk/mhbInzIZk3QWSZJ8R+2w==}
@@ -4120,8 +4123,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  yanki@0.14.0:
-    resolution: {integrity: sha512-8UAmEt9V5EFF8zslXnUBVQ8l+h2uT2X3oTfoB/+YkzAwG5izmD+1nGRglYdCfC70oE8Xvz32FuFJ3anP9A8Hqw==}
+  yanki@0.14.1:
+    resolution: {integrity: sha512-v8Jt8micwoIj+1Ybjfi+N129I7Pi4Rparq9dYzC+C1lkao8uJWGvQaHfNbAEcGlEdEln63351+AisBghRcZ27A==}
     engines: {node: ^18.19.0 || >=20.5.0, pnpm: '>=9.0.0'}
     hasBin: true
 
@@ -4916,7 +4919,7 @@ snapshots:
 
   '@types/hast@3.0.4':
     dependencies:
-      '@types/unist': 3.0.2
+      '@types/unist': 3.0.3
 
   '@types/hosted-git-info@3.0.5': {}
 
@@ -4959,6 +4962,8 @@ snapshots:
   '@types/unist@2.0.10': {}
 
   '@types/unist@3.0.2': {}
+
+  '@types/unist@3.0.3': {}
 
   '@types/which@3.0.4': {}
 
@@ -6604,7 +6609,7 @@ snapshots:
   hast-util-from-parse5@8.0.1:
     dependencies:
       '@types/hast': 3.0.4
-      '@types/unist': 3.0.2
+      '@types/unist': 3.0.3
       devlop: 1.1.0
       hastscript: 8.0.0
       property-information: 6.5.0
@@ -9439,13 +9444,13 @@ snapshots:
 
   yaml@2.5.0: {}
 
-  yanki@0.14.0:
+  yanki@0.14.1:
     dependencies:
       '@types/hast': 3.0.4
       '@types/lodash-es': 4.17.12
       '@types/mdast': 4.0.4
       '@types/node': 18.19.0
-      '@types/unist': 3.0.2
+      '@types/unist': 3.0.3
       '@types/yargs': 17.0.33
       chalk: 5.3.0
       entities: 4.5.0
