@@ -56,3 +56,9 @@ $$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\righ
 ---
 
 Support for the [==highlights==](https://github.com/ipikuka/remark-flexible-markers) syntax.
+
+---
+
+Embedded blocks are partially supported, becoming links to the block content in your Obsidian vault instead of inline embedded content:
+
+![[Support for Obsidian WikiLinks#^block-test]]
