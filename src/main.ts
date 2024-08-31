@@ -131,13 +131,10 @@ export default class YankiPlugin extends Plugin {
 		this.settings = { ...this.settings, ...(await this.loadData()) }
 	}
 
-	async openSettingsTab() {
+	openSettingsTab() {
 		// https://forum.obsidian.md/t/open-settings-for-my-plugin-community-plugin-settings-deeplink/61563/4
-		const { setting } = this.app as unknown as {
-			setting: { open: () => Promise<void>; openTabById: (id: string) => void }
-		}
-		await setting.open()
-		setting.openTabById(this.manifest.id)
+		this.app.setting.open()
+		this.app.setting.openTabById(this.manifest.id)
 	}
 
 	/**
@@ -197,11 +194,12 @@ export default class YankiPlugin extends Plugin {
 			},
 			manageFilenames: settings.manageFilenames.enabled ? settings.manageFilenames.mode : 'off',
 			maxFilenameLength: settings.manageFilenames.maxLength,
+			// Warning: changing the static components of this value can result in data loss...
+			namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace(this.app.appId)}`,
 			// Using vault ID instead of name is more robust to vault renaming... why is this private?
 			// https://forum.obsidian.md/t/is-there-any-way-to-derive-the-vault-id-from-the-vault-directory/5573/4
-			// Warning: changing the static components of this value can result in data loss...
-			namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace((this.app as unknown as { appId: string }).appId)}`,
 			obsidianVault: this.app.vault.getName(),
+			strictLineBreaks: Boolean(this.app.vault.getConfig('strictLineBreaks')),
 			syncMediaAssets: settings.sync.mediaMode,
 		}
 	}

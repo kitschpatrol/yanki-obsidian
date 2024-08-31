@@ -147,7 +147,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 							href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#markdown-note-types"
 							>Yanki documentation</a
 						>
-						for details on how to structure your flashcard notes.`,
+						for details on how to structure the content of your flashcard notes.`,
 				),
 			)
 

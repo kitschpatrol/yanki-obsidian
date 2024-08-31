@@ -21,6 +21,9 @@
 
 		/* tslib interop for obsidian */
 		"importHelpers": true,
-		"downlevelIteration": true
+		"downlevelIteration": true,
+
+		/* undocumented types */
+		"types": ["obsidian-typings"]
 	}
 }

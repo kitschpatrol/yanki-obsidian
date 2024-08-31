@@ -57,13 +57,14 @@
 		"esbuild": "^0.23.1",
 		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
+		"obsidian-typings": "^2.2.0",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.1.0",
 		"rimraf": "^6.0.1",
 		"tsx": "^4.19.0",
 		"type-fest": "^4.26.0",
 		"typescript": "^5.5.4",
-		"yanki": "^0.14.1"
+		"yanki": "^0.15.0"
 	},
 	"obsidian": {
 		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
