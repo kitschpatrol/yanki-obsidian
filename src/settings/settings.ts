@@ -1,17 +1,17 @@
-import { FolderSuggest } from '../extensions/folder-suggest'
-import type YankiPlugin from '../main'
-import { capitalize, html } from '../utilities'
 import {
 	type App,
 	type ButtonComponent,
+	moment,
 	Notice,
 	PluginSettingTab,
-	Setting,
-	moment,
 	sanitizeHTMLToDom,
+	Setting,
 } from 'obsidian'
 import prettyMilliseconds from 'pretty-ms'
 import { hostAndPortToUrl, urlToHostAndPort } from 'yanki'
+import type YankiPlugin from '../main'
+import { FolderSuggest } from '../extensions/folder-suggest'
+import { capitalize, html } from '../utilities'
 
 export type YankiPluginSettings = {
 	ankiConnect: {

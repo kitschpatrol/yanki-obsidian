@@ -1,6 +1,6 @@
-import packageJson from '../package.json'
-import fs from 'node:fs/promises'
 import type { PluginManifest } from 'obsidian'
+import fs from 'node:fs/promises'
+import packageJson from '../package.json'
 
 const inferredManifest = {
 	author: packageJson.author.name,

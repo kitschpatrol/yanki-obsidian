@@ -2,13 +2,13 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 
 import {
-	YankiPluginSettingTab,
-	type YankiPluginSettings,
 	yankiPluginDefaultSettings,
+	type YankiPluginSettings,
+	YankiPluginSettingTab,
 } from './settings/settings'
 import {
-	type CommonProperties,
 	arraysEqual,
+	type CommonProperties,
 	formatRenameResult,
 	formatSyncResult,
 	html,
@@ -28,23 +28,23 @@ import sindreDebounce from 'debounce'
 import path from 'node:path' // Assuming polyfilled
 import {
 	FileSystemAdapter,
+	moment,
+	normalizePath,
 	Notice,
 	Plugin,
+	requestUrl,
+	sanitizeHTMLToDom,
 	type TAbstractFile,
 	TFile,
 	TFolder,
 	Vault,
-	moment,
-	normalizePath,
-	requestUrl,
-	sanitizeHTMLToDom,
 } from 'obsidian'
 import {
 	type FetchAdapter,
-	type RenameFilesOptions,
-	type SyncFilesOptions,
 	renameFiles,
+	type RenameFilesOptions,
 	syncFiles,
+	type SyncFilesOptions,
 } from 'yanki'
 
 export default class YankiPlugin extends Plugin {

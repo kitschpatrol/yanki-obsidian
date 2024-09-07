@@ -48,8 +48,8 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^4.7.2",
-		"@types/node": "^20.16.2",
+		"@kitschpatrol/shared-config": "^4.7.5",
+		"@types/node": "^20.16.5",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.5.2",
 		"debounce": "^2.1.0",
@@ -64,7 +64,7 @@
 		"tsx": "^4.19.0",
 		"type-fest": "^4.26.0",
 		"typescript": "^5.5.4",
-		"yanki": "^0.15.1"
+		"yanki": "^0.15.3"
 	},
 	"obsidian": {
 		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",

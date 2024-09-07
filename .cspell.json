@@ -1,31 +1,5 @@
 {
 	"$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
 	"import": "@kitschpatrol/cspell-config",
-	"words": [
-		"anki",
-		"autolinks",
-		"cloze",
-		"clozed",
-		"clozes",
-		"clozing",
-		"collab",
-		"debouncer",
-		"Eby",
-		"emisjerry",
-		"encloze",
-		"keymap",
-		"lezer",
-		"openai",
-		"outbase",
-		"popperjs",
-		"prefixer",
-		"Rivero",
-		"Rodríguez",
-		"softmax",
-		"throughs",
-		"yanki",
-		"Yankī",
-		"Yatskov",
-		"Zoé"
-	]
+	"words": ["clozed", "clozing", "encloze", "lezer", "outbase", "Zoé"]
 }
