@@ -321,15 +321,77 @@ If [automatic sync](#automatic-sync) is enabled, you shouldn't need to use the c
 
 ##### Watched folder list
 
+> [!CAUTION]  
+> Use care when editing or deleting folders from this list, since notes from the removed folders will be deleted from Anki (along with their review statistics) on the next sync.
+
 Yanki will sync notes in the vault folders specified here to Anki.
 
-_Folder syncing is always recursive._
+Folder syncing is always recursive.
 
 Anki decks will be created automatically to match the hierarchy of your Obsidian folders.
 
 Selecting multiple folders from different parts of your vault is fine, they'll just end up in different Anki decks.
 
-Use care when editing or deleting folders from this list, since notes will be deleted from Anki (along with their review statistics) on the next sync.
+The way that folders and flashcard notes are mapped to Anki decks is somewhat nuanced to accommodate the case of syncing the root folder of a vault.
+
+In general: **Decks are created, as needed, _if there is a note in a given part of the folder hierarchy_.**
+
+For example, syncing `/Flashcards` with this folder structure:
+
+```plaintext
+📂 Flashcards
+└── 📂 Subdeck
+   ├── 📝 Note A.md
+   └── 📝 Note B.md
+```
+
+Will yield the following deck in Anki, because `/Flashcards` does not contain multiple items:
+
+```plaintext
+Subdeck
+```
+
+If you add a second folder to `/Flashcards` in Obsidian, you still won't get a `Flashcards` deck in Anki since it doesn't contain any notes directly, for example:
+
+```plaintext
+📁 Flashcards
+├── 📁 Subdeck
+│  ├── 📝 Note 1.md
+│  └── 📝 Note 2.md
+└── 📁 Subdeck B
+   ├── 📝 Note 1.md
+   └── 📝 Note 2.md
+```
+
+Yields the following decks in Anki:
+
+```plaintext
+Subdeck
+Subdeck B
+```
+
+If you then add a _note_ to the root of `/Flashcards` in Obsidian:
+
+```plaintext
+📁 Flashcards
+├── 📝 Note 1.md
+├── 📁 Subdeck
+│  ├── 📝 Note 1.md
+│  └── 📝 Note 2.md
+└── 📁 Subdeck B
+   ├── 📝 Note 1.md
+   └── 📝 Note 2.md
+```
+
+Then you'll get the full hierarchy in Anki:
+
+```plaintext
+Flashcards
+Flashcards::Subdeck
+Flashcards::Subdeck B
+```
+
+The idea here is that you can sync a folder of folders in Obsidian, without necessarily including top-level folder as a deck. (For example in my personal use of Yanki, I have an `/Anki` folder in the root of my Obsidian vault with many subfolders that I sync, but I don't want all of my synced cards to be inside an `Anki` deck.)
 
 ##### Ignore folder notes
 
