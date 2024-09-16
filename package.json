@@ -61,6 +61,7 @@
 		"yanki": "^0.15.5"
 	},
 	"obsidian": {
+		"author": "Kitschpatrol",
 		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
 		"id": "yanki",
 		"isDesktopOnly": true,
