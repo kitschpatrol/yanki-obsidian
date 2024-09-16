@@ -453,7 +453,7 @@ You don't! Enable the [automatic note naming](#automatic-note-names) setting.
 
 ### Does Yanki work with Obsidian's mobile apps?
 
-No, and it probably never will since it needs to communicate with a running instance of the Anki desktop app. (I suppose it's technically feasible with some network contortions, but that's not anything I'd wish on anyone.)
+No, and it probably never will since it needs to communicate with a running instance of the Anki desktop app. (I suppose it's technically feasible with some network contortions, but that's not anything I'd wish on anyone. There's also the [AnkiconnectAndroid](https://github.com/KamWithK/AnkiconnectAndroid) project which shows promise, but to my knowledge there's no similar project for iOS and I don't plan to support the Yanki plugin on a single mobile platform.)
 
 ### Does Yanki work with Anki's mobile apps?
 
