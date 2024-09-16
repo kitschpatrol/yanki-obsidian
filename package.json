@@ -3,22 +3,16 @@
 	"version": "1.4.3",
 	"type": "module",
 	"description": "An Obsidian plugin for automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/kitschpatrol/yanki-obsidian.git"
-	},
+	"repository": "github:kitschpatrol/yanki-obsidian",
 	"homepage": "https://github.com/kitschpatrol/yanki-obsidian",
-	"bugs": {
-		"url": "https://github.com/kitschpatrol/yanki-obsidian/issues",
-		"email": "eric@ericmika.com"
-	},
+	"bugs": "https://github.com/kitschpatrol/yanki-obsidian/issues",
 	"author": {
 		"name": "Eric Mika",
 		"email": "eric@ericmika.com",
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.9.0",
+	"packageManager": "pnpm@9.10.0",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=9.0.0"
@@ -35,24 +29,24 @@
 		"sync"
 	],
 	"scripts": {
-		"build": "rimraf -rf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
-		"clean": "rimraf ./pnpm-lock.yaml && git clean -fdX",
-		"dev": "rimraf -rf ./dist && pnpm run manifest && touch ./dist/.hotreload && tsx ./scripts/build.ts",
+		"build": "rimraf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
+		"clean": "git rm -f pnpm-lock.yaml ; git clean -fdX",
+		"dev": "rimraf ./dist && pnpm run manifest && touch ./dist/.hotreload && tsx ./scripts/build.ts",
 		"fix": "shared-config --fix",
 		"lint": "shared-config --lint",
 		"manifest": "tsx ./scripts/generate-manifest.ts",
-		"obsidian:link": "pnpm obsidian:unlink && mkdir -p \"$(pwd)/examples/Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
-		"obsidian:unlink": "rimraf -rf \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
-		"release": "pnpm run manifest && pnpm bumpp package.json manifest.json --commit \"Release: %s\" --tag \"%s\"",
+		"obsidian:link": "pnpm run obsidian:unlink && mkdir -p \"$(pwd)/examples/Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
+		"obsidian:unlink": "rimraf \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
+		"release": "pnpm run manifest && bumpp package.json manifest.json --commit 'Release: %s' --tag '%s'",
 		"yanki:use-local": "pnpm remove yanki && pnpm add -D ../yanki",
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^4.7.5",
-		"@types/node": "^20.16.5",
+		"@kitschpatrol/shared-config": "^4.7.10",
+		"@types/node": "18.0.0",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^9.5.2",
-		"debounce": "^2.1.0",
+		"debounce": "^2.1.1",
 		"entities": "^5.0.0",
 		"esbuild": "^0.23.1",
 		"esbuild-plugin-copy": "^2.1.1",
@@ -61,10 +55,10 @@
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.1.0",
 		"rimraf": "^6.0.1",
-		"tsx": "^4.19.0",
-		"type-fest": "^4.26.0",
-		"typescript": "^5.5.4",
-		"yanki": "^0.15.3"
+		"tsx": "^4.19.1",
+		"type-fest": "^4.26.1",
+		"typescript": "^5.6.2",
+		"yanki": "^0.15.5"
 	},
 	"obsidian": {
 		"description": "Sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
