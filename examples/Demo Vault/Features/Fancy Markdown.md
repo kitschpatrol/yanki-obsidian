@@ -62,3 +62,9 @@ Support for the [==highlights==](https://github.com/ipikuka/remark-flexible-mark
 Embedded blocks are partially supported, becoming links to the block content in your Obsidian vault instead of inline embedded content:
 
 ![[Support for Obsidian WikiLinks#^block-test]]
+
+---
+
+A compact bracket-based furigana syntax is also supported:
+
+{北京|Běi|jīng}

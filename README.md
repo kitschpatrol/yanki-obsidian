@@ -148,6 +148,7 @@ An extended palette of Markdown syntax is available out of the box, mirroring (a
 - The aforementioned [WikiLinks](https://github.com/Python-Markdown/markdown/blob/master/docs/extensions/wikilinks.md).
 - [LaTeX formatted mathematical expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) via Anki's built-in [MathJax](https://www.mathjax.org) rendering support.
 - Support for the [`==highlights==`](https://github.com/ipikuka/remark-flexible-markers) syntax.
+- Support for the compact [furigana](https://en.wikipedia.org/wiki/Furigana) / [Ruby](https://en.wikipedia.org/wiki/Ruby_character) syntax specified by [DenDen Markdown](https://conv.denshochan.com/markdown#ruby), for example: `{東京|とうきょう}` renders as `<ruby>東京<rp>(</rp><rt>とうきょう</rt><rp>)</rp></ruby>`. This matches support in Obsidian provided by the [Markdown Furigana](https://github.com/steven-kraft/obsidian-markdown-furigana) plugin.
 
 ### Intelligent syncing
 
@@ -678,15 +679,13 @@ The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is bui
 
 Obsidian implements a number of useful extensions to Markdown for supporting things like `[[wiki-links]]` and `![[embedding]]` — and its ecosystem of plugins brings even more useful but Obsidian-specific functionality. Unfortunately, the nuances of many aspects of Obsidian's treatment of Markdown are imperfectly documented, closed-source, and non-standard.
 
-Every Obsidian-only plugin, Markdown extension, and proprietary-API creates a subtle degree of lock-in to the tool — intentional or otherwise. Yes, your notes are "just" Markdown files, but where their utility depends on Obsidian-specific features, their portability and future flexibility are diminished.
+Every Obsidian-only plugin, Markdown extension, and proprietary-API creates a subtle degree of lock-in to the tool — intentional or otherwise. Yes, your notes are "just" Markdown files, but where their utility or upkeep depend on Obsidian-specific features, their portability and future flexibility are diminished.
 
 Obsidian's great for now, but it's inevitably transitory. Markdown is going to be around much longer than Obsidian will.
 
 For this reason, I'm trying to ensure that the tools I write for my own workflows are "Markdown first" and as context-agnostic as possible, behaving identically whether invoked directly as stand-alone tools or through an Obsidian plugin command. That's why Yanki Obsidian is architected as a very thin wrapper over the underlying stand-alone [CLI version of Yanki](https://github.com/kitschpatrol/yanki).
 
 This approach is not without compromise. Unlike most plugins, Yanki does its own Markdown → HTML rendering instead of relying on Obsidian for this task. This is great for future-proofing the project, but it does mean that even though I've reimplemented many of Obsidian's special Markdown features in the renderer, what you see in Obsidian won't _always_ be what you get in Yanki due to potential differences in how Obsidian and your particular menagerie of plugins define custom Markdown syntax and translate it to HTML.
-
-It's a trade-off, but one that I'm not willing to compromise on. The other Obsidian + Anki plugins below might offer more permissive approaches if that's what you're after.
 
 ### Other Obsidian Anki plugins
 
