@@ -674,6 +674,20 @@ If you want to sync Markdown like the Yanki plugin does from outside of Obsidian
 
 The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://foosoft.net/projects/anki-connect/) API.
 
+### Avoiding lock-in
+
+Obsidian implements a number of useful extensions to Markdown for supporting things like `[[wiki-links]]` and `![[embedding]]` — and its ecosystem of plugins brings even more useful but Obsidian-specific functionality. Unfortunately, the nuances of many aspects of Obsidian's treatment of Markdown are imperfectly documented, closed-source, and non-standard.
+
+Every Obsidian-only plugin, Markdown extension, and proprietary-API creates a subtle degree of lock-in to the tool — intentional or otherwise. Yes, your notes are "just" Markdown files, but where their utility depends on Obsidian-specific features, their portability and future flexibility are diminished.
+
+Obsidian's great for now, but it's inevitably transitory. Markdown is going to be around much longer than Obsidian will.
+
+For this reason, I'm trying to ensure that the tools I write for my own workflows are "Markdown first" and as context-agnostic as possible, behaving identically whether invoked directly as stand-alone tools or through an Obsidian plugin command. That's why Yanki Obsidian is architected as a very thin wrapper over the underlying stand-alone [CLI version of Yanki](https://github.com/kitschpatrol/yanki).
+
+This approach is not without compromise. Unlike most plugins, Yanki does its own Markdown → HTML rendering instead of relying on Obsidian for this task. This is great for future-proofing the project, but it does mean that even though I've reimplemented many of Obsidian's special Markdown features in the renderer, what you see in Obsidian won't _always_ be what you get in Yanki due to potential differences in how Obsidian and your particular menagerie of plugins define custom Markdown syntax and translate it to HTML.
+
+It's a trade-off, but one that I'm not willing to compromise on. The other Obsidian + Anki plugins below might offer more permissive approaches if that's what you're after.
+
 ### Other Obsidian Anki plugins
 
 - [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
