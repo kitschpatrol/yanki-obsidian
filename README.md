@@ -14,11 +14,16 @@
       image: "https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release",
       link: "https://github.com/kitschpatrol/yanki-obsidian/releases/latest",
     },
-  },
+    "Obsidian Downloads": {
+      image: "https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json",
+      link: "https://obsidian.md/plugins?id=yanki",
+    },
+  }
 } -->
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian\&color=%23A88BFA\&label=Downloads\&query=%24%5B%22yanki%22%5D.downloads\&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
 
 <!-- /badges -->
 
@@ -322,7 +327,7 @@ If [automatic sync](#automatic-sync) is enabled, you shouldn't need to use the c
 
 ##### Watched folder list
 
-> [!CAUTION]  
+> \[!CAUTION]\
 > Use care when editing or deleting folders from this list, since notes from the removed folders will be deleted from Anki (along with their review statistics) on the next sync.
 
 Yanki will sync notes in the vault folders specified here to Anki.
@@ -689,7 +694,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ### Other Obsidian Anki plugins
 
-- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [Export to Anki / Obsidian\_to\_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
 - [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
 - [Flashcards](https://github.com/reuseman/flashcards-obsidian)
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)
