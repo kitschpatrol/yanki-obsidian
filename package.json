@@ -12,7 +12,7 @@
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.10.0",
+	"packageManager": "pnpm@9.13.2",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=9.0.0"
@@ -42,23 +42,23 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^4.7.10",
+		"@kitschpatrol/shared-config": "^4.7.12",
 		"@types/node": "18.0.0",
 		"builtin-modules": "^4.0.0",
-		"bumpp": "^9.5.2",
-		"debounce": "^2.1.1",
+		"bumpp": "^9.8.1",
+		"debounce": "^2.2.0",
 		"entities": "^5.0.0",
-		"esbuild": "^0.23.1",
+		"esbuild": "^0.24.0",
 		"esbuild-plugin-copy": "^2.1.1",
 		"obsidian": "latest",
-		"obsidian-typings": "^2.2.0",
+		"obsidian-typings": "^2.3.3",
 		"plur": "^5.1.0",
-		"pretty-ms": "^9.1.0",
+		"pretty-ms": "^9.2.0",
 		"rimraf": "^6.0.1",
-		"tsx": "^4.19.1",
-		"type-fest": "^4.26.1",
-		"typescript": "^5.6.2",
-		"yanki": "^0.16.0"
+		"tsx": "^4.19.2",
+		"type-fest": "^4.27.0",
+		"typescript": "^5.6.3",
+		"yanki": "^0.16.1"
 	},
 	"obsidian": {
 		"author": "Kitschpatrol",
