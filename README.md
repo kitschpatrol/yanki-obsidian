@@ -23,13 +23,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
-[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian\&color=%23A88BFA\&label=Downloads\&query=%24%5B%22yanki%22%5D.downloads\&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
 
 <!-- /badges -->
 
 <!-- short-description -->
 
-**An Obsidian plugin for automated flashcard syncing from a folder in your vault to Anki. Pure Markdown syntax. No fuss.**
+**An Obsidian plugin that syncs flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.**
 
 <!-- /short-description -->
 
@@ -694,7 +694,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ### Other Obsidian Anki plugins
 
-- [Export to Anki / Obsidian\_to\_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
 - [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
 - [Flashcards](https://github.com/reuseman/flashcards-obsidian)
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)
@@ -716,13 +716,13 @@ PJ Eby's [Hot-Reload](https://github.com/pjeby/hot-reload) Obsidian plugin is a 
 
 Figuring out Obsidian's [AbstractInputSuggest](https://docs.obsidian.md/Reference/TypeScript+API/AbstractInputSuggest) class for the folder selection settings depended on examples in projects by [Daniel Rodríguez Rivero](https://github.com/danielo515) and [Liam Cain](https://github.com/liamcain).
 
-<!-- contributing -->
-
 ## Contributing
 
 [Issues](https://github.com/kitschpatrol/yanki-obsidian/issues) and pull requests are welcome.
 
-<!-- /contributing -->
+Please open _one_ issue per feature request or bug report so they can be tracked and resolved individually.
+
+If you're reporting a bug, please provide an Obsidian Vault folder with the minimal set of notes that can reproduce the problem. This can be zipped and attached to the GitHub issue created for the bug.
 
 ## License
 
