@@ -50,6 +50,7 @@
 		"entities": "^5.0.0",
 		"esbuild": "^0.24.0",
 		"esbuild-plugin-copy": "^2.1.1",
+		"escape-string-regexp": "^5.0.0",
 		"obsidian": "latest",
 		"obsidian-typings": "^2.3.3",
 		"plur": "^5.1.0",

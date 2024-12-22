@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable @typescript-eslint/unbound-method */
 
+import escapeStringRegexp from 'escape-string-regexp'
 import {
 	yankiPluginDefaultSettings,
 	type YankiPluginSettings,
@@ -622,7 +623,9 @@ export default class YankiPlugin extends Plugin {
 			return absolutePath
 		}
 
-		const basePathRegex = new RegExp(`^${vaultPath}/?`)
+		// Regex escape here addresses
+		// https://github.com/kitschpatrol/yanki-obsidian/issues/28
+		const basePathRegex = new RegExp(`^${escapeStringRegexp(vaultPath)}/?`)
 		return absolutePath.replace(basePathRegex, '')
 	}
 }

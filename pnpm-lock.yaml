@@ -32,6 +32,9 @@ importers:
       esbuild-plugin-copy:
         specifier: ^2.1.1
         version: 2.1.1(esbuild@0.24.0)
+      escape-string-regexp:
+        specifier: ^5.0.0
+        version: 5.0.0
       obsidian:
         specifier: latest
         version: 1.7.2(@codemirror/state@6.4.1)(@codemirror/view@6.34.3)
