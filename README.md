@@ -522,7 +522,7 @@ Behind the scenes, Yanki stamps every Anki note it creates with a "namespace" va
 
 Every time Yanki syncs, it takes care to only ever touch notes in Anki with a matching namespace.
 
-Yanki Obsidian sets the namespace value to the vault ID _once_ the first time it runs in a vault, and saves it to its plugin settings data file for future use.
+Yanki sets the namespace value to the vault ID _once_ the first time it runs in a vault, and saves it to its plugin settings data file for future use.
 
 _Default: `Yank Obsidian - Vault ID $YOUR_VAULT_ID`_
 
@@ -531,12 +531,12 @@ Scenarios where you might need to touch the namespace value include:
 - **Vault Migration**\
   If you're moving your Yanki flashcard notes from one vault to another, you will want to set this value _before_ the first sync in the new vault to match the namespace string from your _previous_ vault. It's critical that the format matches the entire string exactly, e.g. `Yanki Obsidian - Vault ID d81ea38dabfc7854`, not just `d81ea38dabfc7854` (Where `d81ea38dabfc7854` is your unique Obsidian vault ID).
 
-  Alternately, you can do a find / replace inside Anki to change the `YankiNamespace` field from your old vault ID to the one shown in the Yanki Obsidian advanced settings section in your new vault.
+  Alternately, you can do a find / replace inside Anki to change the `YankiNamespace` field from your old vault ID to the one shown in the Yanki plugin's advanced settings section in your new vault.
 
 - **Vault Synchronization**\
   I don't use the first-party [Obsidian Sync](https://obsidian.md/sync) service, so your mileage may vary. If it works how I would expect it to, then the Yanki plugin's settings file should be synchronized across locations, and in that case even if each synced Obsidian instance has a different local vault ID, it should still pick up and use the "first" vault's namespace ID in both locations via the shared settings file.
 
-  If you're using a custom / third-party syncing approach, then it's up to you to understand what's going on and to ensure that the namespace field in the Yanki Obsidian settings exactly matches between each instance of Obsidian you're trying to sync, and also exactly matches the value in the `YankiNamespace` field of your existing Yanki-synced Anki notes.
+  If you're using a custom / third-party syncing approach, then it's up to you to understand what's going on and to ensure that the namespace field in the Yanki plugin's settings exactly matches between each instance of Obsidian you're trying to sync, and also exactly matches the value in the `YankiNamespace` field of your existing Yanki-synced Anki notes.
 
 If you're not sure, feel free to [open an issue on GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) describing what you're trying to do and I will be happy to help you. Regardless, please make backups of both your Obsidian Markdown files and your Anki notes database before attempting changes to the namespace value.
 
@@ -595,9 +595,9 @@ _Technically_ nothing's stopping you from making edits in Anki, but any changes 
 
 ### Do I have to run the sync command every time I change a flashcard note?
 
-Yes. Earlier versions of Yanki Obsidian features an auto sync mode which would detect changes automatically, but in hindsight this seems too risky to be worth it.
+Yes. Earlier versions of Yanki featured an auto sync mode which would detect changes automatically, but in hindsight this seems too risky to be worth it.
 
-The feature is currently deprecated but is still available in the advanced settings section via the [Automatic sync](#automatic-sync) toggle, but it's not recommended and will probably be removed from the next major version of the Yanki Obsidian plugin.
+The feature is currently deprecated but is still available in the advanced settings section via the [Automatic sync](#automatic-sync) toggle, but it's not recommended and will probably be removed from the next major version of the Yanki plugin.
 
 ### Can I embed images in my notes?
 
@@ -653,7 +653,7 @@ Yes. Specify `/` as your watched folder path to sync an entire vault. In this ca
 
 ### Can I migrate my flashcard notes from one vault to another?
 
-Yes, but if you want to preserve your learning progress in Anki then this involves updating the "namespace" value either in the Yanki Obsidian advanced settings, or in Anki itself. See the [namespace](#namespace) section for more information and please proceed with caution.
+Yes, but if you want to preserve your learning progress in Anki then this involves updating the "namespace" value either in the Yanki plugin's advanced settings, or in Anki itself. See the [namespace](#namespace) section for more information and please proceed with caution.
 
 ### Does Yanki work with Obsidian Sync?
 
@@ -691,33 +691,33 @@ Under the hood, Yanki uses its own Markdown → HTML rendering pipeline, and its
 
 ### Network use
 
-By default, the Yanki Obsidian plugin sends the content and linked media assets of any Obsidian notes in the [watched folders](#watched-folder-list) you've specified to the Anki desktop application via local loopback networking.
+By default, the Yanki plugin sends the content and linked media assets of any Obsidian notes in the [watched folders](#watched-folder-list) you've specified to the Anki desktop application via local loopback networking.
 
 From there, both Anki and Obsidian may send this data on to other networks, such as the [AnkiWeb](https://ankiweb.net/about) synchronization service or [Obsidian Sync](https://obsidian.md/sync). Please see AnkiWeb's [terms](https://ankiweb.net/account/terms) and [privacy policy](https://ankiweb.net/account/privacy), and Obsidian's [terms](https://obsidian.md/terms) and [privacy policy](https://obsidian.md/privacy) for more details.
 
-If ["remote" asset syncing](#sync-media-assets) is enabled, Yanki Obsidian will fetch the headers for any linked media URLs in your flashcard notes to detect changes.
+If ["remote" asset syncing](#sync-media-assets) is enabled, Yanki will fetch the headers for any linked media URLs in your flashcard notes to detect changes.
 
 Network communication is implemented with Obsidian's [request APIs](https://docs.obsidian.md/Reference/TypeScript+API/requestUrl).
 
 ### File access
 
-Yanki Obsidian will only access files outside of your vault when they're explicitly linked as absolute paths inside your flashcard notes. It needs to access these files to check them for changes via a temporary content hash, and for asset syncing.
+Yanki will only access files outside of your vault when they're explicitly linked as absolute paths inside your flashcard notes. It needs to access these files to check them for changes via a temporary content hash, and for asset syncing.
 
-When [asset syncing](#sync-media-assets) syncing is enabled, the Yanki Obsidian plugin aggregates paths to any asset files linked in your flashcard notes — some of which could be absolute paths to files _outside_ of your local vault on your local filesystem, or links to files on remote servers. These paths and assets may be passed on to other networks, as described in the [Network use](#network-use) section.
+When [asset syncing](#sync-media-assets) syncing is enabled, the Yanki plugin aggregates paths to any asset files linked in your flashcard notes — some of which could be absolute paths to files _outside_ of your local vault on your local filesystem, or links to files on remote servers. These paths and assets may be passed on to other networks, as described in the [Network use](#network-use) section.
 
 File access is implemented with Obsidian's [vault APIs](https://docs.obsidian.md/Reference/TypeScript+API/Vault).
 
 ### Local logging
 
-For debugging purposes, Yanki Obsidian maintains simple local counters of how many notes have been synced successfully. Yanki Obsidian doesn't send these statistics anywhere, and they are accessible to you in the [Advanced](#advanced-settings) section of the plugin's setting tab.
+For debugging purposes, Yanki maintains simple local counters of how many notes have been synced successfully. Yanki doesn't send these statistics anywhere, and they are accessible to you in the [Advanced](#advanced-settings) section of the plugin's setting tab.
 
 ## Background
 
 ### Implementation notes
 
-The Yanki Obsidian plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a command line tool and TypeScript library that handles all the Markdown wrangling and communication with Anki. All functionality not specifically related to Obsidian is managed under the [`yanki`](https://github.com/kitschpatrol/yanki) project repository, including extensive automated tests and additional documentation.
+The Yanki plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a command line tool and TypeScript library that handles all the Markdown wrangling and communication with Anki. All functionality not specifically related to Obsidian is managed under the [`yanki`](https://github.com/kitschpatrol/yanki) project repository, including extensive automated tests and additional documentation.
 
-If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, the stand-alone [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and TypeScript library implements all of the same core features (plus a few extras). Using the `yanki` CLI tool directly will not interfere with syncing from the Yanki Obsidian plugin.
+If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, the stand-alone [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and TypeScript library implements all of the same core features (plus a few extras). Using the `yanki` CLI tool directly will not interfere with syncing from the Yanki plugin.
 
 The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://foosoft.net/projects/anki-connect/) API.
 
@@ -729,7 +729,7 @@ Every Obsidian-only plugin, Markdown extension, and proprietary-API creates a su
 
 Obsidian's great for now, but it's inevitably transitory. Markdown is going to be around much longer than Obsidian will.
 
-For this reason, I'm trying to ensure that the tools I write for my own workflows are "Markdown first" and as context-agnostic as possible, behaving identically whether invoked directly as stand-alone tools or through an Obsidian plugin command. That's why Yanki Obsidian is architected as a very thin wrapper over the underlying stand-alone [CLI version of Yanki](https://github.com/kitschpatrol/yanki).
+For this reason, I'm trying to ensure that the tools I write for my own workflows are "Markdown first" and as context-agnostic as possible, behaving identically whether invoked directly as stand-alone tools or through an Obsidian plugin command. That's why the Yanki Obsidian plugin is architected as a very thin wrapper over the underlying stand-alone [CLI version of Yanki](https://github.com/kitschpatrol/yanki).
 
 This approach is not without compromise. Unlike most plugins, Yanki does its own Markdown → HTML rendering instead of relying on Obsidian for this task. This is great for future-proofing the project, but it does mean that even though I've reimplemented many of Obsidian's special Markdown features in the renderer, what you see in Obsidian won't _always_ be what you get in Yanki due to potential differences in how Obsidian and your particular menagerie of plugins define custom Markdown syntax and translate it to HTML.
 
