@@ -11,7 +11,7 @@ import prettyMilliseconds from 'pretty-ms'
 import { hostAndPortToUrl, urlToHostAndPort } from 'yanki'
 import type YankiPlugin from '../main'
 import { FolderSuggest } from '../extensions/folder-suggest'
-import { capitalize, html } from '../utilities'
+import { capitalize, html, sanitizeNamespace, validateNamespace } from '../utilities'
 
 export type YankiPluginSettings = {
 	ankiConnect: {
@@ -26,6 +26,7 @@ export type YankiPluginSettings = {
 		maxLength: number
 		mode: 'prompt' | 'response'
 	}
+	namespace: string
 	showAdvancedSettings: boolean
 	stats: {
 		sync: {
@@ -39,7 +40,7 @@ export type YankiPluginSettings = {
 				ankiUnreachable: number
 				created: number
 				deleted: number
-				recreated: number
+				matched: number
 				unchanged: number
 				updated: number
 			}
@@ -54,49 +55,58 @@ export type YankiPluginSettings = {
 	verboseNotices: boolean
 }
 
-export const yankiPluginDefaultSettings: YankiPluginSettings = {
-	ankiConnect: {
-		host: 'http://localhost',
-		key: undefined,
-		port: 8765,
-	},
-	folders: [],
-	ignoreFolderNotes: true,
-	manageFilenames: {
-		enabled: false,
-		maxLength: 60,
-		mode: 'prompt',
-	},
-	showAdvancedSettings: false,
-	stats: {
-		sync: {
-			auto: 0,
-			duration: 0,
-			errors: 0,
-			invalid: 0,
-			latestSyncTime: undefined,
-			manual: 0,
-			notes: {
-				ankiUnreachable: 0,
-				created: 0,
-				deleted: 0,
-				recreated: 0,
-				unchanged: 0,
-				updated: 0,
+// TODO bind instead?
+export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
+	return {
+		ankiConnect: {
+			host: 'http://localhost',
+			key: undefined,
+			port: 8765,
+		},
+		folders: [],
+		ignoreFolderNotes: true,
+		manageFilenames: {
+			enabled: false,
+			maxLength: 60,
+			mode: 'prompt',
+		},
+		// Defaults to vault ID the first time Yanki is run on a vault, but it may NOT be the actual current vault ID, e.g. when syncing is involved
+		// Using vault ID instead of name is more robust to vault renaming
+		// But why is the vault ID API private?
+		// https://forum.obsidian.md/t/is-there-any-way-to-derive-the-vault-id-from-the-vault-directory/5573/4
+		// Warning: changing the static components of this string can result in data loss...
+		namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace(app.appId)}`,
+		showAdvancedSettings: false,
+		stats: {
+			sync: {
+				auto: 0,
+				duration: 0,
+				errors: 0,
+				invalid: 0,
+				latestSyncTime: undefined,
+				manual: 0,
+				notes: {
+					ankiUnreachable: 0,
+					created: 0,
+					deleted: 0,
+					matched: 0,
+					unchanged: 0,
+					updated: 0,
+				},
 			},
 		},
-	},
-	sync: {
-		autoSyncDebounceIntervalMs: 4000,
-		autoSyncEnabled: false,
-		mediaMode: 'local',
-		pushToAnkiWeb: true,
-	},
-	verboseNotices: false,
+		sync: {
+			autoSyncDebounceIntervalMs: 4000,
+			autoSyncEnabled: false,
+			mediaMode: 'local',
+			pushToAnkiWeb: true,
+		},
+		verboseNotices: false,
+	}
 }
 
 export class YankiPluginSettingTab extends PluginSettingTab {
-	private initialSettings: YankiPluginSettings = yankiPluginDefaultSettings
+	private initialSettings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	plugin: YankiPlugin
 
 	constructor(app: App, plugin: YankiPlugin) {
@@ -360,7 +370,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 
 		new Setting(this.containerEl).setName('Maximum note name length').addText((text) => {
-			text.setPlaceholder(String(yankiPluginDefaultSettings.manageFilenames.maxLength))
+			text.setPlaceholder(String(getYankiPluginDefaultSettings(this.app).manageFilenames.maxLength))
 			text.setValue(String(this.plugin.settings.manageFilenames.maxLength))
 			text.onChange((value) => {
 				this.plugin.settings.manageFilenames.maxLength = Number(value)
@@ -460,7 +470,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl).addButton((button) => {
 			button.setButtonText('Reset to Anki-Connect defaults')
 			button.onClick(async () => {
-				this.plugin.settings.ankiConnect = structuredClone(yankiPluginDefaultSettings.ankiConnect)
+				this.plugin.settings.ankiConnect = structuredClone(
+					getYankiPluginDefaultSettings(this.app).ankiConnect,
+				)
 
 				await this.plugin.saveSettings()
 				this.render()
@@ -480,8 +492,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Show advanced settings to facilitate development and debugging of early releases of
-						Yanki.<br />Trouble with the plugin? Please
+					html`Show advanced settings below to accommodate certain edge cases and to facilitate
+						development and debugging of early releases of Yanki.<br />Trouble with the plugin?
+						Please
 						<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				),
 			)
@@ -504,7 +517,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 
 			const { auto, duration, errors, invalid, manual } = this.plugin.settings.stats.sync
-			const { ankiUnreachable, created, deleted, recreated, unchanged, updated } =
+			const { ankiUnreachable, created, deleted, matched, unchanged, updated } =
 				this.plugin.settings.stats.sync.notes
 
 			new Setting(this.containerEl)
@@ -530,7 +543,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 								<ul>
 									<li>Created: ${String(created)}</li>
 									<li>Deleted: ${String(deleted)}</li>
-									<li>Recreated: ${String(recreated)}</li>
+									<li>Matched: ${String(matched)}</li>
 									<li>Unchanged: ${String(unchanged)}</li>
 									<li>Updated: ${String(updated)}</li>
 									<li>Anki Unreachable: ${String(ankiUnreachable)}</li>
@@ -539,10 +552,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					),
 				)
 
-			new Setting(this.containerEl).addButton((button) => {
+			new Setting(this.containerEl).setClass('stats-reset').addButton((button) => {
 				button.setButtonText('Reset sync stats')
 				button.onClick(async () => {
-					this.plugin.settings.stats.sync = structuredClone(yankiPluginDefaultSettings.stats.sync)
+					this.plugin.settings.stats.sync = structuredClone(
+						getYankiPluginDefaultSettings(this.app).stats.sync,
+					)
 					await this.plugin.saveSettings()
 					this.render()
 
@@ -552,10 +567,59 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				})
 			})
 
+			new Setting(this.containerEl)
+				.setName('Namespace')
+				.setDesc(
+					sanitizeHTMLToDom(
+						html`<strong>Do not change this value unless you know what you're doing.</strong
+							><br />Customize the "namespace" used to correlate flashcard notes in this Obsidian
+							vault with notes in Yanki. This can be useful in rare cases like vault migration or
+							vault synchronization. Backup both Obsidian and Anki first. See the
+							<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#namespace"
+								>Yanki documentation</a
+							>
+							for more details on how namespaces work.`,
+					),
+				)
+				.addText((text) => {
+					text.setPlaceholder('Namespace')
+					text.setValue(this.plugin.settings.namespace)
+
+					text.onChange((value) => {
+						if (validateNamespace(value)) {
+							this.plugin.settings.namespace = value
+						} else {
+							new Notice(sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Invalid namespace.`))
+						}
+					})
+
+					text.inputEl.addEventListener('blur', async () => {
+						await this.plugin.saveSettings()
+					})
+				})
+
+			new Setting(this.containerEl).setClass('namespace-reset').addButton((button) => {
+				button.setWarning()
+				button.setButtonText('Reset namespace to vault ID')
+				button.onClick(async () => {
+					this.plugin.settings.namespace = getYankiPluginDefaultSettings(this.app).namespace
+					await this.plugin.saveSettings()
+					this.render()
+
+					new Notice(
+						sanitizeHTMLToDom(
+							html`<strong>Yanki:</strong><br />Reset Yanki's namespace to default.`,
+						),
+					)
+				})
+			})
+
 			new Setting(this.containerEl).addButton((button) => {
 				button.setButtonText('Reset all settings')
 				button.onClick(async () => {
-					this.plugin.settings = structuredClone(yankiPluginDefaultSettings)
+					// TODO warn!
+
+					this.plugin.settings = structuredClone(getYankiPluginDefaultSettings(this.app))
 					await this.plugin.saveSettings()
 					this.render()
 

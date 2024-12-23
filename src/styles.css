@@ -25,6 +25,12 @@ div.yanki-settings {
 		}
 	}
 
+	/* No line above reset buttons */
+	div.namespace-reset,
+	div.stats-reset {
+		border-top: none;
+	}
+
 	/* Keep button annotations to the right */
 	div.setting-item.description-is-button-annotation {
 		div.setting-item-info {

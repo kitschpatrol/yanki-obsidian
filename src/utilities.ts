@@ -50,7 +50,7 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	const reportLines: string[] = []
 
 	const localCount = synced.filter((syncedNote) =>
-		['created', 'recreated', 'unchanged', 'updated'].includes(syncedNote.action),
+		['created', 'matched', 'unchanged', 'updated'].includes(syncedNote.action),
 	).length
 
 	reportLines.push(
@@ -107,11 +107,16 @@ export function capitalize(text: string): string {
 	return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
+export function validateNamespace(namespace: string): boolean {
+	const sanitizedNamespace = sanitizeNamespace(namespace)
+	return sanitizedNamespace.length > 0 && namespace === sanitizedNamespace
+}
+
 export function sanitizeNamespace(namespace: string): string {
 	// Additional sanitization also happens inside Yanki
 	// Stuck with es2020?
 	// eslint-disable-next-line unicorn/prefer-string-replace-all
-	return namespace.replace(/[*:]/g, '')
+	return namespace.replace(/[*:]/g, '').trim()
 }
 
 /**

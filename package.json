@@ -59,7 +59,7 @@
 		"tsx": "^4.19.2",
 		"type-fest": "^4.27.0",
 		"typescript": "^5.6.3",
-		"yanki": "^0.17.0"
+		"yanki": "^0.18.0"
 	},
 	"obsidian": {
 		"author": "Kitschpatrol",

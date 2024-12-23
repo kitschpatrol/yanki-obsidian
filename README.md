@@ -44,7 +44,6 @@
 - [Usage](#usage)
 - [FAQ](#faq)
 - [Privacy and security](#privacy-and-security)
-- [The future](#the-future)
 - [Background](#background)
 - [Maintainers](#maintainers)
 - [Acknowledgments](#acknowledgments)
@@ -285,7 +284,7 @@ By default, clozes are numbered incrementally. For example, the Markdown:
 ~~All~~ will be ~~revealed _here's a hint_~~.
 ```
 
-Is turned into the following Anki markup behind the scenes:
+Is turned into the following Anki markup:
 
 ```text
 {{c1::All}} will be {{c2::revealed::<em>here's a hint</em>}}
@@ -327,7 +326,7 @@ If [automatic sync](#automatic-sync) is enabled, you shouldn't need to use the c
 
 ##### Watched folder list
 
-> \[!CAUTION]\
+> [!CAUTION]
 > Use care when editing or deleting folders from this list, since notes from the removed folders will be deleted from Anki (along with their review statistics) on the next sync.
 
 Yanki will sync notes in the vault folders specified here to Anki.
@@ -503,7 +502,42 @@ Please see the [Anki-Connect documentation](https://foosoft.net/projects/anki-co
 
 #### Advanced settings
 
-Toggle the advanced section to reveal options related to synchronization statistics and verbose logging.
+Toggle the advanced section to reveal options related to synchronization statistics, verbose logging, and certain edge cases.
+
+##### Verbose notices
+
+Enable to see additional details in synchronization notices.
+
+##### Sync stats
+
+Keep track of how many Obsidian notes have been synchronized to anki, how these synchornizations were initialized, and how the notes were updated. This can be useful for debugging.
+
+##### Namespace
+
+> [!CAUTION]
+> Please understand _exactly_ what you're doing before changing this value. A mistake risks losing your notes and progress metadata in Anki.
+
+Behind the scenes, Yanki stamps every Anki note it creates with a "namespace" value that's unique to a given Obsidian vault. By default, it uses the internal ID of the Obsidian vault where the plugin is installed as the namespace, which might look like `Yanki Obsidian - Vault ID d81ea38dabfc7854`. This ensures that you can use Yanki in multiple Obsidian vaults (or separately via CLI) without interference.
+
+Every time Yanki syncs, it takes care to only ever touch notes in Anki with a matching namespace.
+
+Yanki Obsidian sets the namespace value to the vault ID _once_ the first time it runs in a vault, and saves it to its plugin settings data file for future use.
+
+Scenarios where you might need to touch the namespace value include:
+
+- **Vault Migration**\
+  If you're moving your Yanki flashcard notes from one vault to another, you will want to set this value _before_ the first sync in the new vault to match the namespace string from your _previous_ vault. It's critical that the format matches the entire string exactly, e.g. `Yanki Obsidian - Vault ID d81ea38dabfc7854`, not just `d81ea38dabfc7854` (Where `d81ea38dabfc7854` is your unique Obsidian vault ID).
+
+  Alternately, you can do a find / replace inside Anki to change the `YankiNamespace` field from your old vault ID to the one shown in the Yanki Obsidian advanced settings section in your new vault.
+
+- **Vault Synchronization**\
+  I don't use the first-party [Obsidian Sync](https://obsidian.md/sync) service, so your mileage may vary. If it works how I would expect it to, then the Yanki plugin's settings file should be synchronized across locations, and in that case even if each synced Obsidian instance has a different local vault ID, it should still pick up and use the "first" vault's namespace ID in both locations via the shared settings file.
+
+  If you're using a custom / third-party syncing approach, then it's up to you to understand what's going on and to ensure that the namespace field in the Yanki Obsidian settings exactly matches between each instance of Obsidian you're trying to sync, and also exactly matches the value in the `YankiNamespace` field of your existing Yanki-synced Anki notes.
+
+If you're not sure, feel free to [open an issue on GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) describing what you're trying to do and I will be happy to help you. Regardless, please make backups of both your Obsidian Markdown files and your Anki notes database before attempting changes to the namespace value.
+
+You can read more about the lower-level details of how namespaces work in the [Yanki CLI tool documentation](https://github.com/kitschpatrol/yanki?tab=readme-ov-file#namespaces).
 
 ### Additional resources
 
@@ -580,7 +614,11 @@ It's Anki's internal ID for the note, which is saved after the first sync.
 
 ### Can I delete the `noteId`?
 
-Don't. If it goes missing, Yanki will consider the ID-less note in Anki to be an orphan, and it will be deleted on the next sync, and a new ID will be created. You won't lose your note, because it's safe in Obsidian, but you _will_ lose stats in Anki, so touch the `noteId` property at your own peril.
+Don't. If it goes missing, Yanki might consider the ID-less note in Anki to be an orphan, and it might be deleted from Anki on the next sync and replaced with a fresh note with a new ID. If this happens, you won't lose your note because it's safe in Obsidian, but you _will_ lose stats in Anki, so touch the `noteId` property at your own peril.
+
+### What happens if I accidentally delete a `noteId`?
+
+On the next sync, Yanki will do its best to find the previously-synced note and restore the associated `noteId` in your Obsidian file's properties / Markdown frontmatter. This process depends on a perfect match between the content of your local Markdown note and the previously-synced note in Anki, so it might not work 100% of the time if additional changes have been made to your local note. Better not to find out.
 
 ### Seeing `noteId` everywhere is annoying...
 
@@ -598,11 +636,19 @@ Yanki will try to preserve the `noteId` of the note that matches what's been syn
 
 ### Can I add other properties?
 
-Yes, add all the properties / markdown frontmatter you'd like, as long as it's valid YAML. Yanki will preserve and ignore all of it except for the `tags` and `noteId` fields.
+Yes, add all the properties / Markdown frontmatter you'd like, as long as it's valid YAML. Yanki will preserve and ignore all of it except for the `tags` and `noteId` fields.
 
 ### Can I sync my entire Obsidian vault to Anki?
 
 Yes. Specify `/` as your watched folder path to sync an entire vault. In this case, Yanki will use the name of your vault's containing folder as the top-level deck name in Anki.
+
+### Can I migrate my flashcard notes from one vault to another?
+
+Yes, but if you want to preserve your learning progress in Anki then this involves updating the "namespace" value either in the Yanki Obsidian advanced settings, or in Anki itself. See the [namespace](#namespace) section for more information and please proceed with caution.
+
+### Does Yanki work with Obsidian Sync?
+
+In theory, Yanki should work with the first-party [Obsidian Sync](https://obsidian.md/sync) service, and possibly with additional third-party syncing solutions. In practice, I don't use these services myself so testing has been limited. See the [namespace](#namespace) section for more information and please proceed with caution.
 
 ### If I use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin, will my folder notes become Anki notes?
 
@@ -655,20 +701,6 @@ File access is implemented with Obsidian's [vault APIs](https://docs.obsidian.md
 ### Local logging
 
 For debugging purposes, Yanki Obsidian maintains simple local counters of how many notes have been synced successfully. Yanki Obsidian doesn't send these statistics anywhere, and they are accessible to you in the [Advanced](#advanced-settings) section of the plugin's setting tab.
-
-## The future
-
-A few features are under consideration:
-
-- [ ] Sync Anki's review statistics back to Obsidian.
-
-- [ ] Optionally add a link back to the Obsidian source note on each card in Anki.
-
-- [ ] Optionally render Markdown → HTML with Obsidian's pipeline + stylesheets.
-
-- [ ] Nicer stylesheets / theming for notes in both Anki and Obsidian.
-
-If you have others in mind, feel free to [open an issue](https://github.com/kitschpatrol/yanki-obsidian/issues) with a suggestion.
 
 ## Background
 

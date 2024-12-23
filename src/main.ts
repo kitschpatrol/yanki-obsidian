@@ -3,7 +3,7 @@
 
 import escapeStringRegexp from 'escape-string-regexp'
 import {
-	yankiPluginDefaultSettings,
+	getYankiPluginDefaultSettings,
 	type YankiPluginSettings,
 	YankiPluginSettingTab,
 } from './settings/settings'
@@ -15,7 +15,6 @@ import {
 	html,
 	objectsEqual,
 	sanitizeHtmlToDomWithFunction,
-	sanitizeNamespace,
 } from './utilities'
 
 // An alternate debounce library with a `trigger` method is used instead of the
@@ -49,7 +48,7 @@ import {
 } from 'yanki'
 
 export default class YankiPlugin extends Plugin {
-	public settings: YankiPluginSettings = yankiPluginDefaultSettings
+	public settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	private readonly settingsTab: YankiPluginSettingTab = new YankiPluginSettingTab(this.app, this)
 
 	// ----------------------------------------------------
@@ -57,6 +56,7 @@ export default class YankiPlugin extends Plugin {
 	// Initialization
 
 	async onload() {
+		// Bindings
 		this.fileAdapterWrite = this.fileAdapterWrite.bind(this)
 		this.fileAdapterRead = this.fileAdapterRead.bind(this)
 		this.fileAdapterReadBuffer = this.fileAdapterReadBuffer.bind(this)
@@ -83,6 +83,10 @@ export default class YankiPlugin extends Plugin {
 		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
 
 		await this.loadSettings()
+
+		// Writes any new defaults, useful for migrations, e.g. adding the namespace
+		// setting in v1.6...
+		await this.saveSettings()
 		this.addSettingTab(this.settingsTab)
 
 		this.addCommand({
@@ -101,6 +105,7 @@ export default class YankiPlugin extends Plugin {
 		// Spot any changes since last session
 		// Where is "unregisterEvent"?
 		this.app.workspace.onLayoutReady(async () => {
+			// Sync at startup if auto-sync is enabled...
 			await this.syncFlashcardNotesToAnki(false)
 			this.registerEvent(this.app.vault.on('create', this.handleCreate.bind(this)))
 		})
@@ -120,7 +125,7 @@ export default class YankiPlugin extends Plugin {
 		return super.loadData() as Promise<YankiPluginSettings>
 	}
 
-	// Nothing to do?
+	// Nothing to do on unload
 	// onunload() {
 	// }
 
@@ -129,6 +134,7 @@ export default class YankiPlugin extends Plugin {
 	// Settings
 
 	async loadSettings() {
+		// Merge any saved settings into defaults
 		this.settings = { ...this.settings, ...(await this.loadData()) }
 	}
 
@@ -139,8 +145,7 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	/**
-	 * Certain settings changes should trigger a sync to Anki, (but only fires if auto sync is enabled)
-	 * @param previousSettings
+	 * Certain settings changes should trigger a sync to Anki, (but only fires if auto sync is enabled).
 	 */
 	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
 		// This could be more concise...
@@ -152,6 +157,7 @@ export default class YankiPlugin extends Plugin {
 		}
 
 		if (
+			// Changing the namespace does NOT trigger a sync, because it is so dangerous.
 			!objectsEqual(previousSettings.ankiConnect, this.settings.ankiConnect) ||
 			!objectsEqual(previousSettings.sync, this.settings.sync) ||
 			!arraysEqual(previousSettings.folders, this.settings.folders) ||
@@ -175,7 +181,6 @@ export default class YankiPlugin extends Plugin {
 
 	/**
 	 * Translates YankiPluginSettings into a shared options object for use in Yanki library functions
-	 * @param settings - YankiPluginSettings object
 	 * @returns Options object with fields common to both RenameFilesOptions and SyncFilesOptions
 	 */
 	private getSharedOptions(
@@ -195,10 +200,7 @@ export default class YankiPlugin extends Plugin {
 			},
 			manageFilenames: settings.manageFilenames.enabled ? settings.manageFilenames.mode : 'off',
 			maxFilenameLength: settings.manageFilenames.maxLength,
-			// Warning: changing the static components of this value can result in data loss...
-			namespace: `Yanki Obsidian - Vault ID ${sanitizeNamespace(this.app.appId)}`,
-			// Using vault ID instead of name is more robust to vault renaming... why is this private?
-			// https://forum.obsidian.md/t/is-there-any-way-to-derive-the-vault-id-from-the-vault-directory/5573/4
+			namespace: settings.namespace,
 			obsidianVault: this.app.vault.getName(),
 			strictLineBreaks: Boolean(this.app.vault.getConfig('strictLineBreaks')),
 			syncMediaAssets: settings.sync.mediaMode,
@@ -206,12 +208,11 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	/**
-	 * Translates YankiPluginSettings into an options object for use in the Yanki library's `renameFiles` function
+	 * Translates YankiPluginSettings into an options object for use in the Yanki
+	 * library's `renameFiles` function
 	 *
-	 * Overrides some parameters to improve performance and avoid unnecessary operations.
-	 *
-	 * @param settings - YankiPluginSettings object
-	 * @returns RenameFilesOptions object
+	 * Overrides some parameters to improve performance and avoid unnecessary
+	 * operations.
 	 */
 	private getRenameFilesOptions(settings: YankiPluginSettings): RenameFilesOptions {
 		return {
@@ -222,9 +223,8 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	/**
-	 * Translates YankiPluginSettings into an options object for use in the Yanki library's `syncFiles` function
-	 * @param settings - YankiPluginSettings object
-	 * @returns SyncFilesOptions object
+	 * Translates YankiPluginSettings into an options object for use in the Yanki
+	 * library's `syncFiles` function
 	 */
 	private getSyncFilesOptions(settings: YankiPluginSettings): SyncFilesOptions {
 		return {
@@ -239,6 +239,7 @@ export default class YankiPlugin extends Plugin {
 				version: 6,
 			},
 			ankiWeb: settings.sync.pushToAnkiWeb,
+			strictMatching: false,
 		}
 	}
 
