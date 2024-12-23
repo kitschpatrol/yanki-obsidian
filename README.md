@@ -503,9 +503,9 @@ Keep track of how many Obsidian notes have been synchronized to anki, how these 
 
 > [!WARNING]
 >
-> The Automatic sync option has been deprectated moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
+> The Automatic sync option has been deprectated and moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
 >
-> Since a simple slip-up in the plugin settings or when moving notes between folders could result in near-instantaneous loss of learning progress in Anki, it just seemed too dangerous to be worth it. If you like it and are relying on it, please [open an issue in GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) and let me know.
+> Since a simple slip-up in the plugin settings or when moving notes between folders can result in near-instantaneous loss of learning progress in Anki, it just seemed too dangerous to be worth it. If you like it and are relying on it, please [open an issue in GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) and let me know.
 
 When enabled, Yanki will observe the notes in your [watched folders](#watched-folder-list) for changes, additions, deletions, etc, and trigger a sync to Anki (almost) immediately after it sees a change.
 
