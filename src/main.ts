@@ -84,8 +84,8 @@ export default class YankiPlugin extends Plugin {
 
 		await this.loadSettings()
 
-		// Writes any new defaults, useful for migrations, e.g. adding the namespace
-		// setting in v1.6...
+		// Writes any new defaults, useful for migrations
+		// TODO check if this is necessary first
 		await this.saveSettings()
 		this.addSettingTab(this.settingsTab)
 
@@ -122,7 +122,18 @@ export default class YankiPlugin extends Plugin {
 
 	// Typed override
 	async loadData(): Promise<YankiPluginSettings> {
-		return super.loadData() as Promise<YankiPluginSettings>
+		const settings = await (super.loadData() as Promise<YankiPluginSettings>)
+
+		// Migrate settings
+		// 'recreated' stat was removed in 1.6.0
+		if ('recreated' in settings.stats.sync.notes) {
+			delete settings.stats.sync.notes.recreated
+		}
+
+		// 'matched' stat was added in 1.6.0
+		settings.stats.sync.notes.matched ??= 0
+
+		return settings
 	}
 
 	// Nothing to do on unload
@@ -135,6 +146,7 @@ export default class YankiPlugin extends Plugin {
 
 	async loadSettings() {
 		// Merge any saved settings into defaults
+		// TODO detect change and return boolean to skip subsequent writes?
 		this.settings = { ...this.settings, ...(await this.loadData()) }
 	}
 
@@ -176,6 +188,7 @@ export default class YankiPlugin extends Plugin {
 
 		const originalSettings = structuredClone(this.settings)
 		await this.loadSettings()
+
 		await this.settingsChangeSyncCheck(originalSettings)
 	}
 
