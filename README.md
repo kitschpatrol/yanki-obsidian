@@ -320,7 +320,8 @@ The Yanki plugin provides a single command, which works as advertised:
 
 ##### Watched folder list
 
-> [!CAUTION] Caution
+> [!CAUTION]
+>
 > Use care when editing or deleting folders from this list, since notes from the removed folders will be deleted from Anki (along with their review statistics) on the next sync.
 
 Yanki will sync notes in the vault folders specified here to Anki.
@@ -500,7 +501,8 @@ Keep track of how many Obsidian notes have been synchronized to anki, how these 
 
 ##### Automatic sync
 
-> [!WARNING] Automatic sync is deprecated
+> [!WARNING]
+>
 > The Automatic sync option has been deprectated moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
 >
 > Since a simple slip-up in the plugin settings or when moving notes between folders could result in near-instantaneous loss of learning progress in Anki, it just seemed too dangerous to be worth it. If you like it and are relying on it, please [open an issue in GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) and let me know.
@@ -513,8 +515,9 @@ _Default: Disabled_
 
 ##### Namespace
 
-> [!CAUTION] Danger
-> Please understand _exactly_ what you're doing before changing this value.
+> [!CAUTION]
+>
+> **Please understand _exactly_ what you're doing before changing this value.**
 >
 > A mistake risks losing your progress in Anki.
 
