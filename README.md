@@ -54,7 +54,7 @@
 
 ## Overview
 
-Yanki is a plugin for Obsidian that automatically syncs a folder (or folders) of notes from your vault to Anki.
+Yanki is a plugin for Obsidian that syncs a folder (or folders) of notes from your vault to Anki.
 
 The primary novelty of its approach is in how Markdown is translated into Anki notes, and how folders are translated into Anki decks:
 
@@ -90,7 +90,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 4. **Sync**
 
-   Initiate a sync from Obsidian to Anki using the `Yanki: Sync flashcard notes to Anki` command. You can also trigger a sync manually via the button in the Yanki settings tab, or enable automatic syncing to sync whenever notes in your watched vault folders change.
+   Initiate a sync from Obsidian to Anki using the `Yanki: Sync flashcard notes to Anki` command. You can also trigger a sync manually via the button in the Yanki settings tab.
 
 5. **Study**
 
@@ -163,10 +163,6 @@ When you edit a local Obsidian note, Yanki makes every effort to update rather t
 But when you _do_ want to delete something, it's as simple as deleting it from Obsidian, and it will be removed from the Anki database on the next sync. Protections are in place to prevent deleting Anki notes that weren't initially created by Yanki.
 
 If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yanki will also trigger this next step in the sync, automating the flow from Markdown → Anki → AnkiWeb in one shot. (Configurable via a [setting](#push-to-ankiweb).)
-
-### Automatic syncing
-
-When the Automatic Sync option is enabled, Yanki will automatically update notes to Anki whenever flashcard notes are created, deleted, or updated in Obsidian.
 
 ### Existing notes are untouched
 
@@ -318,15 +314,13 @@ The Yanki plugin provides a single command, which works as advertised:
 
 **`Yanki: Sync flashcard notes to Anki`**
 
-If [automatic sync](#automatic-sync) is enabled, you shouldn't need to use the command manually.
-
 ### Settings
 
 #### Anki flashcard folders
 
 ##### Watched folder list
 
-> [!CAUTION]
+> [!CAUTION] Caution
 > Use care when editing or deleting folders from this list, since notes from the removed folders will be deleted from Anki (along with their review statistics) on the next sync.
 
 Yanki will sync notes in the vault folders specified here to Anki.
@@ -405,14 +399,6 @@ When enabled, notes matching the name of their parent folder will not be synced.
 _Default: Enabled_
 
 #### Sync settings
-
-##### Automatic sync
-
-When enabled, Yanki will observe the notes in your [watched folders](#watched-folder-list) for changes, additions, deletions, etc, and trigger a sync to Anki (almost) immediately after it sees a change.
-
-When disabled, syncing must be initiated manually either via [a command](#commands) or the "Sync now" button in the setting tab.
-
-_Default: Disabled_
 
 ##### Push to AnkiWeb
 
@@ -512,16 +498,33 @@ Enable to see additional details in synchronization notices.
 
 Keep track of how many Obsidian notes have been synchronized to anki, how these synchornizations were initialized, and how the notes were updated. This can be useful for debugging.
 
+##### Automatic sync
+
+> [!WARNING] Automatic sync is deprecated
+> The Automatic sync option has been deprectated moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
+>
+> Since a simple slip-up in the plugin settings or when moving notes between folders could result in near-instantaneous loss of learning progress in Anki, it just seemed too dangerous to be worth it. If you like it and are relying on it, please [open an issue in GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) and let me know.
+
+When enabled, Yanki will observe the notes in your [watched folders](#watched-folder-list) for changes, additions, deletions, etc, and trigger a sync to Anki (almost) immediately after it sees a change.
+
+When disabled, syncing must be initiated manually either via [a command](#commands) or the "Sync now" button in the setting tab.
+
+_Default: Disabled_
+
 ##### Namespace
 
-> [!CAUTION]
-> Please understand _exactly_ what you're doing before changing this value. A mistake risks losing your notes and progress metadata in Anki.
+> [!CAUTION] Danger
+> Please understand _exactly_ what you're doing before changing this value.
+>
+> A mistake risks losing your progress in Anki.
 
 Behind the scenes, Yanki stamps every Anki note it creates with a "namespace" value that's unique to a given Obsidian vault. By default, it uses the internal ID of the Obsidian vault where the plugin is installed as the namespace, which might look like `Yanki Obsidian - Vault ID d81ea38dabfc7854`. This ensures that you can use Yanki in multiple Obsidian vaults (or separately via CLI) without interference.
 
 Every time Yanki syncs, it takes care to only ever touch notes in Anki with a matching namespace.
 
 Yanki Obsidian sets the namespace value to the vault ID _once_ the first time it runs in a vault, and saves it to its plugin settings data file for future use.
+
+_Default: `Yank Obsidian - Vault ID $YOUR_VAULT_ID`_
 
 Scenarios where you might need to touch the namespace value include:
 
@@ -589,6 +592,12 @@ Just delete it from Obsidian, or move it to a folder that Yanki isn't set up to 
 No, Obsidian is the source of truth.
 
 _Technically_ nothing's stopping you from making edits in Anki, but any changes to or deletions of Yanki-managed notes from inside the Anki desktop application or mobile app will be overwritten on the next sync.
+
+### Do I have to run the sync command every time I change a flashcard note?
+
+Yes. Earlier versions of Yanki Obsidian features an auto sync mode which would detect changes automatically, but in hindsight this seems too risky to be worth it.
+
+The feature is currently deprecated but is still available in the advanced settings section via the [Automatic sync](#automatic-sync) toggle, but it's not recommended and will probably be removed from the next major version of the Yanki Obsidian plugin.
 
 ### Can I embed images in my notes?
 

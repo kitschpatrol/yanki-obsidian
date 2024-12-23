@@ -252,20 +252,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			)
 
 		new Setting(this.containerEl)
-			.setName('Automatic sync')
-			.setDesc(
-				'Sync to the local Anki database whenever flashcard notes are changed and the Anki desktop application is open.',
-			)
-			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.sync.autoSyncEnabled)
-				toggle.onChange(async (value) => {
-					this.plugin.settings.sync.autoSyncEnabled = value
-					await this.plugin.saveSettings()
-					this.render()
-				})
-			})
-
-		new Setting(this.containerEl)
 			.setName('Push to AnkiWeb')
 			.setDesc(
 				'Also sync changes to the AnkiWeb "cloud" in addition to the local Anki database. This is like pressing the "Sync" button in the Anki desktop app.',
@@ -566,6 +552,24 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					)
 				})
 			})
+
+			new Setting(this.containerEl)
+				.setName('Automatic sync')
+				.setDesc(
+					sanitizeHTMLToDom(html`
+						<strong>Deprecated. Will be removed from future versions.</strong><br />Sync to the
+						local Anki database whenever flashcard notes are changed and the Anki desktop
+						application is open.
+					`),
+				)
+				.addToggle((toggle) => {
+					toggle.setValue(this.plugin.settings.sync.autoSyncEnabled)
+					toggle.onChange(async (value) => {
+						this.plugin.settings.sync.autoSyncEnabled = value
+						await this.plugin.saveSettings()
+						this.render()
+					})
+				})
 
 			new Setting(this.containerEl)
 				.setName('Namespace')
