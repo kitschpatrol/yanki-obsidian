@@ -121,17 +121,22 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	// Typed override
-	async loadData(): Promise<YankiPluginSettings> {
-		const settings = await (super.loadData() as Promise<YankiPluginSettings>)
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	async loadData(): Promise<null | YankiPluginSettings> {
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		const settings = (await super.loadData()) as null | YankiPluginSettings
 
-		// Migrate settings
-		// 'recreated' stat was removed in 1.6.0
-		if ('recreated' in settings.stats.sync.notes) {
-			delete settings.stats.sync.notes.recreated
+		if (settings === null) {
+			return settings
 		}
 
-		// 'matched' stat was added in 1.6.0
-		settings.stats.sync.notes.matched ??= 0
+		if ('stats' in settings && 'sync' in settings.stats && 'notes' in settings.stats.sync) {
+			if ('recreated' in settings.stats.sync.notes) {
+				delete settings.stats.sync.notes.recreated
+			}
+
+			settings.stats.sync.notes.matched ??= 0
+		}
 
 		return settings
 	}
