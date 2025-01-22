@@ -12,7 +12,7 @@
 		"url": "https://ericmika.com"
 	},
 	"license": "MIT",
-	"packageManager": "pnpm@9.15.1",
+	"packageManager": "pnpm@9.15.4",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=9.0.0"
@@ -45,21 +45,21 @@
 		"@kitschpatrol/shared-config": "^4.7.12",
 		"@types/node": "18.0.0",
 		"builtin-modules": "^4.0.0",
-		"bumpp": "^9.9.2",
+		"bumpp": "^9.10.2",
 		"debounce": "^2.2.0",
 		"entities": "^5.0.0",
 		"esbuild": "^0.24.2",
 		"esbuild-plugin-copy": "^2.1.1",
 		"escape-string-regexp": "^5.0.0",
 		"obsidian": "latest",
-		"obsidian-typings": "^2.7.0",
+		"obsidian-typings": "^2.14.6",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.2.0",
 		"rimraf": "^6.0.1",
 		"tsx": "^4.19.2",
-		"type-fest": "^4.30.2",
-		"typescript": "^5.7.2",
-		"yanki": "^0.18.0"
+		"type-fest": "^4.33.0",
+		"typescript": "^5.7.3",
+		"yanki": "^0.18.1"
 	},
 	"obsidian": {
 		"author": "Kitschpatrol",
