@@ -393,6 +393,12 @@ Flashcards::Subdeck B
 
 The idea here is that you can sync a folder of folders in Obsidian, without necessarily including top-level folder as a deck. (For example in my personal use of Yanki, I have an `/Anki` folder in the root of my Obsidian vault with many subfolders that I sync, but I don't want all of my synced cards to be inside an `Anki` deck.)
 
+> [!TIP]
+>
+> If you really want to put multiple decks in a noteless parent deck, you can add a note in the parent deck's folder in Obsidian, and then suspend the card in Anki after the next sync.
+>
+> _Thank you to user [mzietzke](https://github.com/mzietzke) for this suggestion._
+
 ##### Ignore folder notes
 
 When enabled, notes matching the name of their parent folder will not be synced. This is useful if you use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin to keep a top-level note per folder.
