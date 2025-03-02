@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-/* eslint-disable @typescript-eslint/unbound-method */
+/* eslint-disable ts/unbound-method */
 
 import escapeStringRegexp from 'escape-string-regexp'
 import {
@@ -121,9 +121,10 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	// Typed override
-	// eslint-disable-next-line @typescript-eslint/ban-types
+
+	// eslint-disable-next-line ts/no-restricted-types
 	async loadData(): Promise<null | YankiPluginSettings> {
-		// eslint-disable-next-line @typescript-eslint/ban-types
+		// eslint-disable-next-line ts/no-restricted-types
 		const settings = (await super.loadData()) as null | YankiPluginSettings
 
 		if (settings === null) {
@@ -135,6 +136,7 @@ export default class YankiPlugin extends Plugin {
 				delete settings.stats.sync.notes.recreated
 			}
 
+			// eslint-disable-next-line ts/no-unnecessary-condition
 			settings.stats.sync.notes.matched ??= 0
 		}
 
@@ -622,7 +624,7 @@ export default class YankiPlugin extends Plugin {
 			// - POSIX: "/path/to/vault"
 			const possiblyBarePath = normalizePath(adapter.getBasePath())
 
-			return /^[A-Za-z]:/.test(possiblyBarePath)
+			return /^[A-Z]:/i.test(possiblyBarePath)
 				? possiblyBarePath
 				: path.join(path.sep, possiblyBarePath)
 		}

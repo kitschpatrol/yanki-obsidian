@@ -1,5 +1,5 @@
 # Git Ignore
-# Also used by CSpell and Stylelint
+# Also used by CSpell, Stylelint, and ESLint
 
 # @kitschpatrol/repo-config boilerplate
 .astro/
@@ -7,6 +7,7 @@
 .env
 .env.*
 !.env.example
+.eslint-config-inspector
 .svelte-kit/
 {tmp,temp}/
 **/*.min.js

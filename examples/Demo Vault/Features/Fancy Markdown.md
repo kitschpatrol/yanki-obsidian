@@ -9,12 +9,12 @@ Fancy Markdown
 | Thing       | ✅     |
 | Other thing | ❌     |
 
-Strike ~~throughs~~.
+Strike ~~through~~.
 
 - [ ] Task
 - [ ] Lists
 
-Autolinks: <https://github.com/kitschpatrol>
+Auto-links: <https://github.com/kitschpatrol>
 
 ---
 

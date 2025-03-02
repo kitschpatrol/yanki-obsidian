@@ -146,7 +146,7 @@ The Yanki plugin detects your vault's name, and automatically turns any internal
 
 An extended palette of Markdown syntax is available out of the box, mirroring (almost) all the features supported by Obsidian:
 
-- [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-throughs~~`, `- [x] task lists`, and autolinks.
+- [GitHub Flavored Markdown](https://github.github.com/gfm/), including `| tables |`, `~~strike-through~~`, `- [x] task lists`, and auto-links.
 - Syntax highlighting via [Shiki](https://shiki.style).
 - GitHub-style [Alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
 - The aforementioned [WikiLinks](https://github.com/Python-Markdown/markdown/blob/master/docs/extensions/wikilinks.md).
@@ -431,18 +431,18 @@ Internally, Yanki hashes assets before they're copied into Anki to make sure the
 
 Options:
 
-- **All**\
+- **All**
   Sync all media assets linked in your notes, including local and remote media links.
 
-- **Local only** _(Default)_\
+- **Local only** _(Default)_
   Only sync assets from your vault's attachments directory or other local paths. This includes any assets linked with the `file:` protocol, and any `paths/to/local/assets.png` outside your Obsidian vault.
 
-- **Remote only**\
+- **Remote only**
   Only sync assets that are "hot-linked" via a remote URL. This includes any assets linked with the `http:` or `https:` protocols. other local path.
 
   _Note that syncing remote media assets can slow down the sync process, since each asset has to be downloaded. If you usually have access to the web where / when you're using Anki, syncing remote assets is probably not worth it._
 
-- **None**\
+- **None**
   Don't sync any media assets. Any assets in your vault that are only available locally via a relative path _will not_ appear in the Anki desktop application and mobile app. Hot-linked remote assets _will_ appear assuming you have internet access while using Anki.
 
 Note that the Anki desktop application and mobile apps are somewhat constrained in the types of media they can display. Please see the [document on file formats](https://github.com/kitschpatrol/yanki/blob/main/docs/file-formats.md) from the Yanki CLI tool repository for additional details, recommendations, and a full format compatibility matrix.
@@ -503,13 +503,13 @@ Enable to see additional details in synchronization notices.
 
 ##### Sync stats
 
-Keep track of how many Obsidian notes have been synchronized to anki, how these synchornizations were initialized, and how the notes were updated. This can be useful for debugging.
+Keep track of how many Obsidian notes have been synchronized to anki, how these synchronizations were initialized, and how the notes were updated. This can be useful for debugging.
 
 ##### Automatic sync
 
 > [!WARNING]
 >
-> The Automatic sync option has been deprectated and moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
+> The Automatic sync option has been deprecated and moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
 >
 > Since a simple slip-up in the plugin settings or when moving notes between folders can result in near-instantaneous loss of learning progress in Anki, it just seemed too dangerous to be worth it. If you like it and are relying on it, please [open an issue in GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) and let me know.
 

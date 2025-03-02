@@ -1,29 +1,12 @@
 {
+	"extends": "@kitschpatrol/typescript-config",
 	"compilerOptions": {
 		"target": "es2020",
-		"useDefineForClassFields": true,
-		"module": "ESNext",
 		"lib": ["es2021", "DOM", "DOM.Iterable"],
-		"skipLibCheck": true,
-
-		/* Bundler mode */
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true,
-
-		/* Linting */
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-
-		/* tslib interop for obsidian */
-		"importHelpers": true,
+		"types": ["obsidian-typings"],
 		"downlevelIteration": true,
-
-		/* undocumented types */
-		"types": ["obsidian-typings"]
-	}
+		"importHelpers": true
+	},
+	"include": ["**/*", "**/**.*"],
+	"exclude": ["**/dist/", "**/bin/"]
 }

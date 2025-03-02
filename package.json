@@ -1,23 +1,7 @@
 {
 	"name": "yanki-obsidian",
 	"version": "1.6.4",
-	"type": "module",
 	"description": "An Obsidian plugin that syncs flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.",
-	"repository": "github:kitschpatrol/yanki-obsidian",
-	"homepage": "https://github.com/kitschpatrol/yanki-obsidian",
-	"bugs": "https://github.com/kitschpatrol/yanki-obsidian/issues",
-	"author": {
-		"name": "Eric Mika",
-		"email": "eric@ericmika.com",
-		"url": "https://ericmika.com"
-	},
-	"license": "MIT",
-	"packageManager": "pnpm@9.15.5",
-	"engines": {
-		"node": ">=18.0.0",
-		"pnpm": ">=9.0.0"
-	},
-	"main": "./dist/main.js",
 	"keywords": [
 		"obsidian",
 		"obsidian-md",
@@ -28,12 +12,26 @@
 		"spaced-repetition",
 		"sync"
 	],
+	"homepage": "https://github.com/kitschpatrol/yanki-obsidian",
+	"bugs": "https://github.com/kitschpatrol/yanki-obsidian/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kitschpatrol/yanki-obsidian"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Eric Mika",
+		"email": "eric@ericmika.com",
+		"url": "https://ericmika.com"
+	},
+	"type": "module",
+	"main": "./dist/main.js",
 	"scripts": {
 		"build": "rimraf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
 		"clean": "git rm -f pnpm-lock.yaml ; git clean -fdX",
 		"dev": "rimraf ./dist && pnpm run manifest && touch ./dist/.hotreload && tsx ./scripts/build.ts",
-		"fix": "shared-config --fix",
-		"lint": "shared-config --lint",
+		"fix": "kpi fix",
+		"lint": "kpi lint",
 		"manifest": "tsx ./scripts/generate-manifest.ts",
 		"obsidian:link": "pnpm run obsidian:unlink && mkdir -p \"$(pwd)/examples/Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
 		"obsidian:unlink": "rimraf \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
@@ -42,7 +40,7 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^4.7.12",
+		"@kitschpatrol/shared-config": "^5.0.6",
 		"@types/node": "18.0.0",
 		"builtin-modules": "^4.0.0",
 		"bumpp": "^10.0.1",
@@ -51,15 +49,33 @@
 		"esbuild": "^0.24.2",
 		"esbuild-plugin-copy": "^2.1.1",
 		"escape-string-regexp": "^5.0.0",
+		"moment": "^2.30.1",
 		"obsidian": "latest",
 		"obsidian-typings": "^2.16.0",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.2.0",
 		"rimraf": "^6.0.1",
+		"tslib": "^2.8.1",
 		"tsx": "^4.19.2",
 		"type-fest": "^4.33.0",
-		"typescript": "^5.7.3",
-		"yanki": "^0.18.3"
+		"typescript": "~5.7.3",
+		"yanki": "^0.18.4"
+	},
+	"packageManager": "pnpm@10.5.2",
+	"engines": {
+		"node": ">=18.0.0",
+		"pnpm": ">=10.0.0"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"electron",
+			"esbuild",
+			"obsidian-typings",
+			"puppeteer"
+		],
+		"overrides": {
+			"eslint-plugin-markdown": "^5.1.0"
+		}
 	},
 	"obsidian": {
 		"author": "Kitschpatrol",

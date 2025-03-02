@@ -1,12 +1,9 @@
-import sharedConfig, { overrideRules } from '@kitschpatrol/remark-config'
+import { remarkConfig } from '@kitschpatrol/remark-config'
 
-const localConfig = {
-	...sharedConfig,
-	plugins: overrideRules(sharedConfig.plugins, [
+export default remarkConfig({
+	rules: [
 		['remark-lint-no-undefined-references', false],
 		['remark-lint-maximum-heading-length', 80],
 		['remark-lint-no-file-name-irregular-characters', false],
-	]),
-}
-
-export default localConfig
+	],
+})

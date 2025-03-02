@@ -29,6 +29,7 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	const { synced } = syncReport
 
 	// Aggregate the counts of each action:
+	// eslint-disable-next-line unicorn/no-array-reduce
 	const actionCounts = synced.reduce<Record<string, number>>((acc, note) => {
 		acc[note.action] = (acc[note.action] || 0) + 1
 		return acc
@@ -75,7 +76,7 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	return sanitizeHTMLToDom(reportLines.join(html`<br />`))
 }
 
-export function objectsEqual<T extends Record<string, unknown>>(a: T, b: T): boolean {
+export function objectsEqual<T extends Record<string, unknown> | undefined>(a: T, b: T): boolean {
 	if (a === b) return true
 	if (a === undefined || b === undefined) return false
 
@@ -91,7 +92,7 @@ export function objectsEqual<T extends Record<string, unknown>>(a: T, b: T): boo
 	return true
 }
 
-export function arraysEqual<T>(a: T[], b: T[]): boolean {
+export function arraysEqual<T extends undefined | unknown[]>(a: T, b: T): boolean {
 	if (a === b) return true
 	if (a === undefined || b === undefined) return false
 	if (a.length !== b.length) return false
@@ -121,7 +122,6 @@ export function sanitizeNamespace(namespace: string): string {
 
 /**
  * Elements with class will call a function when clicked
- * @returns
  */
 export function sanitizeHtmlToDomWithFunction(
 	html: string,
@@ -136,28 +136,37 @@ export function sanitizeHtmlToDomWithFunction(
 
 /**
  * Mainly for nice formatting with prettier. But the line wrapping means we have to strip surplus whitespace.
+ * @public
  */
 export function html(strings: TemplateStringsArray, ...values: unknown[]): string {
+	// eslint-disable-next-line unicorn/no-array-reduce
 	const conjoined = strings.reduce(
+		// eslint-disable-next-line ts/no-base-to-string
 		(result, text, i) => `${result}${text}${String(values[i] ?? '')}`,
 		'',
 	)
 	return conjoined.replaceAll(/\s+/g, ' ')
 }
 
-// TODO test why this is breaking notice formatting
+/**
+ * Alternate HTML templating function.
+ @todo test why this is breaking notice formatting
+ @public
+ */
 export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): string {
 	return trimLeadingIndentation(strings, ...values)
 }
 
 function trimLeadingIndentation(strings: TemplateStringsArray, ...values: unknown[]): string {
 	const lines = strings
+		// eslint-disable-next-line ts/no-base-to-string, unicorn/no-array-reduce
 		.reduce((result, text, i) => `${result}${text}${String(values[i] ?? '')}`, '')
 		.split(/\r?\n/)
 		.filter((line) => line.trim() !== '')
 
 	// Get leading white space of first line, and trim that much white space
 	// from subsequent lines
+	// eslint-disable-next-line regexp/no-unused-capturing-group
 	const leadingSpace = /^(\s+)/.exec(lines[0])?.[0] ?? ''
 	const leadingSpaceRegex = new RegExp(`^${leadingSpace}`)
 	return lines.map((line) => line.replace(leadingSpaceRegex, '').trimEnd()).join('\n')
