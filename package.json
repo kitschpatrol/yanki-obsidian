@@ -16,7 +16,7 @@
 	"bugs": "https://github.com/kitschpatrol/yanki-obsidian/issues",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/kitschpatrol/yanki-obsidian"
+		"url": "git+https://github.com/kitschpatrol/yanki-obsidian.git"
 	},
 	"license": "MIT",
 	"author": {
@@ -40,8 +40,8 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^5.0.6",
-		"@types/node": "^18.19.78",
+		"@kitschpatrol/shared-config": "^5.2.0",
+		"@types/node": "^18.19.79",
 		"bumpp": "^10.0.3",
 		"debounce": "^2.2.0",
 		"entities": "^5.0.0",
@@ -58,12 +58,11 @@
 		"tsx": "^4.19.3",
 		"type-fest": "^4.36.0",
 		"typescript": "~5.7.3",
-		"yanki": "^0.18.4"
+		"yanki": "^0.18.5"
 	},
 	"packageManager": "pnpm@10.5.2",
 	"engines": {
-		"node": ">=18.15.0",
-		"pnpm": ">=10.0.0"
+		"node": ">=18.15.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

@@ -15,12 +15,6 @@ export default eslintConfig(
 		},
 		ts: {
 			overrides: {
-				'depend/ban-dependencies': [
-					'error',
-					{
-						allowed: ['builtin-modules'],
-					},
-				],
 				'import/no-named-as-default-member': 'off',
 				// Knip workaround...
 				// https://github.com/webpro-nl/knip/issues/158#issuecomment-1632648598
