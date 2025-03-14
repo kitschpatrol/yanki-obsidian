@@ -306,7 +306,7 @@ export default class YankiPlugin extends Plugin {
 		}
 	}
 
-	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated): Promise<void> => {
+	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated: boolean): Promise<void> => {
 		if (!userInitiated && !this.settings.sync.autoSyncEnabled) {
 			return
 		}
