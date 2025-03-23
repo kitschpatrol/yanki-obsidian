@@ -509,9 +509,9 @@ Keep track of how many Obsidian notes have been synchronized to anki, how these 
 
 > [!WARNING]
 >
-> The Automatic sync option has been deprecated and moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0. It will will likely be removed completely in version 2.0.0.
+> The Automatic sync option has been moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0.
 >
-> Since a simple slip-up in the plugin settings or when moving notes between folders can result in near-instantaneous loss of learning progress in Anki, it just seemed too dangerous to be worth it. If you like it and are relying on it, please [open an issue in GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues) and let me know.
+> Since a simple slip-up in the plugin settings or when moving notes between folders can result in near-instantaneous loss of learning progress in Anki, it should be used with care.
 
 When enabled, Yanki will observe the notes in your [watched folders](#watched-folder-list) for changes, additions, deletions, etc, and trigger a sync to Anki (almost) immediately after it sees a change.
 
@@ -604,9 +604,9 @@ _Technically_ nothing's stopping you from making edits in Anki, but any changes 
 
 ### Do I have to run the sync command every time I change a flashcard note?
 
-Yes. Earlier versions of Yanki featured an auto sync mode which would detect changes automatically, but in hindsight this seems too risky to be worth it.
+Not necessarily. Yanki features an auto-sync mode which detects changes automatically and trigger a sync. While this feature technically works, it is _not recommended_ for general use since it can make it too easy to lose learning progress if you temporarily delete a note or move it out of the folders that Yanki tracks.
 
-The feature is currently deprecated but is still available in the advanced settings section via the [Automatic sync](#automatic-sync) toggle, but it's not recommended and will probably be removed from the next major version of the Yanki plugin.
+For those who dare, it can be enabled in the "advanced" section of Yanki's settings page via the [Automatic sync](#automatic-sync) toggle.
 
 ### Can I embed images in my notes?
 

@@ -557,9 +557,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				.setName('Automatic sync')
 				.setDesc(
 					sanitizeHTMLToDom(html`
-						<strong>Deprecated. Will be removed from future versions.</strong><br />Sync to the
-						local Anki database whenever flashcard notes are changed and the Anki desktop
-						application is open.
+						<strong>This can be dangerous. Enable with care.</strong><br />Sync to the local Anki
+						database whenever flashcard notes are changed and the Anki desktop application is open.
+						<em
+							>If you temporarily delete or remove a note from Anki's flashcard folders, it will be
+							deleted immediately from Anki along with its learning progress metadata.</em
+						>
 					`),
 				)
 				.addToggle((toggle) => {
