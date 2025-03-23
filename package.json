@@ -33,11 +33,11 @@
 		"fix": "kpi fix",
 		"lint": "kpi lint",
 		"manifest": "tsx ./scripts/generate-manifest.ts",
-		"obsidian:link": "pnpm run obsidian:unlink && mkdir -p \"$(pwd)/examples/Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
-		"obsidian:unlink": "rimraf \"$(pwd)/examples/Demo Vault/.obsidian/plugins/yanki\"",
+		"obsidian:link": "pnpm run obsidian:unlink && mkdir -p \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins/yanki\"",
+		"obsidian:unlink": "rimraf \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins/yanki\"",
 		"release": "pnpm run manifest && bumpp package.json manifest.json --commit 'Release: %s' --tag '%s'",
-		"yanki:use-local": "pnpm remove yanki && pnpm add -D ../yanki",
-		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
+		"yanki:use-local": "pnpm remove yanki ; pnpm add -D ../yanki",
+		"yanki:use-npm": "pnpm remove yanki ; pnpm add -D yanki"
 	},
 	"devDependencies": {
 		"@kitschpatrol/shared-config": "^5.3.1",

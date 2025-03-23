@@ -7,7 +7,7 @@ export default eslintConfig(
 				'html/no-inline-styles': 'off',
 			},
 		},
-		ignores: ['examples/Demo Vault/*'],
+		ignores: ['examples/Yanki Demo Vault/*'],
 		json: {
 			overrides: {
 				'json-package/valid-package-definition': 'off',

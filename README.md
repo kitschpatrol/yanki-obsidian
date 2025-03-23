@@ -194,7 +194,7 @@ The most minimal examples to "trigger" different note types are shown below, but
 
 You're free to use additional Markdown in your notes to style and structure the front and back of your flashcard notes.
 
-The four supported note types are described below. See the [Demo Vault](https://github.com/kitschpatrol/yanki-obsidian/blob/main/examples/Demo%20Vault) for additional examples.
+The four supported note types are described below. See the [Yanki Demo Vault](https://github.com/kitschpatrol/yanki-obsidian/blob/main/examples/Yanki%20Demo%20Vault) for additional examples.
 
 ### Basic
 
