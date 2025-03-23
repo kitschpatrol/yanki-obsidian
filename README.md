@@ -82,7 +82,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 2. **Plugin installation**
 
-   Search for `yanki` in Obsidian's community plugins browser, then click the "Install". Or, install it from [the Obsidian website](https://obsidian.md/plugins?id=yanki).
+   Search for `yanki` in Obsidian's community plugins browser, then click "Install". Or, install it from [the Obsidian website](https://obsidian.md/plugins?id=yanki).
 
 3. **Setup**
 
@@ -186,7 +186,7 @@ Both wiki-style `![[something.png]]` and `![markdown](style.png)` asset embeddin
 
 ## Markdown note types
 
-Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain element in your Markdown notes.
+Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain elements in your Markdown notes.
 
 The rules were designed with Markdown's semantic precedents and visual nature in mind, and are based on the note types that are included as defaults in a fresh installation of Anki. Yanki creates and manages the required note types automatically. Do not create or edit them manually.
 
@@ -224,7 +224,7 @@ Sometimes the answer is the question
 Sometimes the question is the answer
 ```
 
-Yanki deviates slightly from the default Anki reversed card note type by supporting adding optional "extra" content that will appear on the the back of both generated cards:
+Yanki deviates slightly from the default Anki reversed card note type by supporting adding optional "extra" content that will appear on the back of both generated cards:
 
 ```md
 Sometimes the answer is the question
@@ -254,7 +254,7 @@ _It just smells funny_
 
 ### Cloze
 
-Text that is `~~struck through~~` with the [somewhat esoteric double-tilde syntax](https://github.github.com/gfm/#strikethrough-extension-) will be hidden in the resulting _cloze_ card:
+Text that is `~~struck through~~` with the [somewhat esoteric double-tilde syntax](https://github.github.com/gfm/#strikethrough-extension-) will be hidden in the card as a _cloze_ deletion:
 
 _Mnemonic: The `~~strike through~~` implies redaction._
 
@@ -288,7 +288,7 @@ Is turned into the following Anki markup:
 
 In [rare cases](https://github.com/kitschpatrol/yanki-obsidian/issues/4), you might want to take control over cloze numbering — perhaps you want to reveal multiple clozes simultaneously on a single card, or group certain clozes together on a particularly cloze-heavy note.
 
-To support this, Yanki offers some optional extra syntax. A leading one- or two-digit a number at the front of your clozed content will be interpreted as the cloze number:
+To support this, Yanki offers some optional extra syntax. A leading one- or two-digit number at the front of your clozed content will be interpreted as the cloze number:
 
 For example:
 
@@ -511,7 +511,7 @@ Keep track of how many Obsidian notes have been synchronized to anki, how these 
 >
 > The Automatic sync option has been moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0.
 >
-> Since a simple slip-up in the plugin settings or when moving notes between folders can result in near-instantaneous loss of learning progress in Anki, it should be used with care.
+> A simple slip-up in the plugin settings or when moving notes between folders can result in loss of review stats or card history in Anki.
 
 When enabled, Yanki will observe the notes in your [watched folders](#watched-folder-list) for changes, additions, deletions, etc, and trigger a sync to Anki (almost) immediately after it sees a change.
 
@@ -734,7 +734,7 @@ The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is bui
 
 Obsidian implements a number of useful extensions to Markdown for supporting things like `[[wiki-links]]` and `![[embedding]]` — and its ecosystem of plugins brings even more useful but Obsidian-specific functionality. Unfortunately, the nuances of many aspects of Obsidian's treatment of Markdown are imperfectly documented, closed-source, and non-standard.
 
-Every Obsidian-only plugin, Markdown extension, and proprietary-API creates a subtle degree of lock-in to the tool — intentional or otherwise. Yes, your notes are "just" Markdown files, but where their utility or upkeep depend on Obsidian-specific features, their portability and future flexibility are diminished.
+Every Obsidian-only plugin, Markdown extension, and proprietary-API creates a degree of lock-in — intentional or otherwise. Yes, your notes are "just" Markdown files, but where their utility or upkeep depend on Obsidian-specific features, their portability and future flexibility are diminished.
 
 Obsidian's great for now, but it's inevitably transitory. Markdown is going to be around much longer than Obsidian will.
 
