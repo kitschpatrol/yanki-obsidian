@@ -41,7 +41,7 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 		return sanitizeHTMLToDom(
 			html`<strong>Anki sync failed:</strong><br />Could not connect to Anki<br /><br />Please make
 				sure that the Anki desktop application is running, and that it has the
-				<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect</a> add-on installed and
+				<a href="https://ankiweb.net/shared/info/2055492159">Anki-Connect</a> add-on installed and
 				<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
 					>configured</a
 				>.`,

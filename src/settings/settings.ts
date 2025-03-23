@@ -388,8 +388,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						>Yanki quick start guide</a
 					>
 					for instructions on how to set up Anki-Connect, and the
-					<a href="https://foosoft.net/projects/anki-connect/">Anki-Connect documentation</a> for
-					more information. The default settings below are usually fine.`,
+					<a href="https://git.sr.ht/~foosoft/anki-connect">Anki-Connect documentation</a> for more
+					information. The default settings below are usually fine.`,
 			),
 		)
 

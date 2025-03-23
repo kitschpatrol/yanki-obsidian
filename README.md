@@ -72,7 +72,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 - The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6+ on Windows, macOS, and Linux.)
 - The [Anki desktop application](https://apps.ankiweb.net)
-- The [Anki-Connect](https://foosoft.net/projects/anki-connect/) add-on
+- The [Anki-Connect](https://ankiweb.net/shared/info/2055492159) add-on
 
   To install the Anki-Connect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
 
@@ -491,7 +491,7 @@ _Default: 60 characters_
 
 These are advanced settings to accommodate custom Anki-Connect configurations. The defaults are almost certainly fine.
 
-Please see the [Anki-Connect documentation](https://foosoft.net/projects/anki-connect) for details on the Host and Key options.
+Please see the [Anki-Connect documentation](https://git.sr.ht/~foosoft/anki-connect) for details on the Host and Key options.
 
 #### Advanced settings
 
@@ -578,7 +578,7 @@ Yes, so long as you're syncing your notes to the mobile app through something li
 
 ### Do I really have to have to launch Anki for syncing to work?
 
-Yes, unfortunately. There are other ways to talk to the Anki database, but none are as robust as what's provided by [Anki-Connect](https://foosoft.net/projects/anki-connect/), which is where this requirement comes from.
+Yes, unfortunately. There are other ways to talk to the Anki database, but none are as robust as what's provided by [Anki-Connect](https://ankiweb.net/shared/info/2055492159), which is where this requirement comes from.
 
 _Note: The stand-alone [Yanki](https://github.com/kitschpatrol/yanki) CLI tool can automatically launch the Anki desktop application on-demand on macOS, but Obsidian's plug-in APIs prevent this from working correctly from inside Obsidian._
 
@@ -728,7 +728,7 @@ The Yanki plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a
 
 If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, the stand-alone [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and TypeScript library implements all of the same core features (plus a few extras). Using the `yanki` CLI tool directly will not interfere with syncing from the Yanki plugin.
 
-The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://foosoft.net/projects/anki-connect/) API.
+The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://git.sr.ht/~foosoft/anki-connect) API.
 
 ### Avoiding lock-in
 
@@ -760,7 +760,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ## Acknowledgments
 
-Thanks to Alex Yatskov for creating [Anki-Connect](https://foosoft.net/projects/anki-connect/).
+Thanks to Alex Yatskov for creating [Anki-Connect](https://git.sr.ht/~foosoft/anki-connect).
 
 PJ Eby's [Hot-Reload](https://github.com/pjeby/hot-reload) Obsidian plugin is a huge help during development.
 
