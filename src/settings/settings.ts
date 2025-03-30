@@ -171,7 +171,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 					callback.inputEl.addEventListener('blur', async () => {
 						await this.plugin.saveSettings()
-						this.render()
+
+						// Kludge for label re-rendering without a focus-stealing full
+						// re-render
+						updateAddFolderButton()
 					})
 				})
 				.setClass('folder-setting')
@@ -192,7 +195,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			}
 		}
 
-		new Setting(this.containerEl)
+		const addFolderButton = new Setting(this.containerEl)
 			.addButton((button: ButtonComponent) => {
 				button
 					.setTooltip('Add folder')
@@ -204,12 +207,17 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						this.render()
 					})
 			})
-			.setDesc(
+			.setClass('description-is-button-annotation')
+
+		const updateAddFolderButton = () => {
+			addFolderButton.setDesc(
 				sanitizeHTMLToDom(
-					html`Flashcard notes found: <em>${String(this.plugin.getWatchedFiles().length)}</em>`,
+					html`Notes found: <em>${String(this.plugin.getWatchedFiles().length)}</em>`,
 				),
 			)
-			.setClass('description-is-button-annotation')
+		}
+
+		updateAddFolderButton()
 
 		new Setting(this.containerEl)
 			.setName('Ignore folder notes')
