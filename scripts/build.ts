@@ -1,6 +1,8 @@
 import type { Plugin } from 'esbuild'
+import chokidar from 'chokidar'
 import esbuild from 'esbuild'
 import { copy } from 'esbuild-plugin-copy'
+import fs from 'node:fs/promises'
 import process from 'node:process'
 
 // We assume our minimum specified Obsidian version 1.5.0 correlates with the
@@ -34,8 +36,6 @@ const context = await esbuild.context({
 	external: [
 		'obsidian',
 		'electron',
-		// 'entities',
-		// 'open',
 		'@codemirror/autocomplete',
 		'@codemirror/collab',
 		'@codemirror/commands',
@@ -120,10 +120,56 @@ const context = await esbuild.context({
 	treeShaking: true,
 })
 
+// Debounce mechanism variables
+// eslint-disable-next-line ts/no-restricted-types, unicorn/no-null
+let rebuildTimeout: NodeJS.Timeout | null = null
+let isRebuilding = false
+
+async function triggerRebuild(): Promise<void> {
+	if (isRebuilding) return
+	isRebuilding = true
+	console.log('Rebuilding...')
+	try {
+		await context.rebuild()
+		console.log('Rebuild complete.')
+		console.log('Copying files to demo vault...')
+
+		await fs.mkdir('./examples/Yanki Demo Vault/.obsidian/plugins/yanki', { recursive: true })
+		const distributionFiles = await fs.readdir('./dist')
+		for (const file of distributionFiles) {
+			await fs.copyFile(
+				`./dist/${file}`,
+				`./examples/Yanki Demo Vault/.obsidian/plugins/yanki/${file}`,
+			)
+		}
+
+		// Create or update a .hotreload file in the demo vault to indicate a rebuild has occurred
+		await fs.writeFile(
+			'./examples/Yanki Demo Vault/.obsidian/plugins/yanki/.hotreload',
+			new Date().toISOString(),
+		)
+
+		console.log('Files copied.')
+	} catch (error) {
+		console.error('Rebuild failed:', error)
+	} finally {
+		isRebuilding = false
+	}
+}
+
 if (production) {
-	await context.rebuild()
+	await triggerRebuild()
 	// eslint-disable-next-line unicorn/no-process-exit
 	process.exit(0)
 } else {
-	await context.watch()
+	await triggerRebuild()
+
+	console.log('Watching for changes...')
+	const watcher = chokidar.watch('src', { ignoreInitial: true })
+
+	watcher.on('all', (event, path) => {
+		console.log(`Detected ${event} on ${path}. Scheduling rebuild...`)
+		if (rebuildTimeout) clearTimeout(rebuildTimeout)
+		rebuildTimeout = setTimeout(triggerRebuild, 100)
+	})
 }

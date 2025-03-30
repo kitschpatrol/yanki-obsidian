@@ -29,12 +29,10 @@
 	"scripts": {
 		"build": "rimraf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
 		"clean": "git rm -f pnpm-lock.yaml ; git clean -fdX",
-		"dev": "rimraf ./dist && pnpm run manifest && touch ./dist/.hotreload && tsx ./scripts/build.ts",
+		"dev": "rimraf ./dist && pnpm run manifest && tsx ./scripts/build.ts",
 		"fix": "kpi fix",
 		"lint": "kpi lint",
 		"manifest": "tsx ./scripts/generate-manifest.ts",
-		"obsidian:link": "pnpm run obsidian:unlink && mkdir -p \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins/yanki\"",
-		"obsidian:unlink": "rimraf \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins/yanki\"",
 		"release": "pnpm run manifest && bumpp package.json manifest.json --commit 'Release: %s' --tag '%s'",
 		"yanki:deploy-local": "cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
 		"yanki:use-local": "pnpm remove yanki ; pnpm add -D ../yanki",
@@ -44,9 +42,10 @@
 		"@kitschpatrol/shared-config": "^5.4.0",
 		"@types/node": "^18.19.84",
 		"bumpp": "^10.1.0",
+		"chokidar": "^4.0.3",
 		"debounce": "^2.2.0",
 		"entities": "^6.0.0",
-		"esbuild": "^0.25.1",
+		"esbuild": "^0.25.2",
 		"esbuild-plugin-copy": "^2.1.1",
 		"escape-string-regexp": "^5.0.0",
 		"moment": "^2.30.1",
@@ -59,7 +58,6 @@
 		"tsx": "^4.19.3",
 		"type-fest": "^4.38.0",
 		"typescript": "~5.7.3",
-		"yanki": "^0.18.9"
 		"yanki": "^0.18.10"
 	},
 	"packageManager": "pnpm@10.7.0",
