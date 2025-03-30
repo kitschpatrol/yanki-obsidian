@@ -457,9 +457,9 @@ When enabled, local note files will be renamed to match their content. This is u
 
 If the prompt or response has multiple lines, only the first line of text is considered.
 
-The file renaming pass runs as part of every sync to Anki, and only affects notes inside a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names, and modifying the content of a watched flashcard note will update its title immediately.
+The file renaming pass runs as part of every sync to Anki, and only affects notes inside a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names, and modifying the content of a watched flashcard note will update its title immediately. Any links to your flashcard notes will auto-update to reflect the change. (You may be prompted to approve this depending on your Obsidian settings.)
 
-There are some great community plugins dedicated to content-driven file naming, like Rey Christian's [Auto Filename](https://github.com/rcsaquino/obsidian-auto-filename) plugin, but this feature is built into Yanki since the renaming process can be more precise when the structure of flashcard notes is understood.
+There are community plugins dedicated to content-driven file naming, but this feature is built into Yanki since the renaming process can be more precise when the structure of flashcard notes is understood.
 
 _Default: Off_
 

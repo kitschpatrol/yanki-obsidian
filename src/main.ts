@@ -460,7 +460,9 @@ export default class YankiPlugin extends Plugin {
 		}
 
 		const vaultFileNewPath = this.absolutePathToVaultPath(newPath)
-		return this.app.vault.rename(file, vaultFileNewPath)
+
+		// Use file manager instead of vault API to ensure links are updated
+		return this.app.fileManager.renameFile(file, vaultFileNewPath)
 	}
 
 	// ----------------------------------------------------
