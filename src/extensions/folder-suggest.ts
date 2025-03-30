@@ -1,6 +1,7 @@
 // Via Daniel Rodríguez Rivero's Modal Form Plugin: https://github.com/danielo515/obsidian-modal-form
 // Via Liam Cain's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
-import { AbstractInputSuggest, type App, type TAbstractFile, TFolder } from 'obsidian'
+import type { App, TAbstractFile } from 'obsidian'
+import { AbstractInputSuggest, TFolder } from 'obsidian'
 
 export class FolderSuggest extends AbstractInputSuggest<TFolder> {
 	constructor(

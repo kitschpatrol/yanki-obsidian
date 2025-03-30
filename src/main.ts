@@ -2,14 +2,11 @@
 /* eslint-disable ts/unbound-method */
 
 import escapeStringRegexp from 'escape-string-regexp'
-import {
-	getYankiPluginDefaultSettings,
-	type YankiPluginSettings,
-	YankiPluginSettingTab,
-} from './settings/settings'
+import type { YankiPluginSettings } from './settings/settings'
+import type { CommonProperties } from './utilities'
+import { getYankiPluginDefaultSettings, YankiPluginSettingTab } from './settings/settings'
 import {
 	arraysEqual,
-	type CommonProperties,
 	formatRenameResult,
 	formatSyncResult,
 	html,
@@ -24,6 +21,8 @@ import {
 // already scheduled at the time of the user-initiated invocation. The import is
 // named with a prefix so there's no ambiguity vs the built-in Obsidian
 // implementation.
+import type { TAbstractFile } from 'obsidian'
+import type { FetchAdapter, RenameFilesOptions, SyncFilesOptions } from 'yanki'
 import sindreDebounce from 'debounce'
 import path from 'node:path' // Assuming polyfilled
 import {
@@ -34,18 +33,11 @@ import {
 	Plugin,
 	requestUrl,
 	sanitizeHTMLToDom,
-	type TAbstractFile,
 	TFile,
 	TFolder,
 	Vault,
 } from 'obsidian'
-import {
-	type FetchAdapter,
-	renameFiles,
-	type RenameFilesOptions,
-	syncFiles,
-	type SyncFilesOptions,
-} from 'yanki'
+import { renameFiles, syncFiles } from 'yanki'
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)

@@ -1,6 +1,6 @@
+import type { RenameFilesResult, SyncFilesResult } from 'yanki'
 import { sanitizeHTMLToDom } from 'obsidian'
 import plur from 'plur'
-import { type RenameFilesResult, type SyncFilesResult } from 'yanki'
 
 export type CommonProperties<T, U> = {
 	[K in keyof T & keyof U]: T[K] extends U[K] ? T[K] : never

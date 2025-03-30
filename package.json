@@ -36,12 +36,13 @@
 		"obsidian:link": "pnpm run obsidian:unlink && mkdir -p \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins\" && ln -s \"$(pwd)/dist\" \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins/yanki\"",
 		"obsidian:unlink": "rimraf \"$(pwd)/examples/Yanki Demo Vault/.obsidian/plugins/yanki\"",
 		"release": "pnpm run manifest && bumpp package.json manifest.json --commit 'Release: %s' --tag '%s'",
+		"yanki:deploy-local": "cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
 		"yanki:use-local": "pnpm remove yanki ; pnpm add -D ../yanki",
 		"yanki:use-npm": "pnpm remove yanki ; pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^5.3.1",
-		"@types/node": "^18.19.83",
+		"@kitschpatrol/shared-config": "^5.4.0",
+		"@types/node": "^18.19.84",
 		"bumpp": "^10.1.0",
 		"debounce": "^2.2.0",
 		"entities": "^6.0.0",
@@ -50,7 +51,7 @@
 		"escape-string-regexp": "^5.0.0",
 		"moment": "^2.30.1",
 		"obsidian": "^1.8.7",
-		"obsidian-typings": "^2.37.0",
+		"obsidian-typings": "^2.41.1",
 		"plur": "^5.1.0",
 		"pretty-ms": "^9.2.0",
 		"rimraf": "^6.0.1",
@@ -58,9 +59,9 @@
 		"tsx": "^4.19.3",
 		"type-fest": "^4.38.0",
 		"typescript": "~5.7.3",
-		"yanki": "^0.18.8"
+		"yanki": "^0.18.9"
 	},
-	"packageManager": "pnpm@10.6.5",
+	"packageManager": "pnpm@10.7.0",
 	"engines": {
 		"node": ">=18.15.0"
 	},

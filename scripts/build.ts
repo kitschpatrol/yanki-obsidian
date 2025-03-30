@@ -1,5 +1,5 @@
+import type { Plugin } from 'esbuild'
 import esbuild from 'esbuild'
-import { type Plugin } from 'esbuild'
 import { copy } from 'esbuild-plugin-copy'
 import process from 'node:process'
 

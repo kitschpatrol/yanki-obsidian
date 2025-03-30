@@ -1,12 +1,5 @@
-import {
-	type App,
-	type ButtonComponent,
-	moment,
-	Notice,
-	PluginSettingTab,
-	sanitizeHTMLToDom,
-	Setting,
-} from 'obsidian'
+import type { App, ButtonComponent } from 'obsidian'
+import { moment, Notice, PluginSettingTab, sanitizeHTMLToDom, Setting } from 'obsidian'
 import prettyMilliseconds from 'pretty-ms'
 import { hostAndPortToUrl, urlToHostAndPort } from 'yanki'
 import type YankiPlugin from '../main'
