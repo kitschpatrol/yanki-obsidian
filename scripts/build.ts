@@ -4,6 +4,7 @@ import esbuild from 'esbuild'
 import { copy } from 'esbuild-plugin-copy'
 import fs from 'node:fs/promises'
 import process from 'node:process'
+import { generateManifest } from './generate-manifest'
 
 // We assume our minimum specified Obsidian version 1.5.0 correlates with the
 // following:
@@ -131,6 +132,8 @@ async function triggerRebuild(): Promise<void> {
 	console.log('Rebuilding...')
 	try {
 		await context.rebuild()
+		await generateManifest()
+
 		console.log('Rebuild complete.')
 		console.log('Copying files to demo vault...')
 

@@ -27,13 +27,12 @@
 	"type": "module",
 	"main": "./dist/main.js",
 	"scripts": {
-		"build": "rimraf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production && pnpm run manifest",
+		"build": "rimraf ./dist && tsc -noEmit -skipLibCheck && tsx ./scripts/build.ts production",
 		"clean": "git rm -f pnpm-lock.yaml ; git clean -fdX",
-		"dev": "rimraf ./dist && pnpm run manifest && tsx ./scripts/build.ts",
+		"dev": "rimraf ./dist && tsx ./scripts/build.ts",
 		"fix": "kpi fix",
 		"lint": "kpi lint",
-		"manifest": "tsx ./scripts/generate-manifest.ts",
-		"release": "pnpm run manifest && bumpp package.json manifest.json --commit 'Release: %s' --tag '%s'",
+		"release": "bumpp package.json manifest.json -x 'pnpm run build' -c 'Release: %s' --tag '%s'",
 		"yanki:deploy-local": "cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
 		"yanki:use-local": "pnpm remove yanki ; pnpm add -D ../yanki",
 		"yanki:use-npm": "pnpm remove yanki ; pnpm add -D yanki"
