@@ -23,7 +23,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
-[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian\&color=%23A88BFA\&label=Downloads\&query=%24%5B%22yanki%22%5D.downloads\&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
 
 <!-- /badges -->
 
@@ -752,7 +752,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ### Other Obsidian Anki plugins
 
-- [Export to Anki / Obsidian\_to\_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
 - [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
 - [Flashcards](https://github.com/reuseman/flashcards-obsidian)
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)
