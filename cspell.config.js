@@ -7,6 +7,7 @@ export default cspellConfig({
 		'clozing',
 		'emisjerry',
 		'encloze',
+		'Flathub',
 		'furigana',
 		'hotreload',
 		'jīng',

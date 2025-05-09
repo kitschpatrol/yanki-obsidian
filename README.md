@@ -23,7 +23,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
-[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian\&color=%23A88BFA\&label=Downloads\&query=%24%5B%22yanki%22%5D.downloads\&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
 
 <!-- /badges -->
 
@@ -71,7 +71,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 1. **Prerequisites**
 
 - The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6+ on Windows, macOS, and Linux.)
-- The [Anki desktop application](https://apps.ankiweb.net)
+- The [Anki desktop application](https://apps.ankiweb.net). (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
 - The [Anki-Connect](https://ankiweb.net/shared/info/2055492159) add-on
 
   To install the Anki-Connect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
@@ -696,6 +696,14 @@ It depends, if the plugin parses non-standard Markdown and renders complex or in
 
 Under the hood, Yanki uses its own Markdown → HTML rendering pipeline, and its own CSS stylesheets, so what you see in Obsidian is not always exactly what you'll get in Anki. See the [supported Markdown features](#fancy-markdown) for a sense of what's possible.
 
+### My Obsidian vault links aren't opening on Linux
+
+Linux users who have installed Anki with Flatpak / Flathub have [reported](https://github.com/kitschpatrol/yanki-obsidian/issues/31) [issues](https://github.com/kitschpatrol/yanki-obsidian/issues/41) with `obsidian://` URI links in Anki cards failing to open in Obsidian, as well as trouble with with media asset synchronization from Obsidian to Anki.
+
+It's recommended that Linux users install Anki by following the [instructions on the official Anki website](https://docs.ankiweb.net/platform/linux/installing.html) to avoid these issues.
+
+In some cases, Linux users might need to [manually register](https://amir.rachum.com/obsidian-uri-linux/) the `obsidian://` URI scheme with their operating system.
+
 ## Privacy and security
 
 ### Network use
@@ -744,7 +752,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ### Other Obsidian Anki plugins
 
-- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [Export to Anki / Obsidian\_to\_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
 - [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
 - [Flashcards](https://github.com/reuseman/flashcards-obsidian)
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)
@@ -764,7 +772,7 @@ Thanks to Alex Yatskov for creating [Anki-Connect](https://git.sr.ht/~foosoft/an
 
 PJ Eby's [Hot-Reload](https://github.com/pjeby/hot-reload) Obsidian plugin is a huge help during development.
 
-Figuring out Obsidian's [AbstractInputSuggest](https://docs.obsidian.md/Reference/TypeScript+API/AbstractInputSuggest) class for the folder selection settings depended on examples in projects by [Daniel Rodríguez Rivero](https://github.com/danielo515) and [Liam Cain](https://github.com/liamcain).
+Obsidian plugins by [Daniel Rodríguez Rivero](https://github.com/danielo515) and [Liam Cain](https://github.com/liamcain) provided helpful examples of common patterns.
 
 ## Contributing
 
