@@ -289,6 +289,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					})
 					.setValue(this.plugin.settings.sync.mediaMode)
 					.onChange(async (value) => {
+						// eslint-disable-next-line ts/no-unsafe-type-assertion
 						this.plugin.settings.sync.mediaMode = value as YankiPluginSettings['sync']['mediaMode']
 						await this.plugin.saveSettings()
 					})
@@ -351,6 +352,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.manageFilenames.mode)
 					.onChange(async (value) => {
 						this.plugin.settings.manageFilenames.mode =
+							// eslint-disable-next-line ts/no-unsafe-type-assertion
 							value as YankiPluginSettings['manageFilenames']['mode']
 						await this.plugin.saveSettings()
 					})

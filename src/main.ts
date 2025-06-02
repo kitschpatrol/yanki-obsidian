@@ -116,7 +116,7 @@ export default class YankiPlugin extends Plugin {
 
 	// eslint-disable-next-line ts/no-restricted-types
 	async loadData(): Promise<null | YankiPluginSettings> {
-		// eslint-disable-next-line ts/no-restricted-types
+		// eslint-disable-next-line ts/no-restricted-types, ts/no-unsafe-type-assertion
 		const settings = (await super.loadData()) as null | YankiPluginSettings
 
 		if (settings === null) {
