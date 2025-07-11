@@ -533,7 +533,7 @@ Every time Yanki syncs, it takes care to only ever touch notes in Anki with a ma
 
 Yanki sets the namespace value to the vault ID _once_ the first time it runs in a vault, and saves it to its plugin settings data file for future use.
 
-_Default: `Yank Obsidian - Vault ID $YOUR_VAULT_ID`_
+_Default: `Yanki Obsidian - Vault ID $YOUR_VAULT_ID`_
 
 Scenarios where you might need to touch the namespace value include:
 
