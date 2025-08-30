@@ -15,6 +15,7 @@ export type YankiPluginSettings = {
 	folders: string[]
 	ignoreFolderNotes: boolean
 	manageFilenames: {
+		autoRenameDebounceIntervalMs: number // Not exposed in settings
 		enabled: boolean
 		maxLength: number
 		mode: 'prompt' | 'response'
@@ -59,6 +60,8 @@ export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 		folders: [],
 		ignoreFolderNotes: true,
 		manageFilenames: {
+			// Obsidian already debounces this!
+			autoRenameDebounceIntervalMs: 300,
 			enabled: false,
 			maxLength: 60,
 			mode: 'prompt',
@@ -128,6 +131,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		// Cancel any pending syncs
 		this.plugin.syncFlashcardNotesToAnki.clear()
+		this.plugin.updateNoteFilenames.clear()
 
 		// Fake input to catch the automatic first-input focus that was popping the search input.
 		// Focus is still just a tab away.
@@ -372,8 +376,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl).addButton((button) => {
 			button.setButtonText('Rename now')
-			button.onClick(async () => {
-				await this.plugin.updateNoteFilenames(true)
+			button.onClick(() => {
+				void this.plugin.updateNoteFilenames(true)
+				this.plugin.updateNoteFilenames.flush()
 			})
 		})
 

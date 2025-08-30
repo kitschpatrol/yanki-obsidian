@@ -1,6 +1,8 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable ts/unbound-method */
 
+import type { TAbstractFile } from 'obsidian'
+import type { FetchAdapter, RenameFilesOptions, SyncFilesOptions } from 'yanki'
 import escapeStringRegexp from 'escape-string-regexp'
 import type { YankiPluginSettings } from './settings/settings'
 import type { CommonProperties } from './utilities'
@@ -13,7 +15,6 @@ import {
 	objectsEqual,
 	sanitizeHtmlToDomWithFunction,
 } from './utilities'
-
 // An alternate debounce library with a `trigger` method is used instead of the
 // Obsidian API's built-in implementation. The `trigger` method allows
 // user-initiated actions to be executed immediately, and also clears any
@@ -21,8 +22,6 @@ import {
 // already scheduled at the time of the user-initiated invocation. The import is
 // named with a prefix so there's no ambiguity vs the built-in Obsidian
 // implementation.
-import type { TAbstractFile } from 'obsidian'
-import type { FetchAdapter, RenameFilesOptions, SyncFilesOptions } from 'yanki'
 import sindreDebounce from 'debounce'
 import path from 'node:path' // Assuming polyfilled
 import {
@@ -69,10 +68,9 @@ export default class YankiPlugin extends Plugin {
 		this.vaultPathToAbsolutePath = this.vaultPathToAbsolutePath.bind(this)
 		this.absolutePathToVaultPath = this.absolutePathToVaultPath.bind(this)
 
-		this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
-
 		// The debounce library we're using handles binding internally
 		// this.syncFlashcardNotesToAnki = this.syncFlashcardNotesToAnki.bind(this)
+		// this.updateNoteFilenames = this.updateNoteFilenames.bind(this)
 
 		await this.loadSettings()
 
@@ -105,7 +103,7 @@ export default class YankiPlugin extends Plugin {
 		// Create is also called when the vault is first loaded for each existing file
 		this.registerEvent(this.app.vault.on('delete', this.handleDelete.bind(this)))
 
-		// Still necessary in case notes are dragged in
+		// Still necessary in case notes are dragged in or automatic file names are stale
 		this.registerEvent(this.app.vault.on('modify', this.handleModify.bind(this)))
 
 		// Only look at folders, which can affect deck names
@@ -263,7 +261,7 @@ export default class YankiPlugin extends Plugin {
 
 	// Primary commands
 
-	public async updateNoteFilenames(userInitiated: boolean): Promise<void> {
+	updateNoteFilenames = sindreDebounce(async (userInitiated: boolean): Promise<void> => {
 		if (
 			this.settings.folders.length === 0 ||
 			(!this.settings.manageFilenames.enabled && !userInitiated)
@@ -296,7 +294,7 @@ export default class YankiPlugin extends Plugin {
 		if (userInitiated || this.settings.verboseNotices) {
 			new Notice(formatRenameResult(report), 5000)
 		}
-	}
+	}, this.settings.manageFilenames.autoRenameDebounceIntervalMs)
 
 	syncFlashcardNotesToAnki = sindreDebounce(async (userInitiated: boolean): Promise<void> => {
 		if (!userInitiated && !this.settings.sync.autoSyncEnabled) {
@@ -545,7 +543,6 @@ export default class YankiPlugin extends Plugin {
 
 	private async handleModify(fileOrFolder: TAbstractFile) {
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
-			// Rename right away
 			await this.updateNoteFilenames(false)
 			await this.syncFlashcardNotesToAnki(false)
 		}
