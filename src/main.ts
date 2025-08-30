@@ -577,7 +577,8 @@ export default class YankiPlugin extends Plugin {
 					if (
 						file instanceof TFile &&
 						file.extension === 'md' &&
-						(!ignoreFolderNotes || file.parent?.name !== file.basename)
+						(!ignoreFolderNotes || file.parent?.name !== file.basename) &&
+						!files.includes(file)
 					) {
 						files.push(file)
 					}
