@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - electron
+  - esbuild
+  - obsidian-typings
+  - oxc-resolver
+  - puppeteer
+  - unrs-resolver
