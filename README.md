@@ -56,7 +56,7 @@
 
 Yanki is a plugin for Obsidian that syncs a folder (or folders) of notes from your vault to Anki.
 
-The primary novelty of its approach is in how Markdown is translated into Anki notes, and how folders are translated into Anki decks:
+The primary novelty of its approach is in how Markdown is translated into Anki notes, and how folders are translated into Anki decks according to a few simple rules:
 
 - **One** Obsidian note maps to **one** Anki note.
 
@@ -106,7 +106,7 @@ Avoid the complexity of mixing and matching multi-note and single-note syntaxes.
 
 Yanki uses your Obsidian note's parent folder name as the deck name. Complex folder hierarchies are also supported — Anki decks will be created and nested as needed to match the structure of your vault.
 
-### Embrace of Anki's default note types
+### Embrace Anki's default note types
 
 More note types, more problems.
 
@@ -140,7 +140,7 @@ Detecting Obsidian `#tags` in the document body is not currently supported, but 
 
 Easily jump back to source notes in Obsidian while studying in the Anki desktop application.
 
-The Yanki plugin detects your vault's name, and automatically turns any internal `[[WikiLinks]]` in your notes into `obsidian://` protocol links, which you can click through in Anki to get back to the source in Obsidian.
+The Yanki plugin detects your vault's name, and automatically turns any internal `[[WikiLinks]]` in your notes into deep `obsidian://` protocol links, which you can click through in Anki to get back to the source in Obsidian.
 
 ### Fancy Markdown
 
@@ -305,6 +305,10 @@ Yields the following Anki markup:
 The difference is subtle, but note the matching `{{c1`s. This markup yields a single card where both `All` and `revealed` are revealed simultaneously.
 
 _Note: While you can encloze images, math equations, and other inline-styled syntax, clozing over multiple lines or block elements is not currently supported._
+
+_Note: If you delete one of several clozes from an existing note, previous cards associated with the now-missing cloze will linger in Anki's database. While studying, you may see the message "No cloze found on card. Please either add a cloze deletion, or use the Empty Cards tool." In these cases, you must run the "Tools → Empty Cards..." command from Anki desktop application menu bar._
+
+_Warning: If you delete one of several implicitly numbered clozes (e.g. `~~hidden~~`) from a note, then study progress will "move" from one cloze to another. For example, if you have three clozes in a note, but then delete the second cloze and sync to Anki, then what was previously the "third" cloze becomes the new "second" cloze, inheriting study progress associated with the now-deleted second cloze. If you plan on editing your cloze notes heavily after the fact, consider using explicit numbering syntax (e.g. `~~1 hidden~~`) instead._
 
 ## Usage
 
@@ -703,6 +707,18 @@ Linux users who have installed Anki with Flatpak / Flathub have [reported](https
 It's recommended that Linux users install Anki by following the [instructions on the official Anki website](https://docs.ankiweb.net/platform/linux/installing.html) to avoid these issues.
 
 In some cases, Linux users might need to [manually register](https://amir.rachum.com/obsidian-uri-linux/) the `obsidian://` URI scheme with their operating system.
+
+### Can I edit my notes in a way that will change their Anki note model type?
+
+Yes, with a few caveats: Certain note type transformations will result in "leftover" cards in the database, which Yanki will attempt to resolve at the end of the sync by automatically calling the Anki desktop application's "Tools → Check Database" menu command.
+
+Changing note types can also result in lost learning progress if the new model type has fewer cards than the old one.
+
+### Why do I have blank cards?
+
+If you remove a cloze from a card that has several, this can result in leftover [empty cards](https://docs.ankiweb.net/templates/errors.html#single-empty-cards) with a message like "No cloze found on card. Please either add a cloze deletion, or use the Empty Cards tool."
+
+There's no way for Yanki to automatically resolve this condition with the available Anki APIs, so you will have to invoke the Anki desktop application's "Tools → Empty Cards..." menu command to clean up empty cards.
 
 ## Privacy and security
 
