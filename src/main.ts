@@ -249,6 +249,7 @@ export default class YankiPlugin extends Plugin {
 				version: 6,
 			},
 			ankiWeb: settings.sync.pushToAnkiWeb,
+			checkDatabase: true,
 			strictMatching: false,
 		}
 	}
