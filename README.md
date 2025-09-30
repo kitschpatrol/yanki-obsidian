@@ -60,7 +60,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 - **One** Obsidian note maps to **one** Anki note.
 
-- The **structure** of the Markdown in your Obsidian notes determine the **types** of Anki notes they become. No extra syntax or Anki-specific markup is required — just pure Markdown.
+- The **structure** of the Markdown in your Obsidian notes determines the **types** of Anki notes they become. No extra syntax or Anki-specific markup is required — just pure Markdown.
 
   This also means that your flashcard notes remain nice and legible in Obsidian, and you don't have to deal with the cognitive switch of ` ```fenced``` ` regions and Anki's rather noisy templating syntax.
 
@@ -719,6 +719,16 @@ Changing note types can also result in lost learning progress if the new model t
 If you remove a cloze from a card that has several, this can result in leftover [empty cards](https://docs.ankiweb.net/templates/errors.html#single-empty-cards) with a message like "No cloze found on card. Please either add a cloze deletion, or use the Empty Cards tool."
 
 There's no way for Yanki to automatically resolve this condition with the available Anki APIs, so you will have to invoke the Anki desktop application's "Tools → Empty Cards..." menu command to clean up empty cards.
+
+### Can I create filtered decks?
+
+Yes, as of version 1.8.0 Yanki can coexist with filtered decks create manually in the Anki desktop or mobile applications. Yanki will continue to sync notes from Obsidian to to a deck matching their containing Obsidian folder name, and should ignore any filtered decks.
+
+### Can I split multiple cards from a single note across multiple decks?
+
+No. The Anki application lets you split the cards from a single note across multiple decks. (E.g. you might have a card with dozens of clozes, some of which you want to study under a different deck.)
+
+Yanki does _not_ support this scenario for the notes / cards it manages — it maintains a strict hierarchical relationship in which a note and its cards always live in a single deck. Notes may be deleted / recreated and study progress might be lost if you attempt to split up a note's cards.
 
 ## Privacy and security
 
