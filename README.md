@@ -158,9 +158,9 @@ An extended palette of Markdown syntax is available out of the box, mirroring (a
 
 Your local Obsidian Markdown notes are the single point of truth for what will end up in Anki, but Yanki knows to leave your other Anki notes alone.
 
-When you edit a local Obsidian note, Yanki makes every effort to update rather than delete it in the Anki database so that review progress is preserved.
+When you edit a local Obsidian note, Yanki makes every effort to update rather than recreate it in the Anki database so that review progress is preserved.
 
-But when you _do_ want to delete something, it's as simple as deleting it from Obsidian, and it will be removed from the Anki database on the next sync. Protections are in place to prevent deleting Anki notes that weren't initially created by Yanki.
+When you _do_ want to delete something, it's as simple as deleting it from Obsidian, and it will be removed from the Anki database on the next sync. Protections are in place to prevent deleting Anki notes that weren't initially created by Yanki.
 
 If you use [AnkiWeb](https://ankiweb.net/) to sync your notes to the cloud, Yanki will also trigger this next step in the sync, automating the flow from Markdown → Anki → AnkiWeb in one shot. (Configurable via a [setting](#push-to-ankiweb).)
 
@@ -186,7 +186,7 @@ Both wiki-style `![[something.png]]` and `![markdown](style.png)` asset embeddin
 
 ## Markdown note types
 
-Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain elements in your Markdown notes.
+Yanki automatically infers the _type_ of Note you'd like to create in Anki based on the presence or absence of certain elements in your Markdown.
 
 The rules were designed with Markdown's semantic precedents and visual nature in mind, and are based on the note types that are included as defaults in a fresh installation of Anki. Yanki creates and manages the required note types automatically. Do not create or edit them manually.
 
@@ -707,6 +707,14 @@ Linux users who have installed Anki with Flatpak / Flathub have [reported](https
 It's recommended that Linux users install Anki by following the [instructions on the official Anki website](https://docs.ankiweb.net/platform/linux/installing.html) to avoid these issues.
 
 In some cases, Linux users might need to [manually register](https://amir.rachum.com/obsidian-uri-linux/) the `obsidian://` URI scheme with their operating system.
+
+### My Obsidian images aren't syncing to Anki on Linux
+
+Linux users who have installed Anki with Flatpak / Flathub have [reported](https://github.com/kitschpatrol/yanki-obsidian/issues/55) problems syncing media assets like images from Obsidian to Anki.
+
+Ensure that both Obsidian and Anki have access to the local network, and give Anki read-only access to your Obsidian vault's directory using a tool like [Flatseal](https://flathub.org/en/apps/com.github.tchx84.Flatseal).
+
+It's recommended that Linux users install Anki by following the [instructions on the official Anki website](https://docs.ankiweb.net/platform/linux/installing.html) to avoid these issues.
 
 ### Can I edit my notes in a way that will change their Anki note model type?
 
