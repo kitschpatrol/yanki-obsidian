@@ -259,7 +259,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		new Setting(this.containerEl)
 			.setName('Push to AnkiWeb')
 			.setDesc(
-				'Also sync changes to the AnkiWeb "cloud" in addition to the local Anki database. This is like pressing the "Sync" button in the Anki desktop app.',
+				'Also sync changes to the AnkiWeb “cloud” in addition to the local Anki database. This is like pressing the “Sync” button in the Anki desktop app.',
 			)
 			.addToggle((toggle) => {
 				toggle.setValue(this.plugin.settings.sync.pushToAnkiWeb)
@@ -274,7 +274,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setName('Sync media assets')
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Also sync image, audio, and video assets in your Obsidian notes to Anki's media asset
+					html`Also sync image, audio, and video assets in your Obsidian notes to Anki’s media asset
 						library.
 						<em
 							>Note that syncing remote media may slow down syncing since assets must be
@@ -325,7 +325,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setDesc(
 				sanitizeHTMLToDom(
 					html`Yanki can set the file name of flashcard notes to a snippet of text derived from the
-					note's contents.`,
+					note’s contents.`,
 				),
 			)
 
@@ -485,7 +485,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 				new Notice(
 					sanitizeHTMLToDom(
-						html`<strong>Yanki:</strong><br />Reset Yanki's Anki-Connect settings to defaults.`,
+						html`<strong>Yanki:</strong><br />Reset Yanki’s Anki-Connect settings to defaults.`,
 					),
 				)
 			})
@@ -568,7 +568,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					this.render()
 
 					new Notice(
-						sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki's sync stats.`),
+						sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki’s sync stats.`),
 					)
 				})
 			})
@@ -580,7 +580,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						<strong>This can be dangerous. Enable with care.</strong><br />Sync to the local Anki
 						database whenever flashcard notes are changed and the Anki desktop application is open.
 						<em
-							>If you temporarily delete or remove a note from Anki's flashcard folders, it will be
+							>If you temporarily delete or remove a note from Anki’s flashcard folders, it will be
 							deleted immediately from Anki along with its learning progress metadata.</em
 						>
 					`),
@@ -598,8 +598,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				.setName('Namespace')
 				.setDesc(
 					sanitizeHTMLToDom(
-						html`<strong>Do not change this value unless you know what you're doing.</strong
-							><br />Customize the "namespace" used to correlate flashcard notes in this Obsidian
+						html`<strong>Do not change this value unless you know what you’re doing.</strong
+							><br />Customize the “namespace” used to correlate flashcard notes in this Obsidian
 							vault with notes in Yanki. This can be useful in rare cases like vault migration or
 							vault synchronization. Backup both Obsidian and Anki first. See the
 							<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#namespace"
@@ -635,7 +635,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 					new Notice(
 						sanitizeHTMLToDom(
-							html`<strong>Yanki:</strong><br />Reset Yanki's namespace to default.`,
+							html`<strong>Yanki:</strong><br />Reset Yanki’s namespace to default.`,
 						),
 					)
 				})
@@ -650,7 +650,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings()
 					this.render()
 
-					new Notice(sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki's settings.`))
+					new Notice(sanitizeHTMLToDom(html`<strong>Yanki:</strong><br />Reset Yanki’s settings.`))
 				})
 			})
 		}
