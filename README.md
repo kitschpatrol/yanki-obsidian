@@ -457,11 +457,24 @@ _Default: Local only_
 
 ##### Automatic note names
 
-When enabled, local note files will be renamed to match their content. This is useful if you want to have semantically reasonable note file names without the exertion of managing note titles yourself.
+This dropdown setting controls when local note files are renamed to match their content. This is useful if you want to have semantically reasonable note file names without the exertion of managing note titles yourself.
+
+Options:
+
+- **Off**\
+  Automatic renaming is disabled. Note files will only be renamed when manually triggered via the "Rename now" button in the settings tab.
+
+- **On Sync**\
+  Note files are automatically renamed before syncing to Anki. This happens whenever a sync is triggered (manually or automatically), ensuring that file names are updated just before the sync operation. This option is useful if you want to control when the potentially disruptive file renaming happens, limiting it to sync operations rather than on every file change.
+
+- **On Change**\
+  Note files are automatically renamed whenever their content changes. This provides the most immediate feedback, updating file names shortly after you modify a flashcard note.
 
 If the prompt or response has multiple lines, only the first line of text is considered.
 
-The file renaming pass runs as part of every sync to Anki, and only affects notes inside a [watched folder](#watched-folder-list). Even if the Anki application is closed, attempting a sync will still update the local flashcard note file names, and modifying the content of a watched flashcard note will update its title after a short delay. Any links _to_ your flashcard notes should auto-update to reflect the change. (This depends on your Obsidian settings, and you may be prompted to approve the link updates.)
+Automatic renaming only affects notes inside a [watched folder](#watched-folder-list).
+
+Any links _to_ your flashcard notes should auto-update to reflect the change. (This depends on your Obsidian settings, and you may be prompted to approve the link updates.)
 
 There are community plugins dedicated to content-driven file naming, but this feature is built into Yanki since the renaming process can be more precise when the structure of flashcard notes is understood.
 
@@ -469,7 +482,7 @@ _Default: Off_
 
 ##### Name mode
 
-If [Automatic note names](#automatic-note-names) is enabled, this setting allows you to prioritize which part of the flashcard note should be used for the automatic note file name.
+If [Automatic note names](#automatic-note-names) is set to "On Sync" or "On Change", this setting allows you to prioritize which part of the flashcard note should be used for the automatic note file name.
 
 - **Prompt**\
   This option sets the note title to the first line of text Anki shows you during a review session — usually the front of the card.
@@ -483,7 +496,7 @@ Sanitization, truncation, and sequential numbering of duplicate note titles are 
 
 _Default: Prompt_
 
-_(But note that the [Automatic note names](#automatic-note-names) toggle must be enabled for this to take effect.)_
+_(But note that [Automatic note names](#automatic-note-names) must be set to "On Sync" or "On Change" for this to take effect.)_
 
 ##### Maximum note name length
 
@@ -570,7 +583,7 @@ _(Note that some of the examples in the videos demonstrate editing model templat
 
 ### Why do I have to come up with a name for every note
 
-You don't! Enable the [automatic note naming](#automatic-note-names) setting.
+You don't! Set the [Automatic note names](#automatic-note-names) setting to "On Sync" or "On Change".
 
 ### Does Yanki work with Obsidian's mobile apps?
 

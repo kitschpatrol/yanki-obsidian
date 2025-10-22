@@ -16,7 +16,7 @@ export type YankiPluginSettings = {
 	ignoreFolderNotes: boolean
 	manageFilenames: {
 		autoRenameDebounceIntervalMs: number // Not exposed in settings
-		enabled: boolean
+		autoRenameTrigger: 'before-sync' | 'file-changed' | 'off'
 		maxLength: number
 		mode: 'prompt' | 'response'
 	}
@@ -62,7 +62,7 @@ export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 		manageFilenames: {
 			// Obsidian already debounces this!
 			autoRenameDebounceIntervalMs: 300,
-			enabled: false,
+			autoRenameTrigger: 'off',
 			maxLength: 60,
 			mode: 'prompt',
 		},
@@ -324,20 +324,32 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setHeading()
 			.setDesc(
 				sanitizeHTMLToDom(
-					html`Yanki can automatically set the file name of flashcard notes to a snippet of text
-					derived from the note's contents. If enabled, note file names are updated whenever notes
-					are synced to Anki.`,
+					html`Yanki can set the file name of flashcard notes to a snippet of text derived from the
+					note's contents.`,
 				),
 			)
 
-		new Setting(this.containerEl).setName('Automatic renaming').addToggle((toggle) => {
-			toggle.setValue(this.plugin.settings.manageFilenames.enabled)
-			toggle.onChange(async (value) => {
-				this.plugin.settings.manageFilenames.enabled = value
-				await this.plugin.saveSettings()
-				this.render()
+		new Setting(this.containerEl)
+			.setName('Automatic renaming')
+			.setDesc('Choose when note file names should be automatically updated.')
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOptions({
+						/* eslint-disable perfectionist/sort-objects */
+						off: 'Off',
+						'before-sync': 'On Sync',
+						'file-changed': 'On Change',
+						/* eslint-enable perfectionist/sort-objects */
+					})
+					.setValue(this.plugin.settings.manageFilenames.autoRenameTrigger)
+					.onChange(async (value) => {
+						this.plugin.settings.manageFilenames.autoRenameTrigger =
+							// eslint-disable-next-line ts/no-unsafe-type-assertion
+							value as YankiPluginSettings['manageFilenames']['autoRenameTrigger']
+						await this.plugin.saveSettings()
+						this.render()
+					})
 			})
-		})
 
 		new Setting(this.containerEl)
 			.setName('Name mode')

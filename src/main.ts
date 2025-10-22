@@ -130,6 +130,14 @@ export default class YankiPlugin extends Plugin {
 			settings.stats.sync.notes.matched ??= 0
 		}
 
+		// Migrate old manageFilenames "enabled" field to new autoRenameTrigger format
+		if ('manageFilenames' in settings && 'enabled' in settings.manageFilenames) {
+			settings.manageFilenames.autoRenameTrigger = settings.manageFilenames.enabled
+				? 'file-changed'
+				: 'off'
+			delete settings.manageFilenames.enabled
+		}
+
 		return settings
 	}
 
@@ -160,9 +168,14 @@ export default class YankiPlugin extends Plugin {
 		// This could be more concise...
 
 		// Local file names have no effect on Anki's database,
-		// so just update them without syncing if settings have changed
-		if (!objectsEqual(previousSettings.manageFilenames, this.settings.manageFilenames)) {
-			await this.updateNoteFilenames(false)
+		// so just update them without syncing if settings have changed, but only
+		// if we're triggering on file change.
+		if (
+			this.settings.manageFilenames.autoRenameTrigger === 'file-changed' &&
+			!objectsEqual(previousSettings.manageFilenames, this.settings.manageFilenames)
+		) {
+			void this.updateNoteFilenames(false)
+			this.updateNoteFilenames.flush()
 		}
 
 		if (
@@ -180,7 +193,7 @@ export default class YankiPlugin extends Plugin {
 	async onExternalSettingsChange() {
 		if (this.settings.verboseNotices) {
 			// TODO when is this actually called?
-			new Notice('External settings changed')
+			new Notice('Yanki external settings change detected')
 		}
 
 		const originalSettings = structuredClone(this.settings)
@@ -208,7 +221,12 @@ export default class YankiPlugin extends Plugin {
 				stat: this.fileAdapterStat,
 				writeFile: this.fileAdapterWrite,
 			},
-			manageFilenames: settings.manageFilenames.enabled ? settings.manageFilenames.mode : 'off',
+			manageFilenames:
+				// TODO should we rename at sync if autoRenameTrigger is 'file-changed'?
+				// currently, yes...
+				settings.manageFilenames.autoRenameTrigger === 'off'
+					? 'off'
+					: settings.manageFilenames.mode,
 			maxFilenameLength: settings.manageFilenames.maxLength,
 			namespace: settings.namespace,
 			obsidianVault: this.app.vault.getName(),
@@ -265,7 +283,7 @@ export default class YankiPlugin extends Plugin {
 	updateNoteFilenames = sindreDebounce(async (userInitiated: boolean): Promise<void> => {
 		if (
 			this.settings.folders.length === 0 ||
-			(!this.settings.manageFilenames.enabled && !userInitiated)
+			(this.settings.manageFilenames.autoRenameTrigger === 'off' && !userInitiated)
 		) {
 			return
 		}
@@ -544,7 +562,10 @@ export default class YankiPlugin extends Plugin {
 
 	private async handleModify(fileOrFolder: TAbstractFile) {
 		if (this.isInsideWatchedFolders(fileOrFolder)) {
-			await this.updateNoteFilenames(false)
+			// Only auto-rename on file change if the trigger is set to 'file-changed'
+			if (this.settings.manageFilenames.autoRenameTrigger === 'file-changed') {
+				await this.updateNoteFilenames(false)
+			}
 			await this.syncFlashcardNotesToAnki(false)
 		}
 	}
