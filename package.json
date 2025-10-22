@@ -57,9 +57,9 @@
 		"tsx": "^4.20.6",
 		"type-fest": "^4.41.0",
 		"typescript": "~5.9.3",
-		"yanki": "^1.2.3"
+		"yanki": "^1.2.4"
 	},
-	"packageManager": "pnpm@10.18.3",
+	"packageManager": "pnpm@10.19.0",
 	"engines": {
 		"node": ">=18.15.0"
 	},
