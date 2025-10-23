@@ -743,7 +743,7 @@ There's no way for Yanki to automatically resolve this condition with the availa
 
 ### Can I create filtered decks?
 
-Yes, as of version 1.8.0 Yanki can coexist with filtered decks create manually in the Anki desktop or mobile applications. Yanki will continue to sync notes from Obsidian to to a deck matching their containing Obsidian folder name, and should ignore any filtered decks.
+Yes, as of version 1.8.0 Yanki can coexist with filtered decks created manually in the Anki desktop or mobile applications. Yanki will continue to sync notes from Obsidian to to a deck matching their containing Obsidian folder name, and should ignore any filtered decks.
 
 ### Can I split multiple cards from a single note across multiple decks?
 
