@@ -69,8 +69,8 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
       yanki:
-        specifier: ^1.2.5
-        version: 1.2.5
+        specifier: ^1.2.6
+        version: 1.2.6
 
 packages:
 
@@ -1511,6 +1511,9 @@ packages:
 
   '@types/yargs@17.0.33':
     resolution: {integrity: sha512-WpxBCKWPLr4xSsHgz511rFJAM+wS28w2zEO1QDNY5zM/S8ok70NNfztH0xwhqKyaK0OHCbN98LDAZuy1ctxDkA==}
+
+  '@types/yargs@17.0.34':
+    resolution: {integrity: sha512-KExbHVa92aJpw9WDQvzBaGVE2/Pz+pLZQloT2hjL8IqsZnV62rlPOYvNnLmf/L2dyllfVUOVBj64M0z/46eR2A==}
 
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
@@ -5426,8 +5429,8 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  yanki@1.2.5:
-    resolution: {integrity: sha512-tsK3D9PM0U4MvfHrEjC1XlnKGtb8XxX6fYQdc5VyANI9m57DbuGEQ9S/faJ1YTeucsbNea9mLjyKx8vk6GttZA==}
+  yanki@1.2.6:
+    resolution: {integrity: sha512-i7Yv5Vk7hwfb85q2Zbt8wm9hvV7kUEeF9lzCqNtBVahf2XDCs+Qlp62LR/5rbBhDKiS0AONtRaSw+D5qZTty+A==}
     engines: {node: ^18.15.0 || >=20.11.0}
     hasBin: true
 
@@ -7206,6 +7209,10 @@ snapshots:
   '@types/yargs-parser@21.0.3': {}
 
   '@types/yargs@17.0.33':
+    dependencies:
+      '@types/yargs-parser': 21.0.3
+
+  '@types/yargs@17.0.34':
     dependencies:
       '@types/yargs-parser': 21.0.3
 
@@ -12348,14 +12355,14 @@ snapshots:
 
   yaml@2.8.1: {}
 
-  yanki@1.2.5:
+  yanki@1.2.6:
     dependencies:
       '@types/hast': 3.0.4
       '@types/lodash-es': 4.17.12
       '@types/mdast': 4.0.4
       '@types/node': 18.19.130
       '@types/unist': 3.0.3
-      '@types/yargs': 17.0.33
+      '@types/yargs': 17.0.34
       globby: 14.1.0
       rehype-parse: 9.0.1
       yargs: 17.7.2
