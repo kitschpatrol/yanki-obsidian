@@ -478,6 +478,8 @@ Any links _to_ your flashcard notes should auto-update to reflect the change. (T
 
 There are community plugins dedicated to content-driven file naming, but this feature is built into Yanki since the renaming process can be more precise when the structure of flashcard notes is understood.
 
+Automatic renaming is **not compatible with Obsidian Sync**. If you use Obsidian Sync, please ensure this option remains "Off".
+
 _Default: Off_
 
 ##### Name mode
@@ -684,6 +686,8 @@ Yes, but if you want to preserve your learning progress in Anki then this involv
 ### Does Yanki work with Obsidian Sync?
 
 In theory, Yanki should work with the first-party [Obsidian Sync](https://obsidian.md/sync) service, and possibly with additional third-party syncing solutions. In practice, I don't use these services myself so testing has been limited. See the [namespace](#namespace) section for more information and please proceed with caution.
+
+[Issues have been reported](https://github.com/kitschpatrol/yanki-obsidian/issues/56) when Obsidian Sync is combined with the [Automatic Note Names](#automatic-note-names) feature, so it's recommended to _disable_ automatic note name management if you're using Obsidian Sync.
 
 ### If I use the [folder notes](https://github.com/LostPaul/obsidian-folder-notes) plugin, will my folder notes become Anki notes?
 

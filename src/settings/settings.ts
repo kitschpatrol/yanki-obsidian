@@ -325,7 +325,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setDesc(
 				sanitizeHTMLToDom(
 					html`Yanki can set the file name of flashcard notes to a snippet of text derived from the
-					note’s contents.`,
+						note’s contents. This feature is <strong>not compatible with Obsidian Sync</strong>.`,
 				),
 			)
 
