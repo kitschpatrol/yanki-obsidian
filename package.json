@@ -38,7 +38,7 @@
 		"yanki:use-npm": "pnpm remove yanki ; pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^5.8.0",
+		"@kitschpatrol/shared-config": "^5.8.1",
 		"@types/node": "^18.19.130",
 		"bumpp": "^10.3.1",
 		"chokidar": "^4.0.3",
