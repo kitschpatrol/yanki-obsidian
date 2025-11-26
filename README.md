@@ -9,6 +9,7 @@
 ![Yanki Obsidian Banner](./assets/banner.gif)
 
 <!-- badges {
+  npm: [],
   custom: {
     "GitHub Release": {
       image: "https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release",
