@@ -1,20 +1,32 @@
 {
-	"explorer.fileNesting.enabled": true,
-	"explorer.fileNesting.expand": false,
-	"explorer.fileNesting.patterns": {
-		"*.js": "${basename}.ts.map, ${basename}.js.map, ${basename}.d.ts, ${basename}.d.ts.map, ${basename}.d.js.map",
-		"*.ts": "${basename}.ts.map, ${basename}.d.ts, ${basename}.d.ts.map",
-		".env": ".env.*",
-		"package.json": ".*.cjs, .*.js, .*.json, .*.mjs, .*.toml, .*.ts, .*.yaml, .*.yml, .*ignore, .*rc, *config.cjs, *config.js, *config.json, *config.mjs, *config.toml, *config.ts, *config.yaml, *config.yml, lerna.json, netlify.toml, package-lock.json, , pnpm*, turbo.json, vercel.json, workspace*, wrangler.toml, yarn.lock, yarn*",
-		"readme.md": "authors*, backers*, changelog*, citation*, code_of_conduct*, contributing*, contributors*, copying*, credits*, governance*, history*, license*, maintainers*, release_notes*, security*, sponsors*"
+	"[astro]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[gitignore]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[ruby]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[shellscript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[svelte]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"cSpell.enabled": true,
 	"cSpell.workspaceRootPath": ".",
 	"editor.codeActionsOnSave": {
-		"source.fixAll": "explicit",
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.stylelint": "explicit",
+		"source.fixAll.ts": "explicit",
 		"source.organizeImports": "never"
 	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
 	"eslint.enable": true,
+	"eslint.runtime": "node",
+	"eslint.useFlatConfig": true,
 	"eslint.validate": [
 		"html",
 		"javascript",
@@ -32,15 +44,15 @@
 		"xml",
 		"yaml"
 	],
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"[gitignore]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.expand": false,
+	"explorer.fileNesting.patterns": {
+		".env": ".env.*, .template.env",
+		"*.js": "${basename}.ts.map, ${basename}.js.map, ${basename}.d.ts, ${basename}.d.ts.map, ${basename}.d.js.map",
+		"*.ts": "${basename}.ts.map, ${basename}.d.ts, ${basename}.d.ts.map",
+		"package.json": ".*.cjs, .*.cts, .*.js, .*.json, .*.json5, .*.jsonc, .*.mjs, .*.mts, .*.toml, .*.ts, .*.yaml, .*.yml, .*ignore, .*rc, *config.cjs, *config.cts, *config.js, *config.json, *config.json5, *config.jsonc, *config.mjs, *config.mts, *config.toml, *config.ts, *config.yaml, *config.yml, lerna.json, netlify.toml, package-lock.json, pnpm*, turbo.json, vercel.json, workspace*, wrangler.toml, wrangler.json, wrangler.jsonc, yarn.lock, yarn*",
+		"readme.md": "authors*, backers*, changelog*, citation*, code_of_conduct*, contributing*, contributors*, copying*, credits*, governance*, history*, license*, maintainers*, release_notes*, security*, sponsors*"
 	},
-	"[shellscript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.formatOnSave": true,
 	"prettier.documentSelectors": [
 		"**/.eslintignore",
 		"**/.node-version",
@@ -54,15 +66,5 @@
 	"stylelint.enable": true,
 	"stylelint.validate": ["css", "html", "svelte", "astro"],
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"eslint.runtime": "node",
-	"eslint.useFlatConfig": true,
-	"[astro]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[ruby]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[svelte]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
