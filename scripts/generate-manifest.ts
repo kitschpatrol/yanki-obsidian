@@ -20,6 +20,9 @@ export async function generateManifest() {
 	// be in the root of the repository, even though it's also in the release...
 	await fs.writeFile('./manifest.json', `${JSON.stringify(manifest, undefined, 2)}\n`)
 
+	// Also copy versions file
+	await fs.copyFile('./versions.json', './dist/versions.json')
+
 	console.log(`Generated Obsidian manifest.json file.`)
 }
 

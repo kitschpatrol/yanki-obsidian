@@ -6,11 +6,11 @@ import fs from 'node:fs/promises'
 import process from 'node:process'
 import { generateManifest } from './generate-manifest'
 
-// We assume our minimum specified Obsidian version 1.5.0 correlates with the
+// We assume our minimum specified Obsidian version 1.6.5 correlates with the
 // following:
-// - The closest release seems to be 1.5.3:
-//   https://github.com/obsidianmd/obsidian-releases/releases/tag/v1.5.3
-// This release is using Electron 25.8.1, Chromium 114, V8 11.4, and Node 18.15.0
+// - The closest release seems to be 1.6.5 from June 25, 2024:
+//   https://github.com/obsidianmd/obsidian-releases/releases/tag/v1.6.5
+// This release is using Electron 30.1.2, Chromium 124, V8 12.4, and Node 20.14.0
 
 const banner = `/*
 This is a generated source file!
@@ -49,8 +49,8 @@ const context = await esbuild.context({
 		'@lezer/highlight',
 		'@lezer/lr',
 
-		// Node 18 builtins
-		// https://github.com/uncenter/builtin-modules-static/blob/main/lib/v18.js
+		// Node 20 builtins
+		// https://github.com/uncenter/builtin-modules-static/blob/main/lib/v20.js
 		'assert',
 		'assert/strict',
 		'async_hooks',
@@ -72,6 +72,7 @@ const context = await esbuild.context({
 		'http2',
 		'https',
 		'inspector',
+		'inspector/promises',
 		'module',
 		'net',
 		'os',

@@ -2,5 +2,11 @@ import { knipConfig } from '@kitschpatrol/knip-config'
 
 export default knipConfig({
 	ignore: ['examples/**/*'],
-	ignoreDependencies: ['entities', 'moment', 'type-fest', 'yanki'],
+	ignoreDependencies: [
+		'@kitschpatrol/typescript-config',
+		'entities',
+		'moment',
+		'type-fest',
+		'yanki',
+	],
 })

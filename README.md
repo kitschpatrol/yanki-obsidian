@@ -71,7 +71,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 1. **Prerequisites**
 
-- The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6+ on Windows, macOS, and Linux.)
+- The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6.5+ on Windows, macOS, and Linux.)
 - The [Anki desktop application](https://apps.ankiweb.net). (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
 - The [Anki-Connect](https://ankiweb.net/shared/info/2055492159) add-on
 
@@ -531,7 +531,7 @@ Keep track of how many Obsidian notes have been synchronized to anki, how these 
 
 > [!WARNING]
 >
-> The Automatic sync option has been moved to the "Advanced settings" area as of Yanki Obsidian version 1.6.0.
+> The Automatic sync option has been moved to the "Advanced settings" area as of Yanki version 1.6.0.
 >
 > A simple slip-up in the plugin settings or when moving notes between folders can result in loss of review stats or card history in Anki.
 
