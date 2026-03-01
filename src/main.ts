@@ -633,7 +633,6 @@ export default class YankiPlugin extends Plugin {
 			await this.saveSettings()
 			await this.syncFlashcardNotesToAnki(false)
 		} else if (this.isInsideWatchedFolders(fileOrFolder)) {
-			//
 			await this.syncFlashcardNotesToAnki(false)
 		}
 	}

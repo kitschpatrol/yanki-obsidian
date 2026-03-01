@@ -154,7 +154,7 @@ An extended palette of Markdown syntax is available out of the box, mirroring (a
 - [LaTeX formatted mathematical expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) via Anki's built-in [MathJax](https://www.mathjax.org) rendering support.
 - The [`==highlights==`](https://github.com/ipikuka/remark-flexible-markers) syntax.
 - Compact [furigana](https://en.wikipedia.org/wiki/Furigana) / [Ruby](https://en.wikipedia.org/wiki/Ruby_character) syntax specified by [DenDen Markdown](https://conv.denshochan.com/markdown#ruby), for example: `{東京|とうきょう}` renders as `<ruby>東京<rp>(</rp><rt>とうきょう</rt><rp>)</rp></ruby>`. This matches support in Obsidian provided by the [Markdown Furigana](https://github.com/steven-kraft/obsidian-markdown-furigana) plugin.
-- Obsidians's [block links](https://help.obsidian.md/links#Link+to+a+block+in+a+note), e.g. `[[Some Note#^37066d]]`
+- Obsidian's [block links](https://help.obsidian.md/links#Link+to+a+block+in+a+note), e.g. `[[Some Note#^37066d]]`
 - Obsidian's [heading links](https://help.obsidian.md/links#Link+to+a+heading+in+a+note), e.g. `[[Some Note#Heading]]`
 
 ### Intelligent syncing
@@ -445,7 +445,7 @@ Options:
   Only sync assets from your vault's attachments directory or other local paths. This includes any assets linked with the `file:` protocol, and any `paths/to/local/assets.png` outside your Obsidian vault.
 
 - **Remote only**
-  Only sync assets that are "hot-linked" via a remote URL. This includes any assets linked with the `http:` or `https:` protocols. other local path.
+  Only sync assets that are "hot-linked" via a remote URL. This includes any assets linked with the `http:` or `https:` protocols.
 
   _Note that syncing remote media assets can slow down the sync process, since each asset has to be downloaded. If you usually have access to the web where / when you're using Anki, syncing remote assets is probably not worth it._
 
