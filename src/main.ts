@@ -623,8 +623,8 @@ export default class YankiPlugin extends Plugin {
 		const watchedFolders = this.getSanitizedFolders()
 		if (watchedFolders.includes(oldPath)) {
 			const updatedFolders = watchedFolders.map((folder) => {
-				if (folder.startsWith(oldPath)) {
-					return fileOrFolder.path + folder.slice(oldPath.length)
+				if (folder === oldPath || folder.startsWith(oldPath + '/')) {
+					return path.join(fileOrFolder.path, folder.slice(oldPath.length))
 				}
 
 				return folder
