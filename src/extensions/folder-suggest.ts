@@ -4,8 +4,8 @@ import type { App, TAbstractFile } from 'obsidian'
 import { AbstractInputSuggest, TFolder } from 'obsidian'
 
 export class FolderSuggest extends AbstractInputSuggest<TFolder> {
-	inputElement: HTMLInputElement
 	app: App
+	inputElement: HTMLInputElement
 
 	constructor(inputElement: HTMLInputElement, app: App) {
 		super(app, inputElement)

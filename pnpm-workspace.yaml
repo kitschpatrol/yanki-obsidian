@@ -5,6 +5,8 @@ onlyBuiltDependencies:
   - oxc-resolver
   - puppeteer
   - unrs-resolver
+overrides:
+  mermaid: ^11.12.3
 publicHoistPattern:
   - '@kitschpatrol/repo-config'
   - '@kitschpatrol/typescript-config'

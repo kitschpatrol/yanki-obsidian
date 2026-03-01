@@ -49,7 +49,10 @@ export type YankiPluginSettings = {
 	verboseNotices: boolean
 }
 
-// TODO bind instead?
+/**
+ * Default plugin settings
+ * TODO bind instead?
+ */
 export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 	return {
 		ankiConnect: {
@@ -102,8 +105,8 @@ export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 }
 
 export class YankiPluginSettingTab extends PluginSettingTab {
-	private initialSettings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	plugin: YankiPlugin
+	private initialSettings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 
 	constructor(app: App, plugin: YankiPlugin) {
 		super(app, plugin)
@@ -138,9 +141,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		const focusCatcher = this.containerEl.createEl('input', { type: 'text' })
 		focusCatcher.setAttribute('style', 'display: none;')
 
-		// ----------------------------------------------------
-
-		// Folders
+		// ── Folders ────────────────────────────────────────────
 
 		new Setting(this.containerEl)
 			.setName('Anki flashcard folders')
@@ -241,9 +242,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				})
 			})
 
-		// ----------------------------------------------------
-
-		// Sync
+		// ── Sync ──────────────────────────────────────────────
 
 		new Setting(this.containerEl)
 			.setName('Sync')
@@ -315,9 +314,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setDesc(sanitizeHTMLToDom(html`Last synced: <em>${capitalize(syncTime)}</em>`))
 			.setClass('description-is-button-annotation')
 
-		// ----------------------------------------------------
-
-		// Note filename management
+		// ── Note filename management ──────────────────────────
 
 		new Setting(this.containerEl)
 			.setName('Automatic note names')
@@ -394,9 +391,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 		})
 
-		// ----------------------------------------------------
-
-		// Anki-Connect
+		// ── Anki-Connect ─────────────────────────────────────
 
 		const ankiConnectSetting = new Setting(this.containerEl).setName('Anki-Connect').setHeading()
 
@@ -491,7 +486,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 		})
 
-		// ----------------------------------------------------
+		// ── Advanced ─────────────────────────────────────────
 
 		new Setting(this.containerEl)
 			.setName('Advanced')

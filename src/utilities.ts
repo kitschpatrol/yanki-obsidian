@@ -6,6 +6,9 @@ export type CommonProperties<T, U> = {
 	[K in keyof T & keyof U]: T[K] extends U[K] ? T[K] : never
 }
 
+/**
+ * Formats a file rename result into a user-facing notification.
+ */
 export function formatRenameResult(renameReport: RenameFilesResult): DocumentFragment {
 	const { notes } = renameReport
 
@@ -25,6 +28,9 @@ export function formatRenameResult(renameReport: RenameFilesResult): DocumentFra
 	)
 }
 
+/**
+ * Formats a sync result into a user-facing notification with action counts.
+ */
 export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment {
 	const { synced } = syncReport
 
@@ -76,6 +82,9 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	return sanitizeHTMLToDom(reportLines.join(html`<br />`))
 }
 
+/**
+ * Shallow-compares two objects by their enumerable keys and values.
+ */
 export function objectsEqual<T extends Record<string, unknown> | undefined>(a: T, b: T): boolean {
 	if (a === b) return true
 	if (a === undefined || b === undefined) return false
@@ -92,6 +101,9 @@ export function objectsEqual<T extends Record<string, unknown> | undefined>(a: T
 	return true
 }
 
+/**
+ * Shallow-compares two arrays by index.
+ */
 export function arraysEqual<T extends undefined | unknown[]>(a: T, b: T): boolean {
 	if (a === b) return true
 	if (a === undefined || b === undefined) return false
@@ -104,15 +116,24 @@ export function arraysEqual<T extends undefined | unknown[]>(a: T, b: T): boolea
 	return true
 }
 
+/**
+ * Capitalizes the first character of a string.
+ */
 export function capitalize(text: string): string {
 	return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
+/**
+ * Checks whether a namespace string is valid and already sanitized.
+ */
 export function validateNamespace(namespace: string): boolean {
 	const sanitizedNamespace = sanitizeNamespace(namespace)
 	return sanitizedNamespace.length > 0 && namespace === sanitizedNamespace
 }
 
+/**
+ * Strips invalid characters (`*`, `:`) from a namespace string.
+ */
 export function sanitizeNamespace(namespace: string): string {
 	// Additional sanitization also happens inside Yanki
 	// Stuck with es2020?
@@ -150,8 +171,8 @@ export function html(strings: TemplateStringsArray, ...values: unknown[]): strin
 
 /**
  * Alternate HTML templating function.
- @todo test why this is breaking notice formatting
- @public
+ * @todo test why this is breaking notice formatting
+ * @public
  */
 export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): string {
 	return trimLeadingIndentation(strings, ...values)

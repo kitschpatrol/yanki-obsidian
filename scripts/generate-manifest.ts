@@ -2,6 +2,9 @@ import type { PluginManifest } from 'obsidian'
 import fs from 'node:fs/promises'
 import packageJson from '../package.json'
 
+/**
+ * Merges data from package.json into an Obsidian plugin manifest.json file
+ */
 export async function generateManifest() {
 	const inferredManifest = {
 		author: packageJson.author.name,
@@ -25,5 +28,3 @@ export async function generateManifest() {
 
 	console.log(`Generated Obsidian manifest.json file.`)
 }
-
-// await generateManifest()

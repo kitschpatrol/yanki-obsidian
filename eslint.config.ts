@@ -9,29 +9,16 @@ export default eslintConfig(
 		},
 		ignores: ['examples/Yanki Demo Vault/*'],
 		json: {
+			// We're not actually publishing an NPM package...
 			overrides: {
+				'json-package/require-files': 'off',
+				'json-package/require-sideEffects': 'off',
 				'json-package/valid-package-definition': 'off',
 			},
 		},
 		ts: {
 			overrides: {
-				'import/no-named-as-default-member': 'off',
-				'jsdoc/require-jsdoc': 'off',
 				'no-new': 'off',
-				'node/no-unpublished-import': 'off',
-				'perfectionist/sort-classes': 'off',
-				'ts/member-ordering': 'off',
-				// TODO move this to shared-config
-				'ts/naming-convention': [
-					'error',
-					{
-						format: ['UPPER_CASE'],
-						modifiers: ['const', 'exported'],
-						selector: 'variable',
-						// Not objects...
-						types: ['boolean', 'string', 'number', 'array'],
-					},
-				],
 			},
 		},
 	},

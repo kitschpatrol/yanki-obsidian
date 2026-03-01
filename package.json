@@ -38,7 +38,7 @@
 		"yanki:use-npm": "pnpm remove yanki ; pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^5.13.0",
+		"@kitschpatrol/shared-config": "^6.0.2",
 		"@types/node": "~20.11.30",
 		"bumpp": "^10.4.1",
 		"chokidar": "^5.0.0",
@@ -57,18 +57,16 @@
 		"tsx": "^4.21.0",
 		"type-fest": "^5.4.4",
 		"typescript": "~5.9.3",
-		"yanki": "^2.0.0"
+		"yanki": "^2.0.3"
 	},
-	"packageManager": "pnpm@10.30.0",
+	"packageManager": "pnpm@10.30.3",
 	"engines": {
 		"node": ">=20.11.0"
 	},
 	"devEngines": {
-		"node": ">=20.19"
-	},
-	"pnpm": {
-		"overrides": {
-			"mermaid": "^11.12.3"
+		"runtime": {
+			"name": "node",
+			"version": ">=20.19.0"
 		}
 	},
 	"obsidian": {
