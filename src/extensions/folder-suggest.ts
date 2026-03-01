@@ -19,7 +19,7 @@ export class FolderSuggest extends AbstractInputSuggest<TFolder> {
 
 		// eslint-disable-next-line unicorn/no-array-reduce
 		const folders: TFolder[] = abstractFiles.reduce<TFolder[]>((acc, folder: TAbstractFile) => {
-			if (folder instanceof TFolder && folder.path.toLowerCase().contains(lowerCaseInputString)) {
+			if (folder instanceof TFolder && folder.path.toLowerCase().includes(lowerCaseInputString)) {
 				acc.push(folder)
 			}
 
