@@ -10,7 +10,8 @@
 		"flashcards",
 		"markdown",
 		"spaced-repetition",
-		"sync"
+		"sync",
+		"pkm"
 	],
 	"homepage": "https://github.com/kitschpatrol/yanki-obsidian",
 	"bugs": "https://github.com/kitschpatrol/yanki-obsidian/issues",

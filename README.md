@@ -335,11 +335,13 @@ The Yanki plugin provides a single command, which works as advertised:
 
 Yanki will sync notes in the vault folders specified here to Anki.
 
-Folder syncing is always recursive.
-
 Anki decks will be created automatically to match the hierarchy of your Obsidian folders.
 
 Selecting multiple folders from different parts of your vault is fine, they'll just end up in different Anki decks.
+
+Folder syncing is always recursive: You can add a top-level folder to the watched folder list, and all sub-folders will be synced as well under eponymous deck names.
+
+In addition to adding / removing entries from settings, you can also add or remove folders from the watched folder list via /context menus in the Obsidian File explorer side bar. (The "Add to Yanki" and "Remove from Yanki" entries.)
 
 The way that folders and flashcard notes are mapped to Anki decks is somewhat nuanced to accommodate the case of syncing the root folder of a vault.
 

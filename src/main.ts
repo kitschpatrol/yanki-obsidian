@@ -63,8 +63,7 @@ export default class YankiPlugin extends Plugin {
 					sanitizeHtmlToDomWithFunction(
 						html`<strong>Anki sync failed:</strong><br />No flashcard folders to sync. You can
 							specify flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
-						'settings',
-						this.openSettingsTab,
+						{ settings: this.openSettingsTab },
 					),
 				)
 			}
@@ -81,8 +80,7 @@ export default class YankiPlugin extends Plugin {
 					sanitizeHtmlToDomWithFunction(
 						html`<strong>Anki sync failed:</strong><br />No flashcard notes found. Check your
 							flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
-						'settings',
-						this.openSettingsTab,
+						{ settings: this.openSettingsTab },
 					),
 				)
 			}
@@ -134,8 +132,7 @@ export default class YankiPlugin extends Plugin {
 					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again.
 					If trouble persists, please
 					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
-				'settings',
-				this.openSettingsTab,
+				{ settings: this.openSettingsTab },
 			)
 			new Notice(fragment, 15_000)
 		}
@@ -161,8 +158,7 @@ export default class YankiPlugin extends Plugin {
 					sanitizeHtmlToDomWithFunction(
 						html`<strong>Anki note file rename:</strong><br />No flashcard notes found to rename.
 							Check your flashcard folders in Yanki's <a class="settings">settings tab</a>.`,
-						'settings',
-						this.openSettingsTab,
+						{ settings: this.openSettingsTab },
 					),
 				)
 			}
@@ -418,6 +414,80 @@ export default class YankiPlugin extends Plugin {
 
 		// Only look at folders, which can affect deck names
 		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
+
+		// Add context menu item to file browser to add/remove folders as Anki card sources
+		this.registerEvent(
+			this.app.workspace.on('file-menu', (menu, file) => {
+				if (!(file instanceof TFolder)) {
+					return
+				}
+
+				const sanitizedFolders = this.getSanitizedFolders()
+				const isWatched = sanitizedFolders.includes(normalizePath(file.path))
+
+				if (isWatched) {
+					menu.addItem((item) => {
+						item
+							.setTitle('Remove from Yanki')
+							.setIcon('trash')
+							.onClick(async () => {
+								this.settings.folders = sanitizedFolders.filter(
+									(folder) => folder !== normalizePath(file.path),
+								)
+								await this.saveSettings()
+								this.settingsTab.render()
+								new Notice(
+									sanitizeHtmlToDomWithFunction(
+										html`<strong
+												>Removed "${file.path}" from Anki flashcard <a class="settings">folders</a>.
+											</strong>
+											${this.settings.sync.autoSyncEnabled
+												? ''
+												: '<br /><br />Run the <a class="sync">Yanki Sync</a> command to remove the folder’s notes from Anki.</a>'}`,
+										{
+											settings: this.openSettingsTab,
+											sync: () => {
+												void this.syncFlashcardNotesToAnki(true)
+											},
+										},
+									),
+									8000,
+								)
+								void this.syncFlashcardNotesToAnki(false)
+							})
+					})
+				} else {
+					menu.addItem((item) => {
+						item
+							.setTitle('Add to Yanki')
+							.setIcon('plus')
+							.onClick(async () => {
+								this.settings.folders.push(normalizePath(file.path))
+								await this.saveSettings()
+								this.settingsTab.render()
+								new Notice(
+									sanitizeHtmlToDomWithFunction(
+										html`<strong
+												>Added "${file.path}" to Anki flashcard <a class="settings">folders</a>.
+											</strong>
+											${this.settings.sync.autoSyncEnabled
+												? ''
+												: '<br /><br />Run the <a class="sync">Yanki Sync</a> command to sync the folder’s notes to Anki.</a>'}`,
+										{
+											settings: this.openSettingsTab,
+											sync: () => {
+												void this.syncFlashcardNotesToAnki(true)
+											},
+										},
+									),
+									8000,
+								)
+								void this.syncFlashcardNotesToAnki(false)
+							})
+					})
+				}
+			}),
+		)
 	}
 
 	// Nothing to do on unload

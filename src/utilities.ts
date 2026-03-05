@@ -146,12 +146,13 @@ export function sanitizeNamespace(namespace: string): string {
  */
 export function sanitizeHtmlToDomWithFunction(
 	html: string,
-	targetClass: string,
-	callback: () => void,
+	classActions: Record<string, () => void>,
 ) {
 	const fragment = sanitizeHTMLToDom(html)
-	const functionElement = fragment.querySelector(`.${targetClass}`)
-	functionElement?.addEventListener('click', callback)
+	for (const [targetClass, callback] of Object.entries(classActions)) {
+		const functionElement = fragment.querySelector(`.${targetClass}`)
+		functionElement?.addEventListener('click', callback)
+	}
 	return fragment
 }
 
