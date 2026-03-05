@@ -195,6 +195,8 @@ The rules were designed with Markdown's semantic precedents and visual nature in
 
 The most minimal examples to "trigger" different note types are shown below, but the implementation can handle additional weirdness and will generally do the right thing if it encounters elements that might indicate conflicting note types.
 
+There's no such thing as an invalid note: In the absence of enough Markdown syntax to differentiate your intended note type, Yanki will resort to creating a Basic note with all content on the front, and nothing on the back. This preserves the guarantee that all notes in selected flashcard folders will be synced to Anki one way or another.
+
 You're free to use additional Markdown in your notes to style and structure the front and back of your flashcard notes.
 
 The four supported note types are described below. See the [Yanki Demo Vault](https://github.com/kitschpatrol/yanki-obsidian/blob/main/examples/Yanki%20Demo%20Vault) for additional examples.
