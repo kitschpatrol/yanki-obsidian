@@ -1,6 +1,6 @@
 import type { PluginManifest } from 'obsidian'
 import fs from 'node:fs/promises'
-import packageJson from '../package.json'
+import packageJson from '../package.json' with { type: 'json' }
 
 /**
  * Merges data from package.json into an Obsidian plugin manifest.json file

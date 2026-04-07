@@ -19,10 +19,12 @@ https://github.com/kitschpatrol/yanki-obsidian
 */
 `
 
+const NODE_MODULE_PREFIX = /^node:.+$/
+
 const ignoreNodeModulesPlugin: Plugin = {
 	name: 'ignore-node-modules',
 	setup(build) {
-		build.onResolve({ filter: /^node:.+$/ }, (args) => ({ external: true, path: args.path }))
+		build.onResolve({ filter: NODE_MODULE_PREFIX }, (args) => ({ external: true, path: args.path }))
 	},
 }
 

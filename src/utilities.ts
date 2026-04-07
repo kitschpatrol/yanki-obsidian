@@ -179,17 +179,21 @@ export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): st
 	return trimLeadingIndentation(strings, ...values)
 }
 
+// eslint-disable-next-line regexp/no-unused-capturing-group
+const LEADING_SPACE_REGEX = /^(\s+)/
+const NEW_LINE_REGEX = /\r?\n/
+
 function trimLeadingIndentation(strings: TemplateStringsArray, ...values: unknown[]): string {
 	const lines = strings
 		// eslint-disable-next-line ts/no-base-to-string, unicorn/no-array-reduce
 		.reduce((result, text, i) => `${result}${text}${String(values[i] ?? '')}`, '')
-		.split(/\r?\n/)
+		.split(NEW_LINE_REGEX)
 		.filter((line) => line.trim() !== '')
 
 	// Get leading white space of first line, and trim that much white space
 	// from subsequent lines
-	// eslint-disable-next-line regexp/no-unused-capturing-group
-	const leadingSpace = /^(\s+)/.exec(lines[0])?.[0] ?? ''
+
+	const leadingSpace = LEADING_SPACE_REGEX.exec(lines[0])?.[0] ?? ''
 	const leadingSpaceRegex = new RegExp(`^${leadingSpace}`)
 	return lines.map((line) => line.replace(leadingSpaceRegex, '').trimEnd()).join('\n')
 }
