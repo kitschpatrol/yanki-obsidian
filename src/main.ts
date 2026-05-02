@@ -506,7 +506,8 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	/**
-	 * Certain settings changes should trigger a sync to Anki, (but only fires if auto sync is enabled).
+	 * Certain settings changes should trigger a sync to Anki, (but only fires if
+	 * auto sync is enabled).
 	 */
 	public async settingsChangeSyncCheck(previousSettings: YankiPluginSettings) {
 		// This could be more concise...
@@ -573,8 +574,11 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	/**
-	 * Translates YankiPluginSettings into a shared options object for use in Yanki library functions
-	 * @returns Options object with fields common to both RenameFilesOptions and SyncFilesOptions
+	 * Translates YankiPluginSettings into a shared options object for use in
+	 * Yanki library functions
+	 *
+	 * @returns Options object with fields common to both RenameFilesOptions and
+	 *   SyncFilesOptions
 	 */
 	private getSharedOptions(
 		settings: YankiPluginSettings,
@@ -681,6 +685,7 @@ export default class YankiPlugin extends Plugin {
 			if (this.settings.manageFilenames.autoRenameTrigger === 'file-changed') {
 				await this.updateNoteFilenames(false)
 			}
+
 			await this.syncFlashcardNotesToAnki(false)
 		}
 	}

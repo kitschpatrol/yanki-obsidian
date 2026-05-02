@@ -1,4 +1,4 @@
-<!-- title ({titleCase: true, postfix: " Plugin"}) -->
+<!-- title({titleCase: true, postfix: " Plugin"}) -->
 
 # Yanki Obsidian Plugin
 
@@ -6,7 +6,7 @@
 
 ![Yanki Obsidian Banner](./assets/banner.gif)
 
-<!-- badges ({
+<!-- badges({
   npm: [],
   custom: {
     "GitHub Release": {
@@ -20,7 +20,7 @@
   }
 }) -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
 [![CI](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
 [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
@@ -33,7 +33,7 @@
 
 <!-- /short-description -->
 
-<!-- toc ({ depth: 2 }) -->
+<!-- toc({ depth: 2 }) -->
 
 ## Table of contents
 
@@ -821,7 +821,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ## Maintainers
 
-[@kitschpatrol](https://github.com/kitschpatrol)
+[kitschpatrol](https://github.com/kitschpatrol)
 
 ## Acknowledgments
 
@@ -833,12 +833,16 @@ Obsidian plugins by [Daniel Rodríguez Rivero](https://github.com/danielo515) an
 
 ## Contributing
 
-[Issues](https://github.com/kitschpatrol/yanki-obsidian/issues) and pull requests are welcome.
+[Issues](https://github.com/kitschpatrol/yanki-obsidian/issues) are welcome and appreciated.
 
 Please open _one_ issue per feature request or bug report so they can be tracked and resolved individually.
 
 If you're reporting a bug, please provide an Obsidian Vault folder with the minimal set of notes that can reproduce the problem. This can be zipped and attached to the GitHub issue created for the bug.
 
+<!-- license -->
+
 ## License
 
-[MIT](LICENSE) © Eric Mika
+[MIT](LICENSE) © [Eric Mika](https://ericmika.com)
+
+<!-- /license -->

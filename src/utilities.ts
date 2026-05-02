@@ -86,16 +86,25 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
  * Shallow-compares two objects by their enumerable keys and values.
  */
 export function objectsEqual<T extends Record<string, unknown> | undefined>(a: T, b: T): boolean {
-	if (a === b) return true
-	if (a === undefined || b === undefined) return false
+	if (a === b) {
+		return true
+	}
+
+	if (a === undefined || b === undefined) {
+		return false
+	}
 
 	const aKeys = Object.keys(a)
 	const bKeys = Object.keys(b)
 
-	if (aKeys.length !== bKeys.length) return false
+	if (aKeys.length !== bKeys.length) {
+		return false
+	}
 
 	for (const key of aKeys) {
-		if (a[key] !== b[key]) return false
+		if (a[key] !== b[key]) {
+			return false
+		}
 	}
 
 	return true
@@ -105,12 +114,22 @@ export function objectsEqual<T extends Record<string, unknown> | undefined>(a: T
  * Shallow-compares two arrays by index.
  */
 export function arraysEqual<T extends undefined | unknown[]>(a: T, b: T): boolean {
-	if (a === b) return true
-	if (a === undefined || b === undefined) return false
-	if (a.length !== b.length) return false
+	if (a === b) {
+		return true
+	}
+
+	if (a === undefined || b === undefined) {
+		return false
+	}
+
+	if (a.length !== b.length) {
+		return false
+	}
 
 	for (const [i, element] of a.entries()) {
-		if (element !== b[i]) return false
+		if (element !== b[i]) {
+			return false
+		}
 	}
 
 	return true
@@ -153,11 +172,14 @@ export function sanitizeHtmlToDomWithFunction(
 		const functionElement = fragment.querySelector(`.${targetClass}`)
 		functionElement?.addEventListener('click', callback)
 	}
+
 	return fragment
 }
 
 /**
- * Mainly for nice formatting with prettier. But the line wrapping means we have to strip surplus whitespace.
+ * Mainly for nice formatting with prettier. But the line wrapping means we have
+ * to strip surplus whitespace.
+ *
  * @public
  */
 export function html(strings: TemplateStringsArray, ...values: unknown[]): string {
@@ -172,8 +194,9 @@ export function html(strings: TemplateStringsArray, ...values: unknown[]): strin
 
 /**
  * Alternate HTML templating function.
- * @todo test why this is breaking notice formatting
+ *
  * @public
+ * @todo Test why this is breaking notice formatting
  */
 export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): string {
 	return trimLeadingIndentation(strings, ...values)

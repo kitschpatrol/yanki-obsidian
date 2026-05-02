@@ -50,8 +50,7 @@ export type YankiPluginSettings = {
 }
 
 /**
- * Default plugin settings
- * TODO bind instead?
+ * Default plugin settings TODO bind instead?
  */
 export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 	return {
