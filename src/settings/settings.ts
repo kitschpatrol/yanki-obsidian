@@ -137,8 +137,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		// Fake input to catch the automatic first-input focus that was popping the search input.
 		// Focus is still just a tab away.
-		const focusCatcher = this.containerEl.createEl('input', { type: 'text' })
-		focusCatcher.setAttribute('style', 'display: none;')
+		this.containerEl.createEl('input', { cls: 'focus-catcher', type: 'text' })
 
 		// ── Folders ────────────────────────────────────────────
 

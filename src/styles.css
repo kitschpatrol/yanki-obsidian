@@ -1,4 +1,8 @@
 div.yanki-settings {
+	input.focus-catcher {
+		display: none;
+	}
+
 	div.search-input-container {
 		width: 100%;
 	}
