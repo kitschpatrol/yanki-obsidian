@@ -32,7 +32,7 @@ export default eslintConfig(
 		},
 	},
 	{
-		files: ['README.md', 'examples/**/*.md'],
+		files: ['CONTRIBUTING.md', 'README.md', 'examples/**/*.md'],
 		rules: {
 			'unicorn/filename-case': 'off',
 		},
