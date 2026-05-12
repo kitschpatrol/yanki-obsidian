@@ -6,6 +6,7 @@ onlyBuiltDependencies:
   - puppeteer
   - unrs-resolver
 overrides:
+  '@expo/plist@0.0.18>@xmldom/xmldom': 0.8.13
   mermaid: ^11.15.0
 publicHoistPattern:
   - '@kitschpatrol/repo-config'
