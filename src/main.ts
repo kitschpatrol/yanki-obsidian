@@ -404,17 +404,33 @@ export default class YankiPlugin extends Plugin {
 		this.app.workspace.onLayoutReady(async () => {
 			// Sync at startup if auto-sync is enabled...
 			await this.syncFlashcardNotesToAnki(false)
-			this.registerEvent(this.app.vault.on('create', this.handleCreate.bind(this)))
+			this.registerEvent(
+				this.app.vault.on('create', (file) => {
+					void this.handleCreate(file)
+				}),
+			)
 		})
 
 		// Create is also called when the vault is first loaded for each existing file
-		this.registerEvent(this.app.vault.on('delete', this.handleDelete.bind(this)))
+		this.registerEvent(
+			this.app.vault.on('delete', (file) => {
+				void this.handleDelete(file)
+			}),
+		)
 
 		// Still necessary in case notes are dragged in or automatic file names are stale
-		this.registerEvent(this.app.vault.on('modify', this.handleModify.bind(this)))
+		this.registerEvent(
+			this.app.vault.on('modify', (file) => {
+				void this.handleModify(file)
+			}),
+		)
 
 		// Only look at folders, which can affect deck names
-		this.registerEvent(this.app.vault.on('rename', this.handleRename.bind(this)))
+		this.registerEvent(
+			this.app.vault.on('rename', (file, oldPath) => {
+				void this.handleRename(file, oldPath)
+			}),
+		)
 
 		// Add context menu item to file browser to add/remove folders as Anki card sources
 		this.registerEvent(

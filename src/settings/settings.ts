@@ -119,10 +119,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		this.render()
 	}
 
-	async hide(): Promise<void> {
+	hide(): void {
 		// Normalize folders
 		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
-		await this.plugin.settingsChangeSyncCheck(this.initialSettings)
+		void this.plugin.settingsChangeSyncCheck(this.initialSettings)
 	}
 
 	public render(): void {
@@ -172,12 +172,14 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 							this.plugin.settings.folders[index] = value
 						})
 
-					callback.inputEl.addEventListener('blur', async () => {
-						await this.plugin.saveSettings()
+					callback.inputEl.addEventListener('blur', () => {
+						void (async () => {
+							await this.plugin.saveSettings()
 
-						// Kludge for label re-rendering without a focus-stealing full
-						// re-render
-						updateAddFolderButton()
+							// Kludge for label re-rendering without a focus-stealing full
+							// re-render
+							updateAddFolderButton()
+						})()
 					})
 				})
 				.setClass('folder-setting')
@@ -376,8 +378,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 				this.plugin.settings.manageFilenames.maxLength = Number(value)
 			})
 
-			text.inputEl.addEventListener('blur', async () => {
-				await this.plugin.saveSettings()
+			text.inputEl.addEventListener('blur', () => {
+				void this.plugin.saveSettings()
 			})
 		})
 
@@ -430,8 +432,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					}
 				})
 
-				text.inputEl.addEventListener('blur', async () => {
-					await this.plugin.saveSettings()
+				text.inputEl.addEventListener('blur', () => {
+					void this.plugin.saveSettings()
 				})
 			})
 
@@ -446,8 +448,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					this.plugin.settings.ankiConnect.key = value.trim().length > 0 ? value.trim() : undefined
 				})
 
-				text.inputEl.addEventListener('blur', async () => {
-					await this.plugin.saveSettings()
+				text.inputEl.addEventListener('blur', () => {
+					void this.plugin.saveSettings()
 				})
 			})
 
@@ -613,8 +615,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						}
 					})
 
-					text.inputEl.addEventListener('blur', async () => {
-						await this.plugin.saveSettings()
+					text.inputEl.addEventListener('blur', () => {
+						void this.plugin.saveSettings()
 					})
 				})
 
