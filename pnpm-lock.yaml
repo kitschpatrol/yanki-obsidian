@@ -11,9 +11,30 @@ importers:
 
   .:
     devDependencies:
+      '@kitschpatrol/cspell-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/node@20.11.30)(typescript@5.9.3)
+      '@kitschpatrol/eslint-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/estree@1.0.9)(@types/node@20.11.30)(@typescript-eslint/utils@8.59.3(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3))(jiti@2.7.0)(svelte@5.55.5(@typescript-eslint/types@8.59.3))(typescript@5.9.3)
+      '@kitschpatrol/knip-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@types/node@20.11.30)(typescript@5.9.3)
+      '@kitschpatrol/mdat-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/node@20.11.30)(electron@42.0.1)(typescript@5.9.3)
+      '@kitschpatrol/prettier-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/node@20.11.30)(svelte@5.55.5(@typescript-eslint/types@8.59.3))(typescript@5.9.3)
+      '@kitschpatrol/remark-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/node@20.11.30)(@types/unist@3.0.3)(mdast-util-from-markdown@2.0.3)(mdast-util-mdx@3.0.0)(micromark-util-types@2.0.2)(remark-parse@11.0.0)(typescript@5.9.3)
       '@kitschpatrol/shared-config':
         specifier: ^7.5.3
         version: 7.5.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@pnpm/logger@1001.0.1)(@types/estree@1.0.9)(@types/node@20.11.30)(@types/unist@3.0.3)(@typescript-eslint/utils@8.59.3(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3))(electron@42.0.1)(jiti@2.7.0)(mdast-util-from-markdown@2.0.3)(mdast-util-mdx@3.0.0)(micromark-util-types@2.0.2)(postcss-html@1.8.1)(remark-parse@11.0.0)(stylelint-order@8.1.1(stylelint@17.11.0(typescript@5.9.3)))(svelte@5.55.5(@typescript-eslint/types@8.59.3))(typescript@5.9.3)
+      '@kitschpatrol/stylelint-config':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/node@20.11.30)(postcss-html@1.8.1)(stylelint-order@8.1.1(stylelint@17.11.0(typescript@5.9.3)))(typescript@5.9.3)
       '@types/node':
         specifier: ~20.11.30
         version: 20.11.30

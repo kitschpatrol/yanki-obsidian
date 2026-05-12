@@ -39,7 +39,14 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
+		"@kitschpatrol/cspell-config": "^7.5.3",
+		"@kitschpatrol/eslint-config": "^7.5.3",
+		"@kitschpatrol/knip-config": "^7.5.3",
+		"@kitschpatrol/mdat-config": "^7.5.3",
+		"@kitschpatrol/prettier-config": "^7.5.3",
+		"@kitschpatrol/remark-config": "^7.5.3",
 		"@kitschpatrol/shared-config": "^7.5.3",
+		"@kitschpatrol/stylelint-config": "^7.5.3",
 		"@types/node": "~20.11.30",
 		"bumpp": "^11.1.0",
 		"chokidar": "^5.0.0",
