@@ -35,7 +35,6 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	const { synced } = syncReport
 
 	// Aggregate the counts of each action:
-	// eslint-disable-next-line unicorn/no-array-reduce
 	const actionCounts = synced.reduce<Record<string, number>>((acc, note) => {
 		acc[note.action] = (acc[note.action] || 0) + 1
 		return acc
@@ -156,7 +155,6 @@ export function validateNamespace(namespace: string): boolean {
 export function sanitizeNamespace(namespace: string): string {
 	// Additional sanitization also happens inside Yanki
 	// Stuck with es2020?
-	// eslint-disable-next-line unicorn/prefer-string-replace-all
 	return namespace.replace(/[*:]/g, '').trim()
 }
 
@@ -183,9 +181,8 @@ export function sanitizeHtmlToDomWithFunction(
  * @public
  */
 export function html(strings: TemplateStringsArray, ...values: unknown[]): string {
-	// eslint-disable-next-line unicorn/no-array-reduce
 	const conjoined = strings.reduce(
-		// eslint-disable-next-line ts/no-base-to-string
+		// eslint-disable-next-line ts/no-base-to-string -- interpolated values may be of any type; explicit String() coercion is intentional
 		(result, text, i) => `${result}${text}${String(values[i] ?? '')}`,
 		'',
 	)
@@ -202,13 +199,13 @@ export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): st
 	return trimLeadingIndentation(strings, ...values)
 }
 
-// eslint-disable-next-line regexp/no-unused-capturing-group
+// eslint-disable-next-line regexp/no-unused-capturing-group -- group is kept for readability; full match is consumed via `[0]`
 const LEADING_SPACE_REGEX = /^(\s+)/
 const NEW_LINE_REGEX = /\r?\n/
 
 function trimLeadingIndentation(strings: TemplateStringsArray, ...values: unknown[]): string {
 	const lines = strings
-		// eslint-disable-next-line ts/no-base-to-string, unicorn/no-array-reduce
+		// eslint-disable-next-line ts/no-base-to-string -- interpolated values may be of any type; explicit String() coercion is intentional
 		.reduce((result, text, i) => `${result}${text}${String(values[i] ?? '')}`, '')
 		.split(NEW_LINE_REGEX)
 		.filter((line) => line.trim() !== '')

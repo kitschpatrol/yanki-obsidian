@@ -286,12 +286,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						all: 'All',
 						local: 'Local only',
 						remote: 'Remote only',
-						// eslint-disable-next-line perfectionist/sort-objects
+						// eslint-disable-next-line perfectionist/sort-objects -- "None" is intentionally last in the dropdown order
 						none: 'None',
 					})
 					.setValue(this.plugin.settings.sync.mediaMode)
 					.onChange(async (value) => {
-						// eslint-disable-next-line ts/no-unsafe-type-assertion
+						// eslint-disable-next-line ts/no-unsafe-type-assertion -- value is constrained to the dropdown's registered options
 						this.plugin.settings.sync.mediaMode = value as YankiPluginSettings['sync']['mediaMode']
 						await this.plugin.saveSettings()
 					})
@@ -331,16 +331,16 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.addDropdown((dropdown) => {
 				dropdown
 					.addOptions({
-						/* eslint-disable perfectionist/sort-objects */
+						/* eslint-disable perfectionist/sort-objects -- options are ordered from least to most aggressive auto-rename behavior */
 						off: 'Off',
 						'before-sync': 'On Sync',
 						'file-changed': 'On Change',
-						/* eslint-enable perfectionist/sort-objects */
+						/* eslint-enable perfectionist/sort-objects -- restore default sorting for surrounding object literals */
 					})
 					.setValue(this.plugin.settings.manageFilenames.autoRenameTrigger)
 					.onChange(async (value) => {
 						this.plugin.settings.manageFilenames.autoRenameTrigger =
-							// eslint-disable-next-line ts/no-unsafe-type-assertion
+							// eslint-disable-next-line ts/no-unsafe-type-assertion -- value is constrained to the dropdown's registered options
 							value as YankiPluginSettings['manageFilenames']['autoRenameTrigger']
 						await this.plugin.saveSettings()
 						this.render()
@@ -364,7 +364,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.manageFilenames.mode)
 					.onChange(async (value) => {
 						this.plugin.settings.manageFilenames.mode =
-							// eslint-disable-next-line ts/no-unsafe-type-assertion
+							// eslint-disable-next-line ts/no-unsafe-type-assertion -- value is constrained to the dropdown's registered options
 							value as YankiPluginSettings['manageFilenames']['mode']
 						await this.plugin.saveSettings()
 					})

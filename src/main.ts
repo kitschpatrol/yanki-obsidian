@@ -1,4 +1,4 @@
-/* eslint-disable ts/unbound-method */
+/* eslint-disable ts/unbound-method -- adapter and helper methods are explicitly bound in `onload` before being passed as callbacks */
 
 import type { TAbstractFile } from 'obsidian'
 import type { FetchAdapter, RenameFilesOptions, SyncFilesOptions } from 'yanki'
@@ -305,9 +305,9 @@ export default class YankiPlugin extends Plugin {
 	// ── Plugin lifecycle and settings ──────────────────────────────
 
 	// Typed override
-	// eslint-disable-next-line ts/no-restricted-types
+	// eslint-disable-next-line ts/no-restricted-types -- override matches the Plugin base class signature, which uses `null`
 	async loadData(): Promise<null | YankiPluginSettings> {
-		// eslint-disable-next-line ts/no-restricted-types, ts/no-unsafe-type-assertion
+		// eslint-disable-next-line ts/no-restricted-types, ts/no-unsafe-type-assertion -- super.loadData() returns `unknown | null`; the cast recovers the typed settings shape
 		const settings = (await super.loadData()) as null | YankiPluginSettings
 
 		if (settings === null) {
@@ -319,7 +319,7 @@ export default class YankiPlugin extends Plugin {
 				delete settings.stats.sync.notes.recreated
 			}
 
-			// eslint-disable-next-line ts/no-unnecessary-condition
+			// eslint-disable-next-line ts/no-unnecessary-condition -- `matched` may be missing on settings written before this field was added
 			settings.stats.sync.notes.matched ??= 0
 		}
 
