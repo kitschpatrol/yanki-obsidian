@@ -1,5 +1,3 @@
-/* eslint-disable ts/unbound-method -- adapter and helper methods are explicitly bound in `onload` before being passed as callbacks */
-
 import type { TAbstractFile } from 'obsidian'
 import type { FetchAdapter, RenameFilesOptions, SyncFilesOptions } from 'yanki'
 import escapeStringRegexp from 'escape-string-regexp'
@@ -42,6 +40,15 @@ const DRIVE_LETTER_REGEX = /^[A-Z]:/i
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	private readonly settingsTab: YankiPluginSettingTab = new YankiPluginSettingTab(this.app, this)
+
+	// Arrow-function field so `this.openSettingsTab` can be passed as a callback
+	// without .bind(this); declared before the debounced fields below because
+	// they reference it (perfectionist/sort-classes enforces this ordering).
+	openSettingsTab = () => {
+		// https://forum.obsidian.md/t/open-settings-for-my-plugin-community-plugin-settings-deeplink/61563/4
+		this.app.setting.open()
+		this.app.setting.openTabById(this.manifest.id)
+	}
 
 	// ── Sync and rename actions ───────────────────────────────────
 
@@ -179,10 +186,10 @@ export default class YankiPlugin extends Plugin {
 
 	// ── Yanki file and fetch adapters ─────────────────────────────
 
-	async fetchAdapter(
+	fetchAdapter = async (
 		input: Parameters<FetchAdapter>[0],
 		init: Parameters<FetchAdapter>[1],
-	): ReturnType<FetchAdapter> {
+	): ReturnType<FetchAdapter> => {
 		const response = await requestUrl({
 			body: init?.body,
 			headers: init?.headers,
@@ -202,7 +209,7 @@ export default class YankiPlugin extends Plugin {
 		}
 	}
 
-	async fileAdapterRead(filePath: string): Promise<string> {
+	fileAdapterRead = async (filePath: string): Promise<string> => {
 		filePath = this.absolutePathToVaultPath(filePath)
 		const file = this.app.vault.getFileByPath(filePath)
 
@@ -213,7 +220,7 @@ export default class YankiPlugin extends Plugin {
 		return this.app.vault.read(file)
 	}
 
-	async fileAdapterReadBuffer(filePath: string): Promise<Uint8Array> {
+	fileAdapterReadBuffer = async (filePath: string): Promise<Uint8Array> => {
 		filePath = this.absolutePathToVaultPath(filePath)
 		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
@@ -224,7 +231,7 @@ export default class YankiPlugin extends Plugin {
 		return new Uint8Array(content)
 	}
 
-	async fileAdapterRename(oldPath: string, newPath: string): Promise<void> {
+	fileAdapterRename = async (oldPath: string, newPath: string): Promise<void> => {
 		const vaultFileOldPath = this.absolutePathToVaultPath(oldPath)
 		const file = this.app.vault.getFileByPath(vaultFileOldPath)
 		if (file === null) {
@@ -237,9 +244,9 @@ export default class YankiPlugin extends Plugin {
 		return this.app.fileManager.renameFile(file, vaultFileNewPath)
 	}
 
-	async fileAdapterStat(
+	fileAdapterStat = async (
 		filePath: string,
-	): Promise<{ ctimeMs: number; mtimeMs: number; size: number }> {
+	): Promise<{ ctimeMs: number; mtimeMs: number; size: number }> => {
 		filePath = this.absolutePathToVaultPath(filePath)
 		const file = this.app.vault.getFileByPath(filePath)
 		if (file === null) {
@@ -255,7 +262,7 @@ export default class YankiPlugin extends Plugin {
 		})
 	}
 
-	async fileAdapterWrite(filePath: string, data: string): Promise<void> {
+	fileAdapterWrite = async (filePath: string, data: string): Promise<void> => {
 		const file = this.app.vault.getFileByPath(this.absolutePathToVaultPath(filePath))
 		if (file === null) {
 			throw new Error(`Write failed. File not found: ${filePath}`)
@@ -354,18 +361,11 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	async onload() {
-		// Bindings
-		this.fileAdapterWrite = this.fileAdapterWrite.bind(this)
-		this.fileAdapterRead = this.fileAdapterRead.bind(this)
-		this.fileAdapterReadBuffer = this.fileAdapterReadBuffer.bind(this)
-		this.fileAdapterStat = this.fileAdapterStat.bind(this)
-		this.fileAdapterRename = this.fileAdapterRename.bind(this)
-		this.fetchAdapter = this.fetchAdapter.bind(this)
-
+		// Bindings — file/fetch adapters and openSettingsTab are arrow-function
+		// class fields, so they don't need to be bound here.
 		this.getSharedOptions = this.getSharedOptions.bind(this)
 		this.getRenameFilesOptions = this.getRenameFilesOptions.bind(this)
 		this.getSyncFilesOptions = this.getSyncFilesOptions.bind(this)
-		this.openSettingsTab = this.openSettingsTab.bind(this)
 
 		this.getWatchedFiles = this.getWatchedFiles.bind(this)
 		this.getSanitizedFolders = this.getSanitizedFolders.bind(this)
@@ -494,12 +494,6 @@ export default class YankiPlugin extends Plugin {
 	// Nothing to do on unload
 	// onunload() {
 	// }
-
-	openSettingsTab() {
-		// https://forum.obsidian.md/t/open-settings-for-my-plugin-community-plugin-settings-deeplink/61563/4
-		this.app.setting.open()
-		this.app.setting.openTabById(this.manifest.id)
-	}
 
 	async saveSettings() {
 		await this.saveData(this.settings)
