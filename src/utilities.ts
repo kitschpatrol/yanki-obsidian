@@ -180,12 +180,8 @@ export function sanitizeHtmlToDomWithFunction(
  *
  * @public
  */
-export function html(strings: TemplateStringsArray, ...values: unknown[]): string {
-	const conjoined = strings.reduce(
-		// eslint-disable-next-line ts/no-base-to-string -- interpolated values may be of any type; explicit String() coercion is intentional
-		(result, text, i) => `${result}${text}${String(values[i] ?? '')}`,
-		'',
-	)
+export function html(strings: TemplateStringsArray, ...values: Array<number | string>): string {
+	const conjoined = strings.reduce((result, text, i) => `${result}${text}${values[i] ?? ''}`, '')
 	return conjoined.replaceAll(/\s+/g, ' ')
 }
 
@@ -195,7 +191,7 @@ export function html(strings: TemplateStringsArray, ...values: unknown[]): strin
  * @public
  * @todo Test why this is breaking notice formatting
  */
-export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): string {
+export function htmlNew(strings: TemplateStringsArray, ...values: Array<number | string>): string {
 	return trimLeadingIndentation(strings, ...values)
 }
 
@@ -203,10 +199,12 @@ export function htmlNew(strings: TemplateStringsArray, ...values: unknown[]): st
 const LEADING_SPACE_REGEX = /^(\s+)/
 const NEW_LINE_REGEX = /\r?\n/
 
-function trimLeadingIndentation(strings: TemplateStringsArray, ...values: unknown[]): string {
+function trimLeadingIndentation(
+	strings: TemplateStringsArray,
+	...values: Array<number | string>
+): string {
 	const lines = strings
-		// eslint-disable-next-line ts/no-base-to-string -- interpolated values may be of any type; explicit String() coercion is intentional
-		.reduce((result, text, i) => `${result}${text}${String(values[i] ?? '')}`, '')
+		.reduce((result, text, i) => `${result}${text}${values[i] ?? ''}`, '')
 		.split(NEW_LINE_REGEX)
 		.filter((line) => line.trim() !== '')
 
