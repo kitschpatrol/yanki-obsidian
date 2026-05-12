@@ -68,18 +68,12 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Zip Artifacts
-        run: |
-          mkdir -p ./zip
-          zip -r "./zip/${GITHUB_REPOSITORY##*/}-${TAG_NAME}.zip" dist/
-
       - name: Attest Build Provenance
         if: env.IS_VALID_COMMIT == 'true'
         uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         with:
           subject-path: |
             dist/*
-            zip/${{ github.event.repository.name }}-${{ env.TAG_NAME }}.zip
 
       - name: Release Notes
         if: env.IS_VALID_COMMIT == 'true'
@@ -101,7 +95,6 @@ jobs:
             ${{ steps.release-notes.outputs.changelog }}
           files: |
             dist/*
-            zip/*
 
       - name: Log Release Details
         if: env.IS_VALID_COMMIT == 'true'
