@@ -9,6 +9,10 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     env:
       ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
       IS_VALID_COMMIT: false
@@ -68,6 +72,14 @@ jobs:
         run: |
           mkdir -p ./zip
           zip -r "./zip/${GITHUB_REPOSITORY##*/}-${TAG_NAME}.zip" dist/
+
+      - name: Attest Build Provenance
+        if: env.IS_VALID_COMMIT == 'true'
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
+        with:
+          subject-path: |
+            dist/*
+            zip/${{ github.event.repository.name }}-${{ env.TAG_NAME }}.zip
 
       - name: Release Notes
         if: env.IS_VALID_COMMIT == 'true'
