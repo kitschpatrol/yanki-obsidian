@@ -1,5 +1,5 @@
 import { cspellConfig } from '@kitschpatrol/cspell-config'
 
 export default cspellConfig({
-	words: ['Flatseal', 'noteless'],
+	words: ['Flatseal', 'noteless', 'obsidianmd', 'tfile', 'tfolder'],
 })

@@ -412,7 +412,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setName('Host')
 			.setDesc('Set the host and port to match your Anki-Connect configuration.')
 			.addText((text) => {
-				text.setPlaceholder('Host Name and Port')
+				text.setPlaceholder('Host name and port')
 				const { host, port } = this.plugin.settings.ankiConnect
 				text.setValue(hostAndPortToUrl(host, port))
 
@@ -441,7 +441,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			.setName('Key')
 			.setDesc('Optional API security key to match your custom Anki-Connect configuration.')
 			.addText((text) => {
-				text.setPlaceholder('API Key')
+				text.setPlaceholder('API key')
 
 				text.setValue(this.plugin.settings.ankiConnect.key ?? '')
 				text.onChange((value) => {

@@ -395,6 +395,7 @@ export default class YankiPlugin extends Plugin {
 				void this.syncFlashcardNotesToAnki(true)
 				this.syncFlashcardNotesToAnki.flush()
 			},
+			// eslint-disable-next-line obsidianmd/commands/no-plugin-id-in-command-id -- legacy
 			id: 'sync-yanki-obsidian',
 			name: 'Sync flashcard notes to Anki',
 		})

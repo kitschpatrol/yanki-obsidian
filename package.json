@@ -55,6 +55,7 @@
 		"esbuild": "^0.28.0",
 		"esbuild-plugin-copy": "^2.1.1",
 		"escape-string-regexp": "^5.0.0",
+		"eslint-plugin-obsidianmd": "^0.3.0",
 		"moment": "^2.30.1",
 		"obsidian": "1.10.0",
 		"obsidian-typings": "4.58.0",
