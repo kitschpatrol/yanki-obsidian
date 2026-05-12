@@ -39,9 +39,9 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/shared-config": "^7.5.2",
+		"@kitschpatrol/shared-config": "^7.5.3",
 		"@types/node": "~20.11.30",
-		"bumpp": "^11.0.1",
+		"bumpp": "^11.1.0",
 		"chokidar": "^5.0.0",
 		"debounce": "^3.0.0",
 		"entities": "^8.0.0",
@@ -58,9 +58,9 @@
 		"tsx": "^4.21.0",
 		"type-fest": "^5.6.0",
 		"typescript": "~5.9.3",
-		"yanki": "^2.0.4"
+		"yanki": "^2.0.5"
 	},
-	"packageManager": "pnpm@10.33.2",
+	"packageManager": "pnpm@10.33.4",
 	"engines": {
 		"node": ">=20.11.0"
 	},
