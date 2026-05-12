@@ -72,13 +72,13 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 - The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6.5+ on Windows, macOS, and Linux.)
 - The [Anki desktop application](https://apps.ankiweb.net). (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
-- The [Anki-Connect](https://ankiweb.net/shared/info/2055492159) add-on
+- The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on
 
-  To install the Anki-Connect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get Anki-Connect.
+  To install the AnkiConnect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get AnkiConnect.
 
-  Anki-Connect may ask for your permission in the Anki application to connect to Obsidian on the first sync.
+  AnkiConnect may ask for your permission in the Anki application to connect to Obsidian on the first sync.
 
-  If you encounter trouble with Anki-Connect, please see [the manual configuration procedure](#ive-installed-anki-connect-but-am-still-getting-connection-errors).
+  If you encounter trouble with AnkiConnect, please see [the manual configuration procedure](#ive-installed-ankiconnect-but-am-still-getting-connection-errors).
 
 2. **Plugin installation**
 
@@ -512,11 +512,11 @@ Yanki will truncate long automatic file names with ellipses. This setting allows
 
 _Default: 60 characters_
 
-#### Anki-Connect settings
+#### AnkiConnect settings
 
-These are advanced settings to accommodate custom Anki-Connect configurations. The defaults are almost certainly fine.
+These are advanced settings to accommodate custom AnkiConnect configurations. The defaults are almost certainly fine.
 
-Please see the [Anki-Connect documentation](https://git.sr.ht/~foosoft/anki-connect) for details on the Host and Key options.
+Please see the [AnkiConnect documentation](https://git.sr.ht/~foosoft/anki-connect) for details on the Host and Key options.
 
 #### Advanced settings
 
@@ -603,7 +603,7 @@ Yes, so long as you're syncing your notes to the mobile app through something li
 
 ### Do I really have to have to launch Anki for syncing to work?
 
-Yes, unfortunately. There are other ways to talk to the Anki database, but none are as robust as what's provided by [Anki-Connect](https://ankiweb.net/shared/info/2055492159), which is where this requirement comes from.
+Yes, unfortunately. There are other ways to talk to the Anki database, but none are as robust as what's provided by [AnkiConnect](https://ankiweb.net/shared/info/2055492159), which is where this requirement comes from.
 
 _Note: The stand-alone [Yanki](https://github.com/kitschpatrol/yanki) CLI tool can automatically launch the Anki desktop application on-demand on macOS, but Obsidian's plug-in APIs prevent this from working correctly from inside Obsidian._
 
@@ -699,9 +699,9 @@ In theory, Yanki should work with the first-party [Obsidian Sync](https://obsidi
 
 No. The Yanki plugin has a [settings option](#ignore-folder-notes) to ignore folder notes, which is enabled by default.
 
-### I've installed Anki-Connect, but am still getting connection errors
+### I've installed AnkiConnect, but am still getting connection errors
 
-If the automatic permission request fails, you might need to configure Anki-Connect to accept connections from Obsidian.
+If the automatic permission request fails, you might need to configure AnkiConnect to accept connections from Obsidian.
 
 In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ from the list, and click the _Config_ button in the lower right. In the ensuing modal, add `"app://obsidian.md"` to the `webCorsOriginList` array, like so:
 
@@ -793,7 +793,7 @@ The Yanki plugin is built on [`yanki`](https://github.com/kitschpatrol/yanki), a
 
 If you want to sync Markdown like the Yanki plugin does from outside of Obsidian, the stand-alone [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and TypeScript library implements all of the same core features (plus a few extras). Using the `yanki` CLI tool directly will not interfere with syncing from the Yanki plugin.
 
-The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [Anki-Connect](https://git.sr.ht/~foosoft/anki-connect) API.
+The [`yanki`](https://github.com/kitschpatrol/yanki) CLI tool and library is built on top of [`yanki-connect`](https://github.com/kitschpatrol/yanki-connect), which is a layer of TypeScript over the [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect) API.
 
 ### Avoiding lock-in
 
@@ -825,7 +825,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ## Acknowledgments
 
-Thanks to Alex Yatskov for creating [Anki-Connect](https://git.sr.ht/~foosoft/anki-connect).
+Thanks to Alex Yatskov for creating [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect).
 
 PJ Eby's [Hot-Reload](https://github.com/pjeby/hot-reload) Obsidian plugin is a huge help during development.
 

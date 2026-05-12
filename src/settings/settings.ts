@@ -391,26 +391,26 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 		})
 
-		// ── Anki-Connect ─────────────────────────────────────
+		// ── AnkiConnect ─────────────────────────────────────
 
-		const ankiConnectSetting = new Setting(this.containerEl).setName('Anki-Connect').setHeading()
+		const ankiConnectSetting = new Setting(this.containerEl).setName('AnkiConnect').setHeading()
 
 		ankiConnectSetting.setDesc(
 			sanitizeHTMLToDom(
-				html`Anki-Connect is the Anki add-on that enables communication between Obsidian and Anki.
+				html`AnkiConnect is the Anki add-on that enables communication between Obsidian and Anki.
 					See the
 					<a href="https://github.com/kitschpatrol/yanki-obsidian?tab=readme-ov-file#quick-start"
 						>Yanki quick start guide</a
 					>
-					for instructions on how to set up Anki-Connect, and the
-					<a href="https://git.sr.ht/~foosoft/anki-connect">Anki-Connect documentation</a> for more
+					for instructions on how to set up AnkiConnect, and the
+					<a href="https://git.sr.ht/~foosoft/anki-connect">AnkiConnect documentation</a> for more
 					information. The default settings below are usually fine.`,
 			),
 		)
 
 		new Setting(this.containerEl)
 			.setName('Host')
-			.setDesc('Set the host and port to match your Anki-Connect configuration.')
+			.setDesc('Set the host and port to match your AnkiConnect configuration.')
 			.addText((text) => {
 				text.setPlaceholder('Host name and port')
 				const { host, port } = this.plugin.settings.ankiConnect
@@ -422,7 +422,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					if (parsedUrl === undefined) {
 						new Notice(
 							sanitizeHTMLToDom(
-								html`<strong>Yanki:</strong><br />Invalid Anki-Connect host and port.`,
+								html`<strong>Yanki:</strong><br />Invalid AnkiConnect host and port.`,
 							),
 						)
 					} else {
@@ -439,7 +439,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('Key')
-			.setDesc('Optional API security key to match your custom Anki-Connect configuration.')
+			.setDesc('Optional API security key to match your custom AnkiConnect configuration.')
 			.addText((text) => {
 				text.setPlaceholder('API key')
 
@@ -469,7 +469,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// 	})
 
 		new Setting(this.containerEl).addButton((button) => {
-			button.setButtonText('Reset to Anki-Connect defaults')
+			button.setButtonText('Reset to AnkiConnect defaults')
 			button.onClick(async () => {
 				this.plugin.settings.ankiConnect = structuredClone(
 					getYankiPluginDefaultSettings(this.app).ankiConnect,
@@ -480,7 +480,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 				new Notice(
 					sanitizeHTMLToDom(
-						html`<strong>Yanki:</strong><br />Reset Yanki’s Anki-Connect settings to defaults.`,
+						html`<strong>Yanki:</strong><br />Reset Yanki’s AnkiConnect settings to defaults.`,
 					),
 				)
 			})
