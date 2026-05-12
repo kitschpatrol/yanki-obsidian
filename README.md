@@ -15,7 +15,7 @@
     },
     "Obsidian Downloads": {
       image: "https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json",
-      link: "https://obsidian.md/plugins?id=yanki",
+      link: "https://community.obsidian.md/plugins/yanki",
     },
   }
 }) -->
@@ -23,7 +23,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
 [![CI](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
-[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=yanki)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://community.obsidian.md/plugins/yanki)
 
 <!-- /badges -->
 
@@ -82,7 +82,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 2. **Plugin installation**
 
-   Search for `yanki` in Obsidian's community plugins browser, then click "Install". Or, install it from [the Obsidian website](https://obsidian.md/plugins?id=yanki).
+   Search for `yanki` in Obsidian's community plugins browser, then click "Install". Or, install it from [the Obsidian website](https://community.obsidian.md/plugins/yanki).
 
 3. **Setup**
 
