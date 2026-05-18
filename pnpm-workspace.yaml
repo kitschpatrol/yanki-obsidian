@@ -1,13 +1,9 @@
-onlyBuiltDependencies:
-  - electron
-  - esbuild
-  - obsidian-typings
-  - oxc-resolver
-  - puppeteer
-  - unrs-resolver
 overrides:
   '@expo/plist@0.0.18>@xmldom/xmldom': 0.8.13
   mermaid: ^11.15.0
+peerDependencyRules:
+  allowedVersions:
+    'eslint-plugin-obsidianmd>obsidian': '1.6.6'
 publicHoistPattern:
   - '@kitschpatrol/repo-config'
   - '@kitschpatrol/typescript-config'
@@ -19,3 +15,9 @@ publicHoistPattern:
   - '*prettier*'
   - '*remark*'
   - '*stylelint*'
+allowBuilds:
+  electron: true
+  esbuild: true
+  oxc-resolver: true
+  puppeteer: true
+  unrs-resolver: true

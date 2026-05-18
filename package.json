@@ -39,14 +39,14 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/cspell-config": "^7.5.3",
-		"@kitschpatrol/eslint-config": "^7.5.3",
-		"@kitschpatrol/knip-config": "^7.5.3",
-		"@kitschpatrol/mdat-config": "^7.5.3",
-		"@kitschpatrol/prettier-config": "^7.5.3",
-		"@kitschpatrol/remark-config": "^7.5.3",
-		"@kitschpatrol/shared-config": "^7.5.3",
-		"@kitschpatrol/stylelint-config": "^7.5.3",
+		"@kitschpatrol/cspell-config": "^7.6.2",
+		"@kitschpatrol/eslint-config": "^7.6.2",
+		"@kitschpatrol/knip-config": "^7.6.2",
+		"@kitschpatrol/mdat-config": "^7.6.2",
+		"@kitschpatrol/prettier-config": "^7.6.2",
+		"@kitschpatrol/remark-config": "^7.6.2",
+		"@kitschpatrol/shared-config": "^7.6.2",
+		"@kitschpatrol/stylelint-config": "^7.6.2",
 		"@types/node": "~20.11.30",
 		"bumpp": "^11.1.0",
 		"chokidar": "^5.0.0",
@@ -57,25 +57,25 @@
 		"escape-string-regexp": "^5.0.0",
 		"eslint-plugin-obsidianmd": "^0.3.0",
 		"moment": "^2.30.1",
-		"obsidian": "1.10.0",
-		"obsidian-typings": "4.58.0",
+		"obsidian": "1.6.6",
+		"obsidian-typings": "2.2.0",
 		"plur": "^6.0.0",
 		"pretty-ms": "^9.3.0",
 		"shx": "^0.4.0",
 		"tslib": "^2.8.1",
-		"tsx": "^4.21.0",
+		"tsx": "^4.22.1",
 		"type-fest": "^5.6.0",
 		"typescript": "~5.9.3",
-		"yanki": "^2.0.8"
+		"yanki": "^2.0.9"
 	},
-	"packageManager": "pnpm@10.33.4",
+	"packageManager": "pnpm@11.1.2",
 	"engines": {
 		"node": ">=20.11.0"
 	},
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": ">=22.18.0"
+			"version": ">=22.22.2"
 		}
 	},
 	"obsidian": {
