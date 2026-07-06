@@ -601,7 +601,7 @@ No, and it probably never will since it needs to communicate with a running inst
 
 Yes, so long as you're syncing your notes to the mobile app through something like [AnkiWeb](https://ankiweb.net/about).
 
-### Do I really have to have to launch Anki for syncing to work?
+### Do I really have to launch Anki for syncing to work?
 
 Yes, unfortunately. There are other ways to talk to the Anki database, but none are as robust as what's provided by [AnkiConnect](https://ankiweb.net/shared/info/2055492159), which is where this requirement comes from.
 
