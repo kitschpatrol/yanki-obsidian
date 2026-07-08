@@ -3,5 +3,5 @@
 
 	// Skips project files for typescript-eslint integration
 	"include": ["**/*", "**/**.*"],
-	"exclude": ["**/dist/", "**/bin/"]
+	"exclude": ["**/dist/"]
 }

@@ -6,11 +6,11 @@ import fs from 'node:fs/promises'
 import process from 'node:process'
 import { generateManifest } from './generate-manifest'
 
-// We assume our minimum specified Obsidian version 1.6.5 correlates with the
+// We assume our minimum specified Obsidian version 1.9.12 correlates with the
 // following:
-// - The closest release seems to be 1.6.5 from June 25, 2024:
-//   https://github.com/obsidianmd/obsidian-releases/releases/tag/v1.6.5
-// This release is using Electron 30.1.2, Chromium 124, V8 12.4, and Node 20.14.0
+// - The closest release is version 1.9.12 from August 26, 2025:
+//   https://github.com/obsidianmd/obsidian-releases/releases/tag/v1.9.12
+// This release is using Electron 37.3.1, Chromium 138, V8 12.4, and Node 22.18.0
 
 const banner = `/*
 This is a generated source file!
@@ -19,6 +19,7 @@ https://github.com/kitschpatrol/yanki-obsidian
 */
 `
 
+// eslint-disable-next-line require-unicode-regexp -- esbuild serializes filter flags into Go's `(?flags)` regexp syntax, which doesn't support 'v'
 const NODE_MODULE_PREFIX = /^node:.+$/
 
 const ignoreNodeModulesPlugin: Plugin = {
@@ -166,13 +167,12 @@ async function triggerRebuild(): Promise<void> {
 	}
 }
 
+await triggerRebuild()
+
 if (production) {
-	await triggerRebuild()
 	// eslint-disable-next-line unicorn/no-process-exit
 	process.exit(0)
 } else {
-	await triggerRebuild()
-
 	console.log('Watching for changes...')
 	const watcher = chokidar.watch('src', { ignoreInitial: true })
 
@@ -182,6 +182,8 @@ if (production) {
 			clearTimeout(rebuildTimeout)
 		}
 
-		rebuildTimeout = setTimeout(triggerRebuild, 100)
+		rebuildTimeout = setTimeout(() => {
+			void triggerRebuild()
+		}, 100)
 	})
 }

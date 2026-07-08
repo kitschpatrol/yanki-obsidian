@@ -35,12 +35,12 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 	const { synced } = syncReport
 
 	// Aggregate the counts of each action:
-	const actionCounts = synced.reduce<Record<string, number>>((acc, note) => {
-		acc[note.action] = (acc[note.action] || 0) + 1
-		return acc
-	}, {})
+	const actionCounts = new Map<string, number>()
+	for (const note of synced) {
+		actionCounts.set(note.action, (actionCounts.get(note.action) ?? 0) + 1)
+	}
 
-	const ankiUnreachable = actionCounts.ankiUnreachable > 0
+	const ankiUnreachable = (actionCounts.get('ankiUnreachable') ?? 0) > 0
 
 	if (ankiUnreachable) {
 		return sanitizeHTMLToDom(
@@ -66,7 +66,7 @@ export function formatSyncResult(syncReport: SyncFilesResult): DocumentFragment 
 		'Sync report:',
 	)
 
-	for (const [action, count] of Object.entries(actionCounts)) {
+	for (const [action, count] of actionCounts) {
 		reportLines.push(`\t${count} Anki ${plur('note', count)} ${action}`)
 	}
 
@@ -155,17 +155,17 @@ export function validateNamespace(namespace: string): boolean {
 export function sanitizeNamespace(namespace: string): string {
 	// Additional sanitization also happens inside Yanki
 	// Stuck with es2020?
-	return namespace.replace(/[*:]/g, '').trim()
+	return namespace.replace(/[*:]/gv, '').trim()
 }
 
 /**
  * Elements with class will call a function when clicked
  */
 export function sanitizeHtmlToDomWithFunction(
-	html: string,
+	htmlContent: string,
 	classActions: Record<string, () => void>,
 ) {
-	const fragment = sanitizeHTMLToDom(html)
+	const fragment = sanitizeHTMLToDom(htmlContent)
 	for (const [targetClass, callback] of Object.entries(classActions)) {
 		const functionElement = fragment.querySelector(`.${targetClass}`)
 		functionElement?.addEventListener('click', callback)
@@ -182,7 +182,7 @@ export function sanitizeHtmlToDomWithFunction(
  */
 export function html(strings: TemplateStringsArray, ...values: Array<number | string>): string {
 	const conjoined = strings.reduce((result, text, i) => `${result}${text}${values[i] ?? ''}`, '')
-	return conjoined.replaceAll(/\s+/g, ' ')
+	return conjoined.replaceAll(/\s+/gv, ' ')
 }
 
 /**
@@ -196,8 +196,8 @@ export function htmlNew(strings: TemplateStringsArray, ...values: Array<number |
 }
 
 // eslint-disable-next-line regexp/no-unused-capturing-group -- group is kept for readability; full match is consumed via `[0]`
-const LEADING_SPACE_REGEX = /^(\s+)/
-const NEW_LINE_REGEX = /\r?\n/
+const LEADING_SPACE_REGEX = /^(\s+)/v
+const NEW_LINE_REGEX = /\r?\n/v
 
 function trimLeadingIndentation(
 	strings: TemplateStringsArray,
@@ -212,6 +212,6 @@ function trimLeadingIndentation(
 	// from subsequent lines
 
 	const leadingSpace = LEADING_SPACE_REGEX.exec(lines[0])?.[0] ?? ''
-	const leadingSpaceRegex = new RegExp(`^${leadingSpace}`)
+	const leadingSpaceRegex = new RegExp(`^${leadingSpace}`, 'v')
 	return lines.map((line) => line.replace(leadingSpaceRegex, '').trimEnd()).join('\n')
 }

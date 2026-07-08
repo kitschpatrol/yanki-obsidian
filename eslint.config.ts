@@ -20,6 +20,7 @@ export default eslintConfig(
 		ts: {
 			overrides: {
 				'no-new': 'off',
+				'unicorn/max-nested-calls': 'off', // Remove when ksc > 8.0.0
 				// Array.prototype.reduce is the cleanest way to express several single-pass
 				// accumulations in this codebase (template-tag interleaving, action-count
 				// tallying, type-narrowed filtering). Refactoring to imperative loops or

@@ -23,7 +23,6 @@ import sindreDebounce from 'debounce'
 import path from 'node:path' // Assuming polyfilled
 import {
 	FileSystemAdapter,
-	moment,
 	normalizePath,
 	Notice,
 	Plugin,
@@ -35,7 +34,7 @@ import {
 } from 'obsidian'
 import { renameFiles, syncFiles } from 'yanki'
 
-const DRIVE_LETTER_REGEX = /^[A-Z]:/i
+const DRIVE_LETTER_REGEX = /^[A-Z]:/iv
 
 export default class YankiPlugin extends Plugin {
 	public settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
@@ -111,7 +110,7 @@ export default class YankiPlugin extends Plugin {
 			}
 
 			// Dev stats
-			this.settings.stats.sync.latestSyncTime = moment().unix()
+			this.settings.stats.sync.latestSyncTime = Math.floor(Date.now() / 1000)
 			this.settings.stats.sync.duration =
 				this.settings.stats.sync.duration === 0
 					? report.duration
@@ -314,7 +313,7 @@ export default class YankiPlugin extends Plugin {
 	// Typed override
 	// eslint-disable-next-line ts/no-restricted-types -- override matches the Plugin base class signature, which uses `null`
 	async loadData(): Promise<null | YankiPluginSettings> {
-		// eslint-disable-next-line ts/no-restricted-types, ts/no-unsafe-type-assertion -- super.loadData() returns `unknown | null`; the cast recovers the typed settings shape
+		// eslint-disable-next-line ts/no-restricted-types -- `null` matches the base class loadData() signature
 		const settings = (await super.loadData()) as null | YankiPluginSettings
 
 		if (settings === null) {
@@ -332,9 +331,8 @@ export default class YankiPlugin extends Plugin {
 
 		// Migrate old manageFilenames "enabled" field to new autoRenameTrigger format
 		if ('manageFilenames' in settings && 'enabled' in settings.manageFilenames) {
-			settings.manageFilenames.autoRenameTrigger = settings.manageFilenames.enabled
-				? 'file-changed'
-				: 'off'
+			settings.manageFilenames.autoRenameTrigger =
+				settings.manageFilenames.enabled === true ? 'file-changed' : 'off'
 			delete settings.manageFilenames.enabled
 		}
 
@@ -459,9 +457,11 @@ export default class YankiPlugin extends Plugin {
 										html`<strong
 												>Removed "${file.path}" from Anki flashcard <a class="settings">folders</a>.
 											</strong>
-											${this.settings.sync.autoSyncEnabled
-												? ''
-												: '<br /><br />Run the <a class="sync">Yanki Sync</a> command to remove the folder’s notes from Anki.</a>'}`,
+											${
+												this.settings.sync.autoSyncEnabled
+													? ''
+													: '<br /><br />Run the <a class="sync">Yanki Sync</a> command to remove the folder’s notes from Anki.</a>'
+											}`,
 										{
 											settings: this.openSettingsTab,
 											sync: () => {
@@ -488,9 +488,11 @@ export default class YankiPlugin extends Plugin {
 										html`<strong
 												>Added "${file.path}" to Anki flashcard <a class="settings">folders</a>.
 											</strong>
-											${this.settings.sync.autoSyncEnabled
-												? ''
-												: '<br /><br />Run the <a class="sync">Yanki Sync</a> command to sync the folder’s notes to Anki.</a>'}`,
+											${
+												this.settings.sync.autoSyncEnabled
+													? ''
+													: '<br /><br />Run the <a class="sync">Yanki Sync</a> command to sync the folder’s notes to Anki.</a>'
+											}`,
 										{
 											settings: this.openSettingsTab,
 											sync: () => {
@@ -558,7 +560,7 @@ export default class YankiPlugin extends Plugin {
 
 		// Regex escape here addresses
 		// https://github.com/kitschpatrol/yanki-obsidian/issues/28
-		const basePathRegex = new RegExp(`^${escapeStringRegexp(vaultPath)}/?`)
+		const basePathRegex = new RegExp(`^${escapeStringRegexp(vaultPath)}/?`, 'v')
 		return absolutePath.replace(basePathRegex, '')
 	}
 
@@ -675,30 +677,34 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	private async handleDelete(fileOrFolder: TAbstractFile) {
-		if (this.isInsideWatchedFolders(fileOrFolder)) {
-			// Remove from settings if it was a watched folder
-			if (fileOrFolder instanceof TFolder) {
-				const watchedFolders = this.getSanitizedFolders()
-				const initialLength = watchedFolders.length
-				this.settings.folders = watchedFolders.filter((folder) => folder !== fileOrFolder.path)
-				if (this.settings.folders.length !== initialLength) {
-					await this.saveSettings()
-				}
-			}
-
-			await this.syncFlashcardNotesToAnki(false)
+		if (!this.isInsideWatchedFolders(fileOrFolder)) {
+			return
 		}
+
+		// Remove from settings if it was a watched folder
+		if (fileOrFolder instanceof TFolder) {
+			const watchedFolders = this.getSanitizedFolders()
+			const initialLength = watchedFolders.length
+			this.settings.folders = watchedFolders.filter((folder) => folder !== fileOrFolder.path)
+			if (this.settings.folders.length !== initialLength) {
+				await this.saveSettings()
+			}
+		}
+
+		await this.syncFlashcardNotesToAnki(false)
 	}
 
 	private async handleModify(fileOrFolder: TAbstractFile) {
-		if (this.isInsideWatchedFolders(fileOrFolder)) {
-			// Only auto-rename on file change if the trigger is set to 'file-changed'
-			if (this.settings.manageFilenames.autoRenameTrigger === 'file-changed') {
-				await this.updateNoteFilenames(false)
-			}
-
-			await this.syncFlashcardNotesToAnki(false)
+		if (!this.isInsideWatchedFolders(fileOrFolder)) {
+			return
 		}
+
+		// Only auto-rename on file change if the trigger is set to 'file-changed'
+		if (this.settings.manageFilenames.autoRenameTrigger === 'file-changed') {
+			await this.updateNoteFilenames(false)
+		}
+
+		await this.syncFlashcardNotesToAnki(false)
 	}
 
 	// Watch for changes, but only folders!

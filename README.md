@@ -70,7 +70,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 1. **Prerequisites**
 
-- The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.6.5+ on Windows, macOS, and Linux.)
+- The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.9.12+ on Windows, macOS, and Linux.)
 - The [Anki desktop application](https://apps.ankiweb.net). (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
 - The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on
 
@@ -761,6 +761,14 @@ No. The Anki application lets you split the cards from a single note across mult
 
 Yanki does _not_ support this scenario for the notes / cards it manages — it maintains a strict hierarchical relationship in which a note and its cards always live in a single deck. Notes may be deleted / recreated and study progress might be lost if you attempt to split up a note's cards.
 
+### Can I mix regular Anki note syntax into my Markdown?
+
+No. "Native" Anki syntax like the `{{c1::...` cloze markup cannot coexist peacefully with Yanki's Markdown-style notes. And in rare cases, doing this can cause sync errors.
+
+### I'm stuck on an old version of Obsidian, can I still use Yanki?
+
+Older releases of the plugin provide compatibility back to Obsidian version 1.5.0, which was originally released in November 2023.
+
 ## Privacy and security
 
 ### Network use
@@ -809,7 +817,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ### Other Obsidian Anki plugins
 
-- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [Export to Anki / Obsidian\_to\_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
 - [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
 - [Flashcards](https://github.com/reuseman/flashcards-obsidian)
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)

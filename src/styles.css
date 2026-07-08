@@ -39,6 +39,7 @@ div.yanki-settings {
 	div.setting-item.description-is-button-annotation {
 		div.setting-item-info {
 			display: flex;
+			flex-wrap: wrap;
 			justify-content: flex-end;
 		}
 

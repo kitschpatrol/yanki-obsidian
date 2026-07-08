@@ -178,7 +178,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 							// Kludge for label re-rendering without a focus-stealing full
 							// re-render
-							updateAddFolderButton()
+							updateNotesFoundCount()
 						})()
 					})
 				})
@@ -200,7 +200,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			}
 		}
 
-		const addFolderButton = new Setting(this.containerEl)
+		const folderAddSetting = new Setting(this.containerEl)
 			.addButton((button: ButtonComponent) => {
 				button
 					.setTooltip('Add folder')
@@ -214,15 +214,15 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			})
 			.setClass('description-is-button-annotation')
 
-		const updateAddFolderButton = () => {
-			addFolderButton.setDesc(
+		const updateNotesFoundCount = () => {
+			folderAddSetting.setDesc(
 				sanitizeHTMLToDom(
 					html`Notes found: <em>${String(this.plugin.getWatchedFiles().length)}</em>`,
 				),
 			)
 		}
 
-		updateAddFolderButton()
+		updateNotesFoundCount()
 
 		new Setting(this.containerEl)
 			.setName('Ignore folder notes')
@@ -292,7 +292,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					})
 					.setValue(this.plugin.settings.sync.mediaMode)
 					.onChange(async (value) => {
-						// eslint-disable-next-line ts/no-unsafe-type-assertion -- value is constrained to the dropdown's registered options
 						this.plugin.settings.sync.mediaMode = value as YankiPluginSettings['sync']['mediaMode']
 						await this.plugin.saveSettings()
 					})
@@ -341,7 +340,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.manageFilenames.autoRenameTrigger)
 					.onChange(async (value) => {
 						this.plugin.settings.manageFilenames.autoRenameTrigger =
-							// eslint-disable-next-line ts/no-unsafe-type-assertion -- value is constrained to the dropdown's registered options
 							value as YankiPluginSettings['manageFilenames']['autoRenameTrigger']
 						await this.plugin.saveSettings()
 						this.render()
@@ -365,7 +363,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.manageFilenames.mode)
 					.onChange(async (value) => {
 						this.plugin.settings.manageFilenames.mode =
-							// eslint-disable-next-line ts/no-unsafe-type-assertion -- value is constrained to the dropdown's registered options
 							value as YankiPluginSettings['manageFilenames']['mode']
 						await this.plugin.saveSettings()
 					})
@@ -426,9 +423,8 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 							),
 						)
 					} else {
-						const { host, port } = parsedUrl
-						this.plugin.settings.ankiConnect.host = host
-						this.plugin.settings.ankiConnect.port = port
+						this.plugin.settings.ankiConnect.host = parsedUrl.host
+						this.plugin.settings.ankiConnect.port = parsedUrl.port
 					}
 				})
 
