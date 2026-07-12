@@ -104,7 +104,7 @@ export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 }
 
 export class YankiPluginSettingTab extends PluginSettingTab {
-	plugin: YankiPlugin
+	override plugin: YankiPlugin
 	private initialSettings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 
 	constructor(app: App, plugin: YankiPlugin) {
@@ -119,7 +119,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		this.render()
 	}
 
-	hide(): void {
+	override hide(): void {
 		// Normalize folders
 		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
 		void this.plugin.settingsChangeSyncCheck(this.initialSettings)

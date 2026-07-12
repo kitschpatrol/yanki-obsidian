@@ -189,10 +189,12 @@ export default class YankiPlugin extends Plugin {
 		input: Parameters<FetchAdapter>[0],
 		init: Parameters<FetchAdapter>[1],
 	): ReturnType<FetchAdapter> => {
+		// Conditional spreads satisfy `exactOptionalPropertyTypes`, since
+		// RequestUrlParam doesn't accept explicit `undefined` values
 		const response = await requestUrl({
-			body: init?.body,
-			headers: init?.headers,
-			method: init?.method,
+			...(init?.body !== undefined && { body: init.body }),
+			...(init?.headers !== undefined && { headers: init.headers }),
+			...(init?.method !== undefined && { method: init.method }),
 			url: input,
 		})
 
@@ -312,7 +314,7 @@ export default class YankiPlugin extends Plugin {
 
 	// Typed override
 	// eslint-disable-next-line ts/no-restricted-types -- override matches the Plugin base class signature, which uses `null`
-	async loadData(): Promise<null | YankiPluginSettings> {
+	override async loadData(): Promise<null | YankiPluginSettings> {
 		// eslint-disable-next-line ts/no-restricted-types -- `null` matches the base class loadData() signature
 		const settings = (await super.loadData()) as null | YankiPluginSettings
 
@@ -346,7 +348,7 @@ export default class YankiPlugin extends Plugin {
 	}
 
 	// This never seems to fire, even after manually editing the settings file?
-	async onExternalSettingsChange() {
+	override async onExternalSettingsChange() {
 		if (this.settings.verboseNotices) {
 			// TODO when is this actually called?
 			new Notice('Yanki external settings change detected')
@@ -358,7 +360,7 @@ export default class YankiPlugin extends Plugin {
 		await this.settingsChangeSyncCheck(originalSettings)
 	}
 
-	async onload() {
+	override async onload() {
 		// Bindings — file/fetch adapters and openSettingsTab are arrow-function
 		// class fields, so they don't need to be bound here.
 		this.getSharedOptions = this.getSharedOptions.bind(this)
@@ -665,6 +667,9 @@ export default class YankiPlugin extends Plugin {
 				? possiblyBarePath
 				: path.join(path.sep, possiblyBarePath)
 		}
+
+		// Mobile adapters have no filesystem base path
+		return undefined
 	}
 
 	// ── Vault event handlers ──────────────────────────────────────
