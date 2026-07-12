@@ -29,6 +29,33 @@ const ignoreNodeModulesPlugin: Plugin = {
 	},
 }
 
+// The `open` package (a transitive dependency via yanki-connect) is only used by
+// yanki-connect's `launchAnkiApp()`, which auto-launches the Anki desktop app.
+// This plugin disables `autoLaunch`, so that code path is never reached. `open`
+// relies on Node's `child_process` and `fs` modules, which trip Obsidian's
+// automated plugin review. Stubbing it out of the bundle removes those
+// filesystem and shell-execution APIs entirely.
+// eslint-disable-next-line require-unicode-regexp -- esbuild's Go regexp engine doesn't support the 'v' flag
+const OPEN_MODULE = /^open$/
+// eslint-disable-next-line require-unicode-regexp -- esbuild's Go regexp engine doesn't support the 'v' flag
+const MATCH_ALL = /.*/
+const stubOpenPlugin: Plugin = {
+	name: 'stub-open',
+	setup(build) {
+		build.onResolve({ filter: OPEN_MODULE }, () => ({ namespace: 'stub-open', path: 'open' }))
+		build.onLoad({ filter: MATCH_ALL, namespace: 'stub-open' }, () => ({
+			contents: `
+				const unsupported = () => {
+					throw new Error('The "open" package is not bundled in the Yanki Obsidian plugin.')
+				}
+				export default unsupported
+				export const openApp = unsupported
+			`,
+			loader: 'js',
+		}))
+	},
+}
+
 const production = process.argv.includes('production')
 
 const context = await esbuild.context({
@@ -116,6 +143,7 @@ const context = await esbuild.context({
 	platform: 'browser',
 	plugins: [
 		ignoreNodeModulesPlugin,
+		stubOpenPlugin,
 		copy({
 			assets: { from: ['./src/**/*.css'], to: ['./'] },
 		}),
