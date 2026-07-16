@@ -152,7 +152,7 @@ export default class YankiPlugin extends Plugin {
 	updateNoteFilenames = sindreDebounce(async (userInitiated: boolean): Promise<void> => {
 		if (
 			this.settings.folders.length === 0 ||
-			(this.settings.manageFilenames.autoRenameTrigger === 'off' && !userInitiated)
+			(!userInitiated && this.settings.manageFilenames.autoRenameTrigger === 'off')
 		) {
 			return
 		}

@@ -5,6 +5,6 @@
 		"lib": ["es2025", "DOM"],
 		"types": ["obsidian-typings"]
 	},
-	"include": ["**/*", "**/**.*"],
-	"exclude": ["**/dist/"]
+	"include": ["**/**.*"],
+	"exclude": ["dist/"]
 }

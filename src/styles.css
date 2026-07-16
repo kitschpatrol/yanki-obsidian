@@ -19,7 +19,7 @@ div.yanki-settings {
 
 			div.setting-item-description {
 				display: grid;
-				grid-template-columns: 1fr 1fr;
+				grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
 				p {
 					margin: 0;
