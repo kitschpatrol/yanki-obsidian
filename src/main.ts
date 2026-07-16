@@ -37,7 +37,7 @@ import { renameFiles, syncFiles } from 'yanki'
 const DRIVE_LETTER_REGEX = /^[A-Z]:/iv
 
 export default class YankiPlugin extends Plugin {
-	public settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
+	public override settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	private readonly settingsTab: YankiPluginSettingTab = new YankiPluginSettingTab(this.app, this)
 
 	// Arrow-function field so `this.openSettingsTab` can be passed as a callback
