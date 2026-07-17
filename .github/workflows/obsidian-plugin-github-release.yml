@@ -13,11 +13,6 @@ jobs:
       contents: write
       id-token: write
       attestations: write
-    env:
-      ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
-      IS_VALID_COMMIT: false
-      TAG_NAME: ''
-      ZIP_NAME: 'archive.zip'
 
     steps:
       - name: Checkout
@@ -26,31 +21,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Log Token Type
+      - name: Ensure tag is on main
         run: |
-          if [ ${ACCESS_TOKEN} == ${{ secrets.GITHUB_TOKEN }} ]; then
-            echo "🗝️ Authenticated with GitHub Token"
-          else
-            echo "🔑 Authenticated with Personal Access token"
-          fi
-
-      - name: Validate Tag and Branch
-        id: validation
-        run: |
-          TAG=$(git tag --contains HEAD | grep '^[0-9]' | head -n 1)
-          echo "🏷️ Tag for commit is: $TAG"
-          BRANCH=$(git branch -r --contains tags/${GITHUB_REF_NAME} | grep 'origin/main' | xargs)
-          if [[ -z "$BRANCH" ]]; then
-            echo "🚨 Tag is not on main branch"
-          else
-            echo "🕊️ Current branch is: $BRANCH"
-          fi
-          if [[ -z "$TAG" || -z "$BRANCH" ]]; then
-            echo "IS_VALID_COMMIT=false" >> $GITHUB_ENV
-            echo "TAG_NAME=''" >> $GITHUB_ENV
-          else
-            echo "IS_VALID_COMMIT=true" >> $GITHUB_ENV
-            echo "TAG_NAME=$TAG" >> $GITHUB_ENV
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "🚨 Tag ${GITHUB_REF_NAME} is not on main"
+            exit 1
           fi
 
       - name: Install pnpm
@@ -60,48 +35,27 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
-          cache: 'pnpm'
+          package-manager-cache: false
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm ci
 
       - name: Build
         run: pnpm run build
 
       - name: Attest Build Provenance
-        if: env.IS_VALID_COMMIT == 'true'
         uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
         with:
-          subject-path: |
-            dist/*
+          subject-path: dist/*
 
       - name: Release Notes
-        if: env.IS_VALID_COMMIT == 'true'
         id: release-notes
-        uses: kitschpatrol/github-action-release-changelog@v2
+        uses: kitschpatrol/github-action-release-changelog@12279a22cf9d0b432dca8ff189d82ad0dd393345 # v2.0.9
 
       - name: Release
-        if: env.IS_VALID_COMMIT == 'true'
-        id: release
-        uses: kitschpatrol/github-action-release@v2
+        uses: kitschpatrol/github-action-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
-          token: ${{ env.ACCESS_TOKEN }}
-          draft: false
-          prerelease: false
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
           fail_on_unmatched_files: true
-          name: ${{ env.TAG_NAME }}
-          tag_name: ${{ env.TAG_NAME }}
-          body: |
-            ${{ steps.release-notes.outputs.changelog }}
-          files: |
-            dist/*
-
-      - name: Log Release Details
-        if: env.IS_VALID_COMMIT == 'true'
-        run: |
-          echo "📦 Successfully released: ${{ env.TAG_NAME }}"
-          echo "🔗 Release URL: ${STEPS_RELEASE_OUTPUTS_URL}"
-          echo "🪪 Release ID: ${STEPS_RELEASE_OUTPUTS_ID}"
-        env:
-          STEPS_RELEASE_OUTPUTS_URL: ${{ steps.release.outputs.url }}
-          STEPS_RELEASE_OUTPUTS_ID: ${{ steps.release.outputs.id }}
+          body: ${{ steps.release-notes.outputs.changelog }}
+          files: dist/*
