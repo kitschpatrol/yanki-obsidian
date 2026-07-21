@@ -1,6 +1,4 @@
 overrides:
-  # 1100.1.12 was published to npm with only lib/index.js — remove once a fixed version ships
-  '@pnpm/lockfile.fs': 1100.1.11
   # Match obsidian-typings' pin so a single obsidian instance is resolved,
   # otherwise its module augmentations don't apply to our obsidian import
   '@codemirror/state': 6.5.2
