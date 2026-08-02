@@ -35,6 +35,16 @@ div.yanki-settings {
 		border-top: none;
 	}
 
+	/* Section descriptions hug their group heading and span the full row */
+	div.setting-item.section-description {
+		padding-top: 0;
+		border-top: none;
+
+		div.setting-item-info {
+			width: 100%;
+		}
+	}
+
 	/* Keep button annotations to the right */
 	div.setting-item.description-is-button-annotation {
 		div.setting-item-info {
