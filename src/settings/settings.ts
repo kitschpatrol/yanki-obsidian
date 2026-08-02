@@ -1,4 +1,4 @@
-import type { App, ButtonComponent, SettingDefinitionRender } from 'obsidian'
+import type { App, ButtonComponent } from 'obsidian'
 import {
 	moment,
 	Notice,
@@ -19,8 +19,17 @@ import { capitalize, html, sanitizeNamespace, validateNamespace } from '../utili
  */
 const FORCE_LEGACY_SETTINGS = false
 
-type YankiSettingDefinition = Omit<SettingDefinitionRender, 'render'> & {
+/**
+ * Structurally compatible with Obsidian 1.13's `SettingDefinitionRender`, but
+ * defined locally so the code also type-checks against pre-1.13 typings, like
+ * the ones the Obsidian plugin review bot lints with.
+ */
+type YankiSettingDefinition = {
+	desc?: DocumentFragment | string
+	name: string
 	render: (setting: Setting) => void
+	searchable?: boolean
+	visible?: (() => boolean) | boolean
 }
 
 type YankiSettingGroup = {
@@ -128,7 +137,7 @@ export function getYankiPluginDefaultSettings(app: App): YankiPluginSettings {
 
 export class YankiPluginSettingTab extends PluginSettingTab {
 	override plugin: YankiPlugin
-	private folderAddSetting: Setting | undefined
+	private folderAddSetting?: Setting
 	private initialSettings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	private isSettingsOpen = false
 
