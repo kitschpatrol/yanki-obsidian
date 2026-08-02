@@ -158,6 +158,17 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		// Normalize folders.
 		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
 		void this.plugin.settingsChangeSyncCheck(this.initialSettings)
+
+		// Obsidian 1.13+ renders reopened tabs from cached setting definitions, so
+		// rebuild them to match the folders normalized above. Deferred because
+		// `hide()` runs while the tab is still active, and `update()` re-renders
+		// the active tab mid-teardown.
+		// eslint-disable-next-line unicorn/prefer-global-this -- `obsidianmd/prefer-window-timers` wants `window` timers for popout window compatibility.
+		window.setTimeout(() => {
+			if (requireApiVersion('1.13.0')) {
+				this.update()
+			}
+		}, 0)
 	}
 
 	public render(): void {
@@ -206,7 +217,7 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 			},
 		]
 
-		for (const [index, folder] of folders.entries()) {
+		for (const index of folders.keys()) {
 			folderItems.push({
 				name: `Anki flashcard folder ${String(index + 1)}`,
 				render: (setting) => {
@@ -219,16 +230,18 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 							new FolderSuggest(search.inputEl, this.app)
 							search
 								.setPlaceholder('Select a folder')
-								.setValue(folder)
+								// Obsidian 1.13+ re-renders from cached definitions, so the value
+								// must come from live settings rather than the closure.
+								.setValue(this.plugin.settings.folders[index] ?? '')
 								.onChange((value) => {
 									this.plugin.settings.folders[index] = value
+									// Selecting a suggestion keeps focus in the input, so the count
+									// can't wait for the blur listener below.
+									this.updateNotesFoundCount()
 								})
 
 							search.inputEl.addEventListener('blur', () => {
-								void (async () => {
-									await this.plugin.saveSettings()
-									this.updateNotesFoundCount()
-								})()
+								void this.plugin.saveSettings()
 							})
 						})
 						.setClass('folder-setting')
