@@ -627,7 +627,13 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 						.setName('')
 						.setClass('namespace-reset')
 						.addButton((button) => {
-							button.setWarning()
+							if (requireApiVersion('1.13.0')) {
+								button.setDestructive()
+							} else {
+								// eslint-disable-next-line ts/no-deprecated -- `setDestructive` does not exist before Obsidian 1.13.0.
+								button.setWarning()
+							}
+
 							button.setButtonText('Reset namespace to vault ID')
 							button.onClick(async () => {
 								this.plugin.settings.namespace = getYankiPluginDefaultSettings(this.app).namespace
