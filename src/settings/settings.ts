@@ -155,8 +155,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	override hide(): void {
 		this.isSettingsOpen = false
 
-		// Normalize folders.
+		// Normalize folders, and persist since the blur listeners that usually save
+		// don't fire when the modal is torn down while an input is focused.
 		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
+		void this.plugin.saveSettings()
 		void this.plugin.settingsChangeSyncCheck(this.initialSettings)
 
 		// Obsidian 1.13+ renders reopened tabs from cached setting definitions, so

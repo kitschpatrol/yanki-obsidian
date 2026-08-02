@@ -358,6 +358,10 @@ export default class YankiPlugin extends Plugin {
 		await this.loadSettings()
 
 		await this.settingsChangeSyncCheck(originalSettings)
+
+		// Refresh the settings tab, which otherwise caches stale definitions on
+		// Obsidian 1.13+ (e.g. folder row count and values).
+		this.settingsTab.render()
 	}
 
 	override async onload() {
