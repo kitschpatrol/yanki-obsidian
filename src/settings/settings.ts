@@ -789,7 +789,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		this.containerEl.empty()
 		this.prepareSettingsDisplay()
-		this.containerEl.addClass('legacy-settings')
 
 		// Catch the automatic first-input focus without opening the first folder search.
 		this.containerEl.createEl('input', { cls: 'focus-catcher', type: 'text' })
