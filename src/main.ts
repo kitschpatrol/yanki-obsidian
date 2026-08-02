@@ -37,7 +37,7 @@ import { renameFiles, syncFiles } from 'yanki'
 const DRIVE_LETTER_REGEX = /^[A-Z]:/iv
 
 export default class YankiPlugin extends Plugin {
-	public settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
+	public override settings: YankiPluginSettings = getYankiPluginDefaultSettings(this.app)
 	private readonly settingsTab: YankiPluginSettingTab = new YankiPluginSettingTab(this.app, this)
 
 	// Arrow-function field so `this.openSettingsTab` can be passed as a callback
@@ -358,6 +358,10 @@ export default class YankiPlugin extends Plugin {
 		await this.loadSettings()
 
 		await this.settingsChangeSyncCheck(originalSettings)
+
+		// Refresh the settings tab, which otherwise caches stale definitions on
+		// Obsidian 1.13+ (e.g. folder row count and values).
+		this.settingsTab.render()
 	}
 
 	override async onload() {

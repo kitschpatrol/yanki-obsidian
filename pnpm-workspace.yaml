@@ -27,3 +27,5 @@ minimumReleaseAgeExclude:
   - 'eslint-plugin-obsidianmd'
   - 'yanki-connect'
   - 'yanki'
+  - '@obsidian-typings/*'
+  - 'obsidian-typings'
