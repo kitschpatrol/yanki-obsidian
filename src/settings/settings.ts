@@ -13,6 +13,12 @@ import type YankiPlugin from '../main'
 import { FolderSuggest } from '../extensions/folder-suggest'
 import { capitalize, html, sanitizeNamespace, validateNamespace } from '../utilities'
 
+/**
+ * Debug flag: set to `true` to force the pre-1.13 imperative settings
+ * rendering, even on Obsidian 1.13+.
+ */
+const FORCE_LEGACY_SETTINGS = false
+
 type YankiSettingDefinition = Omit<SettingDefinitionRender, 'render'> & {
 	render: (setting: Setting) => void
 }
@@ -137,6 +143,36 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	}
 
 	override getSettingDefinitions(): YankiSettingGroup[] {
+		// eslint-disable-next-line ts/no-unnecessary-condition -- `FORCE_LEGACY_SETTINGS` is a hard-coded debug flag.
+		if (FORCE_LEGACY_SETTINGS) {
+			// With no definitions, Obsidian 1.13+ falls back to the `display()` code path.
+			return []
+		}
+
+		return this.getSettingGroups()
+	}
+
+	override hide(): void {
+		this.isSettingsOpen = false
+
+		// Normalize folders.
+		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
+		void this.plugin.settingsChangeSyncCheck(this.initialSettings)
+	}
+
+	public render(): void {
+		if (requireApiVersion('1.13.0')) {
+			// eslint-disable-next-line unicorn/no-lonely-if, ts/no-unnecessary-condition -- `FORCE_LEGACY_SETTINGS` is a hard-coded debug flag, and the `if` nesting keeps the `requireApiVersion` guard visible to `obsidianmd/no-unsupported-api`.
+			if (!FORCE_LEGACY_SETTINGS) {
+				this.update()
+				return
+			}
+		}
+
+		this.renderLegacySettings()
+	}
+
+	private getSettingGroups(): YankiSettingGroup[] {
 		const advancedVisible = () => this.plugin.settings.showAdvancedSettings
 		const folders = this.plugin.settings.folders.length === 0 ? [''] : this.plugin.settings.folders
 		const { latestSyncTime } = this.plugin.settings.stats.sync
@@ -724,23 +760,6 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 		]
 	}
 
-	override hide(): void {
-		this.isSettingsOpen = false
-
-		// Normalize folders.
-		this.plugin.settings.folders = this.plugin.getSanitizedFolders()
-		void this.plugin.settingsChangeSyncCheck(this.initialSettings)
-	}
-
-	public render(): void {
-		if (requireApiVersion('1.13.0')) {
-			this.update()
-			return
-		}
-
-		this.renderLegacySettings()
-	}
-
 	private prepareSettingsDisplay(): void {
 		this.containerEl.addClass('yanki-settings')
 		this.containerEl.setAttr('id', 'yanki-settings')
@@ -770,11 +789,12 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 
 		this.containerEl.empty()
 		this.prepareSettingsDisplay()
+		this.containerEl.addClass('legacy-settings')
 
 		// Catch the automatic first-input focus without opening the first folder search.
 		this.containerEl.createEl('input', { cls: 'focus-catcher', type: 'text' })
 
-		for (const group of this.getSettingDefinitions()) {
+		for (const group of this.getSettingGroups()) {
 			new Setting(this.containerEl).setName(group.heading).setHeading()
 
 			for (const definition of group.items) {

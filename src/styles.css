@@ -35,13 +35,19 @@ div.yanki-settings {
 		border-top: none;
 	}
 
-	/* Section descriptions hug their group heading and span the full row */
+	/* Section descriptions span the full row */
 	div.setting-item.section-description {
-		padding-top: 0;
-		border-top: none;
-
 		div.setting-item-info {
 			width: 100%;
+		}
+	}
+
+	/* Pre-1.13 imperative rendering */
+	&.legacy-settings {
+		/* Section descriptions hug the heading row above */
+		div.setting-item.section-description {
+			padding-top: 0;
+			border-top: none;
 		}
 	}
 
