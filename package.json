@@ -40,16 +40,16 @@
 	},
 	"devDependencies": {
 		"@eslint/json": "0.14.0",
-		"@kitschpatrol/cspell-config": "^8.3.0",
-		"@kitschpatrol/eslint-config": "^8.3.0",
-		"@kitschpatrol/knip-config": "^8.3.0",
-		"@kitschpatrol/mdat-config": "^8.3.0",
-		"@kitschpatrol/prettier-config": "^8.3.0",
-		"@kitschpatrol/remark-config": "^8.3.0",
-		"@kitschpatrol/shared-config": "^8.3.0",
-		"@kitschpatrol/stylelint-config": "^8.3.0",
+		"@kitschpatrol/cspell-config": "^8.6.0",
+		"@kitschpatrol/eslint-config": "^8.6.0",
+		"@kitschpatrol/knip-config": "^8.6.0",
+		"@kitschpatrol/mdat-config": "^8.6.0",
+		"@kitschpatrol/prettier-config": "^8.6.0",
+		"@kitschpatrol/remark-config": "^8.6.0",
+		"@kitschpatrol/shared-config": "^8.6.0",
+		"@kitschpatrol/stylelint-config": "^8.6.0",
 		"@types/node": "~20.19.43",
-		"bumpp": "^11.1.0",
+		"bumpp": "^12.1.1",
 		"chokidar": "^5.0.0",
 		"debounce": "^3.0.0",
 		"entities": "^8.0.0",
@@ -66,9 +66,9 @@
 		"tsx": "^4.23.1",
 		"type-fest": "^5.8.0",
 		"typescript": "~6.0.3",
-		"yanki": "^2.0.13"
+		"yanki": "^2.0.14"
 	},
-	"packageManager": "pnpm@11.13.0",
+	"packageManager": "pnpm@11.17.0",
 	"engines": {
 		"node": ">=20.19.0"
 	},

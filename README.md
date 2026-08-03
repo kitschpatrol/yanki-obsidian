@@ -20,7 +20,7 @@
   }
 }) -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit)
 [![CI](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release)](https://github.com/kitschpatrol/yanki-obsidian/releases/latest)
 [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://community.obsidian.md/plugins/yanki)
@@ -153,8 +153,8 @@ An extended palette of Markdown syntax is available out of the box, mirroring (a
 - [LaTeX formatted mathematical expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) via Anki's built-in [MathJax](https://www.mathjax.org) rendering support.
 - The [`==highlights==`](https://github.com/ipikuka/remark-flexible-markers) syntax.
 - Compact [furigana](https://en.wikipedia.org/wiki/Furigana) / [Ruby](https://en.wikipedia.org/wiki/Ruby_character) syntax specified by [DenDen Markdown](https://conv.denshochan.com/markdown#ruby), for example: `{東京|とうきょう}` renders as `<ruby>東京<rp>(</rp><rt>とうきょう</rt><rp>)</rp></ruby>`. This matches support in Obsidian provided by the [Markdown Furigana](https://github.com/steven-kraft/obsidian-markdown-furigana) plugin.
-- Obsidian's [block links](https://help.obsidian.md/links#Link+to+a+block+in+a+note), e.g. `[[Some Note#^37066d]]`
-- Obsidian's [heading links](https://help.obsidian.md/links#Link+to+a+heading+in+a+note), e.g. `[[Some Note#Heading]]`
+- Obsidian's [block links](https://obsidian.md/help/links#Link+to+a+block+in+a+note), e.g. `[[Some Note#^37066d]]`
+- Obsidian's [heading links](https://obsidian.md/help/links#Link+to+a+heading+in+a+note), e.g. `[[Some Note#Heading]]`
 
 ### Intelligent syncing
 
@@ -198,7 +198,7 @@ There's no such thing as an invalid note: In the absence of enough Markdown synt
 
 You're free to use additional Markdown in your notes to style and structure the front and back of your flashcard notes.
 
-The four supported note types are described below. See the [Yanki Demo Vault](https://github.com/kitschpatrol/yanki-obsidian/blob/main/examples/Yanki%20Demo%20Vault) for additional examples.
+The four supported note types are described below. See the [Yanki Demo Vault](https://github.com/kitschpatrol/yanki-obsidian/tree/main/examples/Yanki%20Demo%20Vault) for additional examples.
 
 ### Basic
 
@@ -665,7 +665,7 @@ On the next sync, Yanki will do its best to find the previously-synced note and 
 
 ### Seeing `noteId` everywhere is annoying...
 
-Shield your eyes with a [CSS snippet](https://help.obsidian.md/Extending+Obsidian/CSS+snippets):
+Shield your eyes with a [CSS snippet](https://obsidian.md/help/snippets):
 
 ```css
 div.metadata-property[data-property-key='noteId'] {
@@ -823,7 +823,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)
 - [Note Synchronizer](https://github.com/tansongchen/obsidian-note-synchronizer)
 - [Awesome Flashcard](https://github.com/AwesomeDog/obsidian-awesome-flashcard)
-- [Auto Anki](https://github.com/ad2969/obsidian-auto-anki)
+- [Auto Anki](https://github.com/cadrianxyz/obsidian-auto-anki)
 - [text2anki-openai](https://github.com/manibatra/obsidian-text2anki-openai)
 - [AnkiSync+](https://github.com/RochaG07/anki-sync-plus)
 
