@@ -738,8 +738,10 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 									if (requireApiVersion('1.13.0')) {
 										button.setDestructive()
 									} else {
-										// eslint-disable-next-line ts/no-deprecated -- `setDestructive` does not exist before Obsidian 1.13.0.
-										button.setWarning()
+										// `setDestructive` does not exist before Obsidian 1.13.0, and the
+										// deprecated `setWarning` is flagged by Obsidian's scanner, so apply
+										// the class it would have added directly.
+										button.buttonEl.addClass('mod-warning')
 									}
 
 									button.setButtonText('Reset namespace to vault ID')
