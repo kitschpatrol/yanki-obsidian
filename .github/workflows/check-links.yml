@@ -63,11 +63,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout .lycheeignore
+      - name: Checkout lychee config
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          sparse-checkout: .lycheeignore
+          sparse-checkout: |
+            .lycheeignore
+            lychee.toml
           sparse-checkout-cone-mode: false
 
       - name: Resolve homepage URL
@@ -96,15 +98,27 @@ jobs:
           key: lychee-site-${{ github.run_id }}
           restore-keys: lychee-site-
 
-      - name: Generate URL list from sitemap
+      - name: Install htmlq
+        if: steps.homepage.outputs.url != ''
+        run: cargo install htmlq --version 0.4.0 --locked
+
+      - name: Discover sitemap and generate URL list
         if: steps.homepage.outputs.url != ''
         env:
           HOMEPAGE: ${{ steps.homepage.outputs.url }}
         run: |
-          pipx run --spec trafilatura trafilatura --sitemap "$HOMEPAGE" --list \
+          sitemap_url="$(
+            curl --fail --silent --show-error --location "$HOMEPAGE" |
+              htmlq --base "$HOMEPAGE" --attribute href 'link[rel~="sitemap"]'
+          )" 2> "$RUNNER_TEMP/htmlq.log" || true
+          sitemap_url="${sitemap_url:-$HOMEPAGE}"
+
+          pipx run --spec 'trafilatura==2.1.0' trafilatura --sitemap "$sitemap_url" --list \
             > "$RUNNER_TEMP/urls.txt" 2> "$RUNNER_TEMP/trafilatura.log" || true
+
           if ! grep -q '[^[:space:]]' "$RUNNER_TEMP/urls.txt"; then
             echo "::group::No sitemap found, falling back to homepage URL"
+            cat "$RUNNER_TEMP/htmlq.log"
             cat "$RUNNER_TEMP/trafilatura.log"
             echo "::endgroup::"
             printf '%s\n' "$HOMEPAGE" > "$RUNNER_TEMP/urls.txt"

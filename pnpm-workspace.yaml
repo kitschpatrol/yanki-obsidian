@@ -18,8 +18,5 @@ allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@kitschpatrol/*'
-  - 'eslint-plugin-obsidianmd'
-  - 'yanki-connect'
-  - 'yanki'
-  - '@obsidian-typings/*'
-  - 'obsidian-typings'
+  - yanki-connect@4.0.10
+  - yanki@2.0.15
