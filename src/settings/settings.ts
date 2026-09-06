@@ -284,14 +284,11 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 					setting
 						.setName('')
 						.addButton((button: ButtonComponent) => {
-							button
-								.setTooltip('Add folder')
-								.setButtonText('Add folder')
-								.onClick(async () => {
-									this.plugin.settings.folders.push('')
-									await this.plugin.saveSettings()
-									this.render()
-								})
+							button.setButtonText('Add folder').onClick(async () => {
+								this.plugin.settings.folders.push('')
+								await this.plugin.saveSettings()
+								this.render()
+							})
 						})
 						.setClass('description-is-button-annotation')
 					this.updateNotesFoundCount()
