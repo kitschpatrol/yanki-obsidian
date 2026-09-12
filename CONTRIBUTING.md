@@ -24,6 +24,8 @@ For anything beyond a trivial fix, please open an issue first so we can agree on
 4. Run `pnpm dev` to start compilation in watch mode.
 5. Reload Obsidian (Ctrl/Cmd+R) to pick up changes. The [Hot Reload plugin](https://github.com/pjeby/hot-reload) can help automate this during development.
 
+For automated testing in real Obsidian and Anki, see [Desktop tests](./test/README.md). With uv installed, `pnpm test` prepares Anki, builds the plugin, and runs the Vitest suite. CI builds on Linux, macOS, and Windows, testing the minimum and latest stable Obsidian apps with the installer matching `minAppVersion`. Lint and type checking run once on Linux.
+
 ## Code standards
 
 This project uses [`@kitschpatrol/shared-config`](https://github.com/kitschpatrol/shared-config) for linting, formatting, and type checking, orchestrated through the `ksc` CLI. **Run `pnpm fix` before submitting a PR** — it auto-fixes formatting, import sorting, and most lint issues in one shot.

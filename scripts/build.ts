@@ -6,11 +6,9 @@ import fs from 'node:fs/promises'
 import process from 'node:process'
 import { generateManifest } from './generate-manifest'
 
-// We assume our minimum specified Obsidian version 1.9.12 correlates with the
-// following:
-// - The closest release is version 1.9.12 from August 26, 2025:
-//   https://github.com/obsidianmd/obsidian-releases/releases/tag/v1.9.12
-// This release is using Electron 37.3.1, Chromium 138, V8 12.4, and Node 22.18.0
+// Obsidian updates its app separately from its Electron installer. minAppVersion
+// does not guarantee a JavaScript runtime version, and esbuild's target does not
+// polyfill runtime APIs such as Set.union. See test/README.md and issue #81.
 
 const banner = `/*
 This is a generated source file!
@@ -170,6 +168,10 @@ async function triggerRebuild(): Promise<void> {
 		await generateManifest()
 
 		console.log('Rebuild complete.')
+		if (process.argv.includes('--no-demo')) {
+			return
+		}
+
 		console.log('Copying files to demo vault...')
 
 		await fs.mkdir('./examples/Yanki Demo Vault/.obsidian/plugins/yanki', { recursive: true })
@@ -190,6 +192,9 @@ async function triggerRebuild(): Promise<void> {
 		console.log('Files copied.')
 	} catch (error) {
 		console.error('Rebuild failed:', error)
+		if (production) {
+			throw error
+		}
 	} finally {
 		isRebuilding = false
 	}
