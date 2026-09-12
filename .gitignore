@@ -29,3 +29,9 @@ resources/
 /examples/Yanki Demo Vault/.obsidian/workspace.json
 /examples/Yanki Demo Vault/.obsidian/plugins/yanki
 .claude/
+
+# Disposable desktop test environments and diagnostics
+.cache/
+.venv/
+test-results/
+__pycache__/

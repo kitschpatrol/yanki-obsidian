@@ -10,8 +10,11 @@ publicHoistPattern:
   - '*remark*'
   - '*stylelint*'
 allowBuilds:
+  classic-level: true
+  edgedriver: false
   electron: true
   esbuild: true
+  geckodriver: false
   obsidian-typings: false
   oxc-resolver: true
   puppeteer: true

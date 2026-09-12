@@ -32,10 +32,35 @@ export default eslintConfig(
 		},
 	},
 	{
-		files: ['CONTRIBUTING.md', 'README.md', 'examples/**/*.md'],
+		files: ['CONTRIBUTING.md', '**/README.md', 'examples/**/*.md'],
 		rules: {
 			'unicorn/filename-case': 'off',
 		},
+	},
+	{
+		files: ['test/**/*.ts', 'vitest*.ts'],
+		rules: {
+			// ExecuteObsidian serializes callbacks into another runtime: regexes
+			// must stay inside those callbacks and work on older Electron versions.
+			'e18e/prefer-static-regex': 'off',
+			// Desktop test tooling runs on Node 24, independently of plugin engines.
+			'node/no-unsupported-features/node-builtins': ['error', { version: '>=24.16.0' }],
+			'require-unicode-regexp': ['error', { requireFlag: 'u' }],
+			'test/no-standalone-expect': ['error', { additionalTestBlockFunctions: ['test'] }],
+			// Environment and WebDriver capability names are external API contracts.
+			'ts/naming-convention': 'off',
+		},
+	},
+	{
+		files: ['test/support/types.d.ts'],
+		rules: {
+			// Module augmentation requires interfaces for declaration merging.
+			'ts/consistent-type-definitions': ['error', 'interface'],
+		},
+	},
+	{
+		files: ['test/vault/**/*.md'],
+		rules: { 'unicorn/filename-case': 'off' },
 	},
 	// Obsidian plugin guidelines — matches the rule set used by the Obsidian
 	// plugin scanner. See https://github.com/obsidianmd/eslint-plugin.

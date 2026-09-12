@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request: {}
   workflow_dispatch: {}
+  schedule:
+    # Exercise newly released Obsidian versions even without a plugin change.
+    - cron: '23 10 * * 1'
 
 permissions:
   contents: read
@@ -14,14 +17,10 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  ci:
-    runs-on: ${{ matrix.os }}
+  checks:
+    name: Lint and type-check
+    runs-on: ubuntu-latest
     timeout-minutes: 20
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -41,13 +40,91 @@ jobs:
       - name: Install dependencies
         run: pnpm ci
 
-      - name: Build
-        run: pnpm run build
-
-      - name: Lint
+      - name: Lint and type-check
         run: pnpm run lint
-      # Tests happen in
-      # https://github.com/kitschpatrol/yanki
-      # https://github.com/kitschpatrol/yanki-connect
-      # - name: Test
-      #   run: pnpm run test
+
+  desktop:
+    name: ${{ matrix.os }} / build and desktop tests
+    needs: checks
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            xvfb libegl1 libgl1 libopengl0 libnss3 libxcomposite1 libxdamage1 \
+            libxrandr2 libxtst6 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 \
+            libxcb-shape0 libxcb-xinerama0 libgbm1 libasound2t64 libatk1.0-0 \
+            libatk-bridge2.0-0 libcups2 libdrm2 libpango-1.0-0 libcairo2 libatspi2.0-0
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: '0.12.10'
+          enable-cache: true
+          cache-dependency-glob: test/uv.lock
+
+      - name: Install Anki
+        run: uv sync --project test --locked --managed-python
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm ci
+
+      - name: Cache desktop downloads
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .cache
+          # Refresh moving "latest" aliases each run; restore immutable downloads.
+          key: desktop-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.run_id }}
+          restore-keys: |
+            desktop-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('pnpm-lock.yaml') }}-
+
+      - name: Build release bundle
+        # The checks job already ran TypeScript. Build once on each OS.
+        run: pnpm build:bundle --no-demo
+
+      - name: Test minimum Obsidian
+        id: minimum
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          YANKI_E2E_APP_VERSION: earliest
+        # Both app versions use the installer matching dist/manifest.json's minAppVersion.
+        run: ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum ' || '' }}pnpm test:e2e
+
+      - name: Test latest stable Obsidian
+        # Run both endpoints even if the minimum-version tests fail.
+        if: ${{ !cancelled() && (steps.minimum.outcome == 'success' || steps.minimum.outcome == 'failure') }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          YANKI_E2E_APP_VERSION: latest
+        run: ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum ' || '' }}pnpm test:e2e
+
+      - name: Upload desktop diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: desktop-${{ matrix.os }}
+          path: test-results/
+          retention-days: 14
