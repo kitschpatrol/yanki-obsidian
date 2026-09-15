@@ -122,7 +122,6 @@ export const test = base.extend<{ desktop: Desktop }>({
 				({ obsidian }, resolvedInstallerVersion) => ({
 					app: obsidian.apiVersion,
 					installer: resolvedInstallerVersion,
-					setUnion: typeof Set.prototype.union === 'function',
 					versions: process.versions,
 				}),
 				capabilities['wdio:obsidianOptions']?.installerVersion,
@@ -132,7 +131,7 @@ export const test = base.extend<{ desktop: Desktop }>({
 				JSON.stringify(runtime, undefined, 2),
 			)
 			console.log(
-				`Obsidian ${runtime.app}, installer ${runtime.installer}, Electron ${runtime.versions.electron}, Set.union: ${String(runtime.setUnion)}`,
+				`Obsidian ${runtime.app}, installer ${runtime.installer}, Electron ${runtime.versions.electron}`,
 			)
 			await browser.executeObsidian(
 				async ({ plugins }, connection, testNamespace) => {

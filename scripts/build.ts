@@ -8,7 +8,7 @@ import { generateManifest } from './generate-manifest'
 
 // Obsidian updates its app separately from its Electron installer. minAppVersion
 // does not guarantee a JavaScript runtime version, and esbuild's target does not
-// polyfill runtime APIs such as Set.union. See test/README.md and issue #81.
+// polyfill runtime APIs. See test/README.md for the supported runtime tests.
 
 const banner = `/*
 This is a generated source file!

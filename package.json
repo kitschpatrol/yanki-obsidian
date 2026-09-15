@@ -37,7 +37,6 @@
 		"release": "bumpp package.json manifest.json -x 'pnpm build' -c 'Release: %s' --tag '%s'",
 		"test": "pnpm build --no-demo && vitest run",
 		"test:e2e": "vitest run",
-		"test:issue-81": "pnpm build --no-demo && vitest run --config vitest.issue-81.config.ts",
 		"yanki:deploy-local": "shx cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
 		"yanki:use-local": "pnpm remove yanki && pnpm add -D ../yanki",
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"

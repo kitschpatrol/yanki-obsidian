@@ -528,7 +528,7 @@ Enable to see additional details in synchronization notices.
 
 ##### Sync stats
 
-Keep track of how many Obsidian notes have been synchronized to anki, how these synchronizations were initialized, and how the notes were updated. This can be useful for debugging.
+Keep track of how many Obsidian notes have been synchronized to Anki, how these synchronizations were initialized, and how the notes were updated. This can be useful for debugging.
 
 ##### Automatic sync
 
@@ -767,7 +767,15 @@ No. "Native" Anki syntax like the `{{c1::...` cloze markup cannot coexist peacef
 
 ### I'm stuck on an old version of Obsidian, can I still use Yanki?
 
-Older releases of the plugin provide compatibility back to Obsidian version 1.5.0, which was originally released in November 2023.
+Older releases of the plugin provide compatibility back to Obsidian installer version 1.5.0, which was originally released in November 2023.
+
+### I'm getting a mysterious `TypeError` when I sync
+
+Yanki requires Obsidian 1.6.5 or newer — including the installer version, which, confoundingly, can differ from the app version.
+
+Obsidian's in-app updates don't update its underlying Electron, Chromium, and V8 components. If you originally installed an older version of Obsidian, these components may lack functions Yanki needs, causing errors even when the app appears up to date.
+
+To check your installer version, run `Show debug info` from Obsidian's command palette. If it's older than 1.6.5, follow Obsidian's [installer update instructions](https://obsidian.md/help/updates#Installer+updates) and try to sync again.
 
 ## Privacy and security
 

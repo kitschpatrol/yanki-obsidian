@@ -3,4 +3,5 @@ exclude = [
 	'https://github.com/kitschpatrol/yanki-obsidian/releases/latest',
 	'https://obsidian\.md/help/links#Link\+to\+a\+block\+in\+a\+note',
 	'https://obsidian\.md/help/links#Link\+to\+a\+heading\+in\+a\+note',
+	'https://obsidian\.md/help/updates#Installer\+updates',
 ]
