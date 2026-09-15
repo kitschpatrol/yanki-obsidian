@@ -4,6 +4,8 @@ These tests run the production bundle in real Obsidian and sync to real Anki. [V
 
 The focus is the plugin boundary: commands and notices, settings UI and persistence, watched folders, file and fetch adapters, metadata cache updates, and plugin lifecycle. Parsing, note types, media permutations, and sync algorithm coverage belong in [yanki](https://github.com/kitschpatrol/yanki).
 
+The [sync regression test](./sync.e2e.test.ts) syncs notes into nested decks, adds another note through Obsidian's Vault API, and syncs again. It verifies successful completion, stable existing Anki IDs, frontmatter and metadata cache updates, and an unchanged third sync without duplicate notes. This scenario runs in every supported CI combination.
+
 ## Local setup
 
 Install the repository's Node and pnpm versions, plus [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
@@ -21,19 +23,19 @@ On Linux, install the Qt/Electron libraries listed in [the workflow](../.github/
 
 ## Commands
 
-| Command                                 | Behavior                                                                                                                  |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm test`                             | Build the production bundle, then run all desktop tests on latest stable Obsidian with the minimum supported installer.   |
-| `pnpm test:e2e`                         | Run against the existing `dist/` bundle. Build first after source changes.                                                |
-| `pnpm test:e2e test/plugin.e2e.test.ts` | Run one test file.                                                                                                        |
-| `pnpm test:e2e -t "persists folder"`    | Select tests by name.                                                                                                     |
-| `pnpm test:issue-81`                    | Build and run the nested-deck regression on app 1.13.7 / installer 1.5.12. Currently expected to fail on the second sync. |
+| Command                                 | Behavior                                                                                                                |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `pnpm test`                             | Build the production bundle, then run all desktop tests on latest stable Obsidian with the minimum supported installer. |
+| `pnpm test:e2e`                         | Run against the existing `dist/` bundle. Build first after source changes.                                              |
+| `pnpm test:e2e test/plugin.e2e.test.ts` | Run one test file.                                                                                                      |
+| `pnpm test:e2e -t "persists folder"`    | Select tests by name.                                                                                                   |
+| `pnpm test:e2e test/sync.e2e.test.ts`   | Run the nested-deck sync regression.                                                                                    |
 
 To test other combinations, set `YANKI_E2E_APP_VERSION` and `YANKI_E2E_INSTALLER_VERSION`. For example, on macOS/Linux:
 
 ```sh
 YANKI_E2E_APP_VERSION=earliest pnpm test
-YANKI_E2E_APP_VERSION=1.13.7 YANKI_E2E_INSTALLER_VERSION=1.5.12 pnpm test:e2e test/sync.e2e.test.ts
+YANKI_E2E_APP_VERSION=latest pnpm test:e2e test/sync.e2e.test.ts
 ```
 
 `earliest` for the **app** reads `minAppVersion` from the built manifest. `latest` selects the latest public stable app, excluding beta releases. The **installer** defaults to that same `minAppVersion` for both app endpoints, currently 1.9.12. Raising `minAppVersion` raises the tested installer version automatically. An app update does not update Electron, so both endpoints explicitly exercise the supported runtime floor. You can override the installer for local diagnostics; those additional combinations are outside the CI matrix.
@@ -59,15 +61,7 @@ Each test gets a fresh copy of `test/vault`, the release plugin from `dist`, iso
 
 Test commands build with `--no-demo`, leaving the human-facing example vault untouched. The regular `pnpm build` and `pnpm dev` commands retain their existing demo plugin copy behavior.
 
-`test-results/<app>-<installer>/` contains the Anki startup log and, for each desktop test, a screenshot, browser console log, Markdown contents with plugin sync statistics, and runtime versions including whether `Set.prototype.union` exists. Each app endpoint keeps its own logs so running both in one CI job preserves both sets of diagnostics. Diagnostics are captured before shutting down Obsidian, including on assertion failures. Setup failures before a browser starts may only have process logs. These files are ignored by Git and uploaded by CI for 14 days.
-
-## Issue #81
-
-[The report](https://github.com/kitschpatrol/yanki-obsidian/issues/81) uses Obsidian app 1.13.7 with installer 1.5.12. The reporter confirmed that `Set.prototype.union` is missing. The test starts with four nested notes, syncs successfully, creates Chicken through Obsidian's Vault API, and syncs again. It checks the actual completion statistics and notices, Anki IDs/decks, persisted frontmatter, metadata cache, and a further unchanged sync.
-
-The test always asserts successful behavior. It does not remove `Set.union`, install a polyfill, or accept an arbitrary failure as a passing test. The pinned reproduction configuration currently exposes the bug with an ordinary failing assertion. This testing change does not fix the library's use of `Set.union`.
-
-The nested-note regression runs in every supported CI combination. Installer 1.5.12 is below the supported floor, so the pinned `pnpm test:issue-81` reproduction is a local diagnostic command rather than an extra CI combination. It is still expected to fail with the reported error.
+`test-results/<app>-<installer>/` contains the Anki startup log and, for each desktop test, a screenshot, browser console log, Markdown contents with plugin sync statistics, and runtime versions. Each app endpoint keeps its own logs so running both in one CI job preserves both sets of diagnostics. Diagnostics are captured before shutting down Obsidian, including on assertion failures. Setup failures before a browser starts may only have process logs. These files are ignored by Git and uploaded by CI for 14 days.
 
 ## Adding tests
 

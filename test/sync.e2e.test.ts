@@ -2,7 +2,9 @@ import { expect } from 'vitest'
 import { ankiRequest } from './support/anki'
 import { sync, test, watchFolders } from './support/obsidian'
 
-test('issue 81: syncs again after adding Chicken to a nested deck', async ({ desktop }) => {
+test('syncs an added note into a nested deck and preserves existing note IDs', async ({
+	desktop,
+}) => {
 	const { anki, browser, namespace } = desktop
 	await watchFolders(browser)
 	const first = await sync(browser)
@@ -37,8 +39,6 @@ test('issue 81: syncs again after adding Chicken to a nested deck', async ({ des
 		)
 		.toBe(5)
 
-	// On installer 1.5.12 this must fail with the visible "union is not a
-	// function" notice, not silently pass because the command was dispatched.
 	const second = await sync(browser)
 	expect(second.notes.created).toBe(5)
 	expect(second.notes.unchanged).toBe(4)

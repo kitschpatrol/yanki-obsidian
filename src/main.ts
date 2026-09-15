@@ -136,8 +136,10 @@ export default class YankiPlugin extends Plugin {
 				html`<strong>Anki sync failed:</strong>
 					<pre style="white-space: pre-wrap;">${String(error)}</pre>
 					Please check <a class="settings">the plugin settings</a>, review the
-					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>, and try again.
-					If trouble persists, please
+					<a href="https://github.com/kitschpatrol/yanki-obsidian">documentation</a>,
+					<a href="https://obsidian.md/help/updates#Installer+updates"
+						>install the latest version of Obsidian</a
+					>, and try again. If trouble persists, please
 					<a href="https://github.com/kitschpatrol/yanki-obsidian/issues">open an issue</a>.`,
 				{ settings: this.openSettingsTab },
 			)

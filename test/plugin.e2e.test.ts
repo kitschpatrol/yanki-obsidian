@@ -25,6 +25,33 @@ test('loads the release bundle and reports an unconfigured sync in Obsidian', as
 		.toContain('No flashcard folders to sync')
 })
 
+test('offers installer updates and issue reporting after a sync error', async ({ desktop }) => {
+	const { browser } = desktop
+	await watchFolders(browser)
+	await browser.executeObsidian(({ plugins }) => {
+		// Inject a read failure into this test's disposable plugin instance.
+		// eslint-disable-next-line ts/require-await -- The async adapter deliberately rejects without reading a file.
+		plugins.yanki.fileAdapterRead = async () => {
+			throw new Error('Could not read test flashcard')
+		}
+	})
+	await browser.executeObsidianCommand('yanki:sync')
+	const notice = browser.$(
+		'.notice:has(a[href="https://obsidian.md/help/updates#Installer+updates"])',
+	)
+	await notice.waitForDisplayed()
+	await expect.poll(async () => notice.getText()).toContain('Could not read test flashcard')
+	expect(
+		await notice.$('a[href="https://obsidian.md/help/updates#Installer+updates"]').getText(),
+	).toBe('install the latest version of Obsidian')
+	expect(
+		await notice.$('a[href="https://github.com/kitschpatrol/yanki-obsidian/issues"]').getText(),
+	).toBe('open an issue')
+	expect(
+		await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync),
+	).toMatchObject({ errors: 1, manual: 0 })
+})
+
 test('persists folder settings from the UI through plugin reloads', async ({ desktop }) => {
 	const { browser } = desktop
 	const mainWindow = await openSettings(browser)
