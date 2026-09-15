@@ -20,6 +20,5 @@ allowBuilds:
   puppeteer: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - '@kitschpatrol/*'
-  - yanki-connect@4.0.10
-  - yanki@2.0.15
+  - yanki-connect@4.0.11
+  - yanki@3.0.0
