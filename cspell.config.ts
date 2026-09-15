@@ -2,7 +2,6 @@ import { cspellConfig } from '@kitschpatrol/cspell-config'
 
 export default cspellConfig({
 	words: [
-		'confoundingly',
 		'edgedriver',
 		'executemany',
 		'Flatseal',

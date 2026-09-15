@@ -70,7 +70,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 1. **Prerequisites**
 
-- The [Obsidian desktop application](https://obsidian.md/download). (The Yanki Obsidian plugin has been tested with Obsidian 1.9.12+ on Windows, macOS, and Linux.)
+- The [Obsidian desktop application](https://obsidian.md/download), with both the app and installer version at 1.9.12 or newer. Yanki is tested on Windows, macOS, and Linux.
 - The [Anki desktop application](https://apps.ankiweb.net). (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
 - The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on
 
@@ -771,11 +771,11 @@ Older releases of the plugin provide compatibility back to Obsidian installer ve
 
 ### I'm getting a mysterious `TypeError` when I sync
 
-Yanki requires Obsidian 1.6.5 or newer — including the installer version, which, confoundingly, can differ from the app version.
+The current Yanki release supports Obsidian 1.9.12 or newer, including the installer version, which can differ from the app version.
 
 Obsidian's in-app updates don't update its underlying Electron, Chromium, and V8 components. If you originally installed an older version of Obsidian, these components may lack functions Yanki needs, causing errors even when the app appears up to date.
 
-To check your installer version, run `Show debug info` from Obsidian's command palette. If it's older than 1.6.5, follow Obsidian's [installer update instructions](https://obsidian.md/help/updates#Installer+updates) and try to sync again.
+To check your app and installer versions, open **Settings → General**, or run `Show debug info` from Obsidian's command palette. If your installer is older than 1.9.12, follow Obsidian's [installer update instructions](https://obsidian.md/help/updates#Installer+updates) and try to sync again.
 
 ## Privacy and security
 
