@@ -14,7 +14,6 @@ export default eslintConfig(
 			overrides: {
 				'json-package/require-files': 'off',
 				'json-package/require-sideEffects': 'off',
-				'json-package/valid-package-definition': 'off',
 			},
 		},
 		ts: {
@@ -32,7 +31,7 @@ export default eslintConfig(
 		},
 	},
 	{
-		files: ['CONTRIBUTING.md', '**/README.md', 'examples/**/*.md'],
+		files: ['CONTRIBUTING.md', '**/README.md'],
 		rules: {
 			'unicorn/filename-case': 'off',
 		},

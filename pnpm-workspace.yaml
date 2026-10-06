@@ -20,5 +20,28 @@ allowBuilds:
   puppeteer: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - yanki-connect@4.0.11
-  - yanki@3.0.0
+  - '@eslint-react/ast@5.24.5'
+  - '@eslint-react/core@5.24.5'
+  - '@eslint-react/eslint-plugin@5.24.5'
+  - '@eslint-react/eslint@5.24.5'
+  - '@eslint-react/jsx@5.24.5'
+  - '@eslint-react/shared@5.24.5'
+  - '@eslint-react/var@5.24.5'
+  - '@kitschpatrol/cspell-config@8.12.1'
+  - '@kitschpatrol/eslint-config@8.12.1'
+  - '@kitschpatrol/knip-config@8.12.1'
+  - '@kitschpatrol/mdat-config@8.12.1'
+  - '@kitschpatrol/prettier-config@8.12.1'
+  - '@kitschpatrol/remark-config@8.12.1'
+  - '@kitschpatrol/repo-config@8.12.1'
+  - '@kitschpatrol/shared-config@8.12.1'
+  - '@kitschpatrol/stylelint-config@8.12.1'
+  - '@kitschpatrol/typescript-config@8.12.1'
+  - eslint-plugin-react-dom@5.24.5
+  - eslint-plugin-react-jsx@5.24.5
+  - eslint-plugin-react-naming-convention@5.24.5
+  - eslint-plugin-react-rsc@5.24.5
+  - eslint-plugin-react-web-api@5.24.5
+  - eslint-plugin-react-x@5.24.5
+  - yanki-connect@4.0.12
+  - yanki@3.1.0

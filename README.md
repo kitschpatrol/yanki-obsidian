@@ -6,19 +6,7 @@
 
 ![Yanki Obsidian Banner](./assets/banner.gif)
 
-<!-- badges({
-  npm: [],
-  custom: {
-    "GitHub Release": {
-      image: "https://img.shields.io/github/v/release/kitschpatrol/yanki-obsidian?label=Release",
-      link: "https://github.com/kitschpatrol/yanki-obsidian/releases/latest",
-    },
-    "Obsidian Downloads": {
-      image: "https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23A88BFA&label=Downloads&query=%24%5B%22yanki%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json",
-      link: "https://community.obsidian.md/plugins/yanki",
-    },
-  }
-}) -->
+<!-- badges({ githubRelease: true, npm: false, obsidianDownloads: true }) -->
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit)
 [![CI](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/yanki-obsidian/actions/workflows/ci.yml)
@@ -29,7 +17,7 @@
 
 <!-- short-description -->
 
-**An Obsidian plugin that syncs flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.**
+**Obsidian plugin to sync flashcards from a folder in your vault to Anki. Pure Markdown syntax. No fuss.**
 
 <!-- /short-description -->
 
@@ -825,7 +813,7 @@ This approach is not without compromise. Unlike most plugins, Yanki does its own
 
 ### Other Obsidian Anki plugins
 
-- [Export to Anki / Obsidian\_to\_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
+- [Export to Anki / Obsidian_to_Anki](https://github.com/ObsidianToAnki/Obsidian_to_Anki)
 - [AnkiBridge](https://github.com/JeppeKlitgaard/ObsidianAnkiBridge)
 - [Flashcards](https://github.com/reuseman/flashcards-obsidian)
 - [Anki Sync](https://github.com/debanjandhar12/Obsidian-Anki-Sync)

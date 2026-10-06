@@ -725,13 +725,11 @@ export default class YankiPlugin extends Plugin {
 
 		const watchedFolders = this.getSanitizedFolders()
 		if (watchedFolders.includes(oldPath)) {
-			const updatedFolders = watchedFolders.map((folder) => {
-				if (folder === oldPath || folder.startsWith(oldPath + '/')) {
-					return path.join(fileOrFolder.path, folder.slice(oldPath.length))
-				}
-
-				return folder
-			})
+			const updatedFolders = watchedFolders.map((folder) =>
+				folder === oldPath || folder.startsWith(oldPath + '/')
+					? path.join(fileOrFolder.path, folder.slice(oldPath.length))
+					: folder,
+			)
 			this.settings.folders = updatedFolders
 			await this.saveSettings()
 			await this.syncFlashcardNotesToAnki(false)

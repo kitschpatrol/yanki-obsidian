@@ -3,13 +3,17 @@
 
 # @kitschpatrol/repo-config boilerplate
 !.env.example
+.agents/
 .astro/
+.claude/
 .DS_Store
 .env
 .env.*
 .eslint-config-inspector
 .pnpm-store/
 .svelte-kit/
+.vitest/
+.worktrees/
 {tmp,temp}/
 **/*.min.js
 /scratch/
@@ -18,6 +22,7 @@ build/
 coverage/
 dist/
 node_modules/
+skills-lock.json
 vendor/
 
 # Customizations
@@ -28,7 +33,6 @@ data.json
 resources/
 /examples/Yanki Demo Vault/.obsidian/workspace.json
 /examples/Yanki Demo Vault/.obsidian/plugins/yanki
-.claude/
 
 # Disposable desktop test environments and diagnostics
 .cache/

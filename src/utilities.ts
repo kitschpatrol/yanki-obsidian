@@ -113,25 +113,9 @@ export function objectsEqual<T extends Record<string, unknown> | undefined>(a: T
  * Shallow-compares two arrays by index.
  */
 export function arraysEqual<T extends undefined | unknown[]>(a: T, b: T): boolean {
-	if (a === b) {
-		return true
-	}
-
-	if (a === undefined || b === undefined) {
-		return false
-	}
-
-	if (a.length !== b.length) {
-		return false
-	}
-
-	for (const [i, element] of a.entries()) {
-		if (element !== b[i]) {
-			return false
-		}
-	}
-
-	return true
+	return a === undefined || b === undefined
+		? a === b
+		: a.length === b.length && a.every((element, i) => element === b[i])
 }
 
 /**
