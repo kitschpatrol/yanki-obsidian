@@ -564,6 +564,26 @@ If you're not sure, feel free to [open an issue on GitHub](https://github.com/ki
 
 You can read more about the lower-level details of how namespaces work in the [Yanki CLI tool documentation](https://github.com/kitschpatrol/yanki?tab=readme-ov-file#namespaces).
 
+<!-- skills({ headingLevel: 3 }) -->
+
+### Agent skills
+
+This project includes an [Agent Skill](https://agentskills.io) to help coding agents work with yanki-obsidian.
+
+To install the skill, run Vercel's [skills CLI](https://github.com/vercel-labs/skills):
+
+```sh
+npx skills add kitschpatrol/yanki-obsidian
+```
+
+Included skill:
+
+#### Skill: [`yanki-obsidian`](skills/yanki-obsidian/SKILL.md)
+
+Create and edit Markdown flashcards in an Obsidian vault and sync them to Anki with the Yanki plugin.
+
+<!-- /skills -->
+
 ### Additional resources
 
 [@emisjerry](https://github.com/emisjerry) has published several very thorough Mandarin-language videos walking through Yanki and illustrating some advanced use-cases:
