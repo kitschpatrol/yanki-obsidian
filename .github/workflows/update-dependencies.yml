@@ -31,7 +31,7 @@ jobs:
         run: pnpm ci
 
       - name: Run ksc-update
-        uses: kitschpatrol/github-action-skill-to-pr@710cc149d42470565427d1bd957f51bb6d53ef9e # v1.1.0
+        uses: kitschpatrol/github-action-skill-to-pr@fe3e8b4aea5851133d8b064a68e92f7b7e4de1e4 # v1.1.1
         with:
           skill: ksc-update
           claude-code-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

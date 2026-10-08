@@ -51,7 +51,7 @@
 		"@kitschpatrol/mdat-config": "^8.12.1",
 		"@kitschpatrol/prettier-config": "^8.12.1",
 		"@kitschpatrol/remark-config": "^8.12.1",
-		"@kitschpatrol/shared-config": "^8.12.1",
+		"@kitschpatrol/shared-config": "^8.13.1",
 		"@kitschpatrol/stylelint-config": "^8.12.1",
 		"@types/node": "~20.19.43",
 		"bumpp": "^12.3.0",
