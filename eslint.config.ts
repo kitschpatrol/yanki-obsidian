@@ -9,13 +9,6 @@ export default eslintConfig(
 			},
 		},
 		ignores: ['examples/Yanki Demo Vault/*'],
-		json: {
-			// We're not actually publishing an NPM package...
-			overrides: {
-				'json-package/require-files': 'off',
-				'json-package/require-sideEffects': 'off',
-			},
-		},
 		ts: {
 			overrides: {
 				'no-new': 'off',
