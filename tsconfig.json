@@ -1,10 +1,7 @@
 {
 	"extends": "@kitschpatrol/typescript-config",
 	"compilerOptions": {
-		"target": "es2025",
-		"lib": ["es2025", "DOM"],
 		"types": ["obsidian-typings"]
 	},
-	"include": ["**/**.*"],
 	"exclude": ["dist/"]
 }

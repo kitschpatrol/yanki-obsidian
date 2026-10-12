@@ -1,3 +1,15 @@
+allowBuilds:
+  classic-level: true
+  edgedriver: false
+  esbuild: true
+  geckodriver: false
+  unrs-resolver: true
+peerDependencyRules:
+  allowedVersions:
+    # Remove once the installed version declares ESLint 10 support.
+    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1075
+    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/pull/1081
+    eslint-plugin-jsx-a11y@6>eslint: ^10.0.0
 publicHoistPattern:
   - '@kitschpatrol/repo-config'
   - '@kitschpatrol/typescript-config'
@@ -9,45 +21,3 @@ publicHoistPattern:
   - '*remark*'
   - '*stylelint*'
   - 'case-police'
-allowBuilds:
-  classic-level: true
-  edgedriver: false
-  electron: true
-  esbuild: true
-  geckodriver: false
-  obsidian-typings: false
-  oxc-resolver: true
-  puppeteer: true
-  unrs-resolver: true
-minimumReleaseAgeExclude:
-  - '@eslint-react/ast@5.24.5'
-  - '@eslint-react/core@5.24.5'
-  - '@eslint-react/eslint-plugin@5.24.5'
-  - '@eslint-react/eslint@5.24.5'
-  - '@eslint-react/jsx@5.24.5'
-  - '@eslint-react/shared@5.24.5'
-  - '@eslint-react/var@5.24.5'
-  - '@kitschpatrol/cspell-config@8.13.1'
-  - '@kitschpatrol/eslint-config@8.13.1'
-  - '@kitschpatrol/knip-config@8.13.1'
-  - '@kitschpatrol/mdat-config@8.13.1'
-  - '@kitschpatrol/prettier-config@8.13.1'
-  - '@kitschpatrol/remark-config@8.13.1'
-  - '@kitschpatrol/repo-config@8.13.1'
-  - '@kitschpatrol/shared-config@8.13.1'
-  - '@kitschpatrol/stylelint-config@8.13.1'
-  - '@kitschpatrol/typescript-config@8.13.1'
-  - eslint-plugin-react-dom@5.24.5
-  - eslint-plugin-react-jsx@5.24.5
-  - eslint-plugin-react-naming-convention@5.24.5
-  - eslint-plugin-react-rsc@5.24.5
-  - eslint-plugin-react-web-api@5.24.5
-  - eslint-plugin-react-x@5.24.5
-  - yanki-connect@4.0.12
-  - yanki@3.1.0
-peerDependencyRules:
-  allowedVersions:
-    # Remove once the installed version declares ESLint 10 support.
-    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1075
-    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/pull/1081
-    eslint-plugin-jsx-a11y@6>eslint: ^10.0.0
