@@ -58,15 +58,17 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 1. **Prerequisites**
 
-- The [Obsidian desktop application](https://obsidian.md/download), with both the app and installer version at 1.9.12 or newer. Yanki is tested on Windows, macOS, and Linux.
-- The [Anki desktop application](https://apps.ankiweb.net). (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
-- The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on
+- The [Obsidian desktop application](https://obsidian.md/download), with both the app and **installer version** at 1.9.12+. Yanki is tested on Windows, macOS, and Linux.
+- The [Anki desktop application](https://apps.ankiweb.net), version 26.08+. (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
+- The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on, version 2026.10.13.0 or newer.
 
   To install the AnkiConnect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get AnkiConnect.
 
   AnkiConnect may ask for your permission in the Anki application to connect to Obsidian on the first sync.
 
   If you encounter trouble with AnkiConnect, please see [the manual configuration procedure](#ive-installed-ankiconnect-but-am-still-getting-connection-errors).
+
+  _Anki versions back to 2.1.55 and AnkiConnect versions back to 24.6.17.0 should work, but please upgrade both to the latest before [reporting a Yanki Obsidian issue on GitHub](https://github.com/kitschpatrol/yanki-obsidian/issues)._
 
 2. **Plugin installation**
 
@@ -720,7 +722,6 @@ In Anki, select _Tools → Add-ons_ from the menu, then select _AnkiConnect_ fro
   "ignoreOriginList": [],
   "webBindAddress": "127.0.0.1",
   "webBindPort": 8765,
-  "webCorsOrigin": "http://localhost",
   "webCorsOriginList": ["http://localhost", "app://obsidian.md"]
 }
 ```
@@ -733,7 +734,7 @@ Under the hood, Yanki uses its own Markdown → HTML rendering pipeline, and its
 
 ### My Obsidian vault links aren't opening on Linux
 
-Linux users who have installed Anki with Flatpak / Flathub have [reported](https://github.com/kitschpatrol/yanki-obsidian/issues/31) [issues](https://github.com/kitschpatrol/yanki-obsidian/issues/41) with `obsidian://` URI links in Anki cards failing to open in Obsidian, as well as trouble with with media asset synchronization from Obsidian to Anki.
+Linux users who have installed Anki with Flatpak / Flathub have [reported](https://github.com/kitschpatrol/yanki-obsidian/issues/31) [issues](https://github.com/kitschpatrol/yanki-obsidian/issues/41) with `obsidian://` URI links in Anki cards failing to open in Obsidian, as well as trouble with media asset synchronization from Obsidian to Anki.
 
 It's recommended that Linux users install Anki by following the [instructions on the official Anki website](https://docs.ankiweb.net/platform/linux/installing.html) to avoid these issues.
 

@@ -12,8 +12,8 @@ import type { AnkiConnection } from './anki'
 import { ankiRequest } from './anki'
 import { getTestEnvironment } from './environment'
 
-const ankiConnectRevision = 'de6e6e1b8aaf4ae195eb1d1ff6db5409b99b2a3e'
-const ankiConnectSha256 = '0dc931bcf645d342e02726329fb3fb6b0bdc7066b064eea9bea17e8e2072029a'
+const ankiConnectRevision = '3b933b1cb2a3deb561c93e5cd2c7196dd7943618'
+const ankiConnectSha256 = 'c109aafe47ed5f4877ed17a4addd4b3d79d1e59e76d3d24eea41fa30a615fc8a'
 
 async function getAnkiConnectArchive(): Promise<string> {
 	const archive = path.resolve('.cache/yanki-e2e', `anki-connect-${ankiConnectRevision}.tar.gz`)

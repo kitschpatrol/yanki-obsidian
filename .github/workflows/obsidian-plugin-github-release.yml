@@ -53,7 +53,7 @@ jobs:
         uses: kitschpatrol/github-action-release-changelog@12279a22cf9d0b432dca8ff189d82ad0dd393345 # v2.0.9
 
       - name: Release
-        uses: kitschpatrol/github-action-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
+        uses: kitschpatrol/github-action-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
           fail_on_unmatched_files: true

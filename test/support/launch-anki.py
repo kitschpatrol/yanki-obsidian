@@ -24,7 +24,13 @@ from aqt.profiles import metaConf, profileConf
 # collection on first open. This also bypasses language/profile welcome dialogs.
 with sqlite3.connect(base / "prefs21.db") as db:
     db.execute("CREATE TABLE profiles (name TEXT PRIMARY KEY, data BLOB NOT NULL)")
-    meta = dict(metaConf, firstRun=False, defaultLang="en_US", updates=False)
+    meta = dict(
+        metaConf,
+        check_for_addon_updates=False,
+        defaultLang="en_US",
+        firstRun=False,
+        updates=False,
+    )
     prefs = dict(profileConf, autoSync=False, syncMedia=False, numBackups=0)
     db.executemany(
         "INSERT INTO profiles VALUES (?, ?)",

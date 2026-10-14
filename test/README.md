@@ -17,7 +17,7 @@ pnpm test
 
 The same commands work on macOS, Windows, and Linux. The runner uses uv to install Python 3.13 and sync `test/.venv` from `test/uv.lock`; no environment activation or existing Python installation is needed. To prepare Anki separately, run `uv sync --project test --locked --managed-python`. Change `test/pyproject.toml` and run `uv lock --project test` when updating Anki dependencies.
 
-Anki is installed through its official Python distribution (`aqt==25.9.2`, the same release as Yanki's CI). A normal desktop Anki installation and its add-ons are not required. The first test run downloads the pinned AnkiConnect source archive, verifies its SHA-256, and downloads Obsidian plus its matching ChromeDriver. Downloads are cached in `.cache/`.
+Anki is installed through its official Python distribution (`aqt==26.9.3`; the pinned AnkiConnect release requires Anki 26.8 or newer). A normal desktop Anki installation and its add-ons are not required. The first test run downloads the pinned AnkiConnect source archive, verifies its SHA-256, and downloads Obsidian plus its matching ChromeDriver. Downloads are cached in `.cache/`.
 
 On Linux, install the Qt/Electron libraries listed in [the workflow](../.github/workflows/ci.yml), then use `xvfb-run --auto-servernum pnpm test` on a headless machine. macOS and Windows need a desktop session. Test windows will appear during local runs.
 

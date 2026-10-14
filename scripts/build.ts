@@ -77,8 +77,8 @@ const context = await esbuild.context({
 		'@lezer/highlight',
 		'@lezer/lr',
 
-		// Node 20 builtins
-		// https://github.com/uncenter/builtin-modules-static/blob/main/lib/v20.js
+		// Node 22 builtins, matching Electron 37 in the minimum supported Obsidian installer
+		// Omits the deprecated `sys` alias for `util`
 		'assert',
 		'assert/strict',
 		'async_hooks',

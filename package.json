@@ -53,7 +53,7 @@
 		"@kitschpatrol/remark-config": "^8.13.1",
 		"@kitschpatrol/shared-config": "^8.13.1",
 		"@kitschpatrol/stylelint-config": "^8.13.1",
-		"@types/node": "~20.19.43",
+		"@types/node": "~22.18.13",
 		"bumpp": "^12.3.0",
 		"chokidar": "^5.0.0",
 		"debounce": "^3.0.0",
@@ -75,11 +75,11 @@
 		"vitest": "^5.0.3",
 		"wdio-obsidian-service": "3.3.0",
 		"webdriverio": "^9.32.0",
-		"yanki": "^3.1.0"
+		"yanki": "^3.2.0"
 	},
 	"packageManager": "pnpm@12.11.2",
 	"engines": {
-		"node": "^20.19.0 || ^22.0.0 || ^24.0.0 || >=26.0.0"
+		"node": ">=22.18.0"
 	},
 	"devEngines": {
 		"runtime": {
