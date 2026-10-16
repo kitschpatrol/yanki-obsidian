@@ -75,7 +75,7 @@
 		"vitest": "^5.0.3",
 		"wdio-obsidian-service": "3.3.0",
 		"webdriverio": "^9.32.0",
-		"yanki": "^3.2.0"
+		"yanki": "^3.2.1"
 	},
 	"packageManager": "pnpm@12.11.2",
 	"engines": {

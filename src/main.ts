@@ -197,6 +197,9 @@ export default class YankiPlugin extends Plugin {
 			...(init?.body !== undefined && { body: init.body }),
 			...(init?.headers !== undefined && { headers: init.headers }),
 			...(init?.method !== undefined && { method: init.method }),
+			// Resolve HTTP errors with their status like fetch does, since
+			// yanki-connect treats any rejection as Anki being unreachable
+			throw: false,
 			url: input,
 		})
 

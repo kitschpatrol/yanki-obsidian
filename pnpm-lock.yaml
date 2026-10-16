@@ -260,8 +260,8 @@ importers:
         specifier: ^9.32.0
         version: 9.32.0(supports-color@10.2.2)
       yanki:
-        specifier: ^3.2.0
-        version: 3.2.0(supports-color@10.2.2)
+        specifier: ^3.2.1
+        version: 3.2.1(supports-color@10.2.2)
 
 packages:
 
@@ -3060,10 +3060,6 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
-
-  crypto-hash@4.0.1:
-    resolution: {integrity: sha512-4u4yl+8C+75Xedf1uMA0J/TTYAqJ54XdyBc1RV3UjCkU2wQjFMsB5ScjRDh3oo21zAwSprcVEDolaGDT8z5G6g==}
-    engines: {node: '>=20'}
 
   cspell-config-lib@10.3.6:
     resolution: {integrity: sha512-3LcA2uIgB90Ucn3xa1lO5VVncHtsD4LZUf2ENBtHVmxFVFw1wvm1hbXL1mhenLY2xJDONGvLKRnNoowUWIZoDQ==}
@@ -7300,12 +7296,12 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  yanki-connect@5.0.0:
-    resolution: {integrity: sha512-UfbGJasrQXxG1lLD+eMMHHeAj9H9u7C/BqnZchlEDdrH/iUvJ4oikVVRlQMSahLDgCgucmraw5jXCiHGzURcwg==}
+  yanki-connect@5.2.0:
+    resolution: {integrity: sha512-Cui2ZVEh49qUEBX2IF8f8syOOzLy15DB/VSVHdn3fGWimLM0kj89Nd6xQGQWyUmu3t16vlh8M8wKmcD2zafAiA==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
 
-  yanki@3.2.0:
-    resolution: {integrity: sha512-GxofRbWjIB9jnALRVC3Xn1A7tz2JM+S9Rt7+tFKnTE2WBob6WgaPI7dErjfTL/wSalZAcVoZemolwMT1j/sT0A==}
+  yanki@3.2.1:
+    resolution: {integrity: sha512-eqkMbLS/6LUaA7XYQu50BG+8kN55ruf1GA0xXQsGGqAu3r7K6fO8iLQr4XtTZoyrQRNcLiUvPeC3y3ENQ5b6sw==}
     engines: {node: ^22.18.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
 
@@ -10464,8 +10460,6 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
-
-  crypto-hash@4.0.1: {}
 
   cspell-config-lib@10.3.6:
     dependencies:
@@ -16109,12 +16103,12 @@ snapshots:
 
   yaml@2.9.1: {}
 
-  yanki-connect@5.0.0:
+  yanki-connect@5.2.0:
     dependencies:
       '@types/node': 20.19.43
       open: 11.0.4
 
-  yanki@3.2.0(supports-color@10.2.2):
+  yanki@3.2.1(supports-color@10.2.2):
     dependencies:
       '@shikijs/langs': 4.5.0
       '@shikijs/rehype': 4.5.0
@@ -16128,7 +16122,6 @@ snapshots:
       '@types/node': 22.18.13
       '@types/unist': 3.0.3
       '@types/yargs': 17.0.35
-      crypto-hash: 4.0.1
       deepmerge-ts: 8.0.2
       filenamify: 6.0.0
       globby: 16.2.4
@@ -16167,7 +16160,7 @@ snapshots:
       unist-util-visit: 5.1.0
       untildify: 6.0.0
       yaml: 2.9.1
-      yanki-connect: 5.0.0
+      yanki-connect: 5.2.0
       yargs: 18.2.0
     transitivePeerDependencies:
       - canvas

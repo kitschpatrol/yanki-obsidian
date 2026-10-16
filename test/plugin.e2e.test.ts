@@ -1,6 +1,34 @@
+import type { AddressInfo } from 'node:net'
+import http from 'node:http'
+import net from 'node:net'
 import { expect } from 'vitest'
 import { ankiRequest } from './support/anki'
 import { closeSettings, openSettings, sync, test, watchFolders } from './support/obsidian'
+
+/**
+ * Get a port with nothing listening on it.
+ */
+async function getClosedPort(): Promise<number> {
+	const server = net.createServer()
+	await new Promise<void>((resolve) => {
+		server.listen(0, '127.0.0.1', resolve)
+	})
+	const { port } = server.address() as AddressInfo
+	await new Promise((resolve) => {
+		server.close(resolve)
+	})
+	return port
+}
+
+/**
+ * Point the plugin at a local port instead of the test Anki.
+ */
+async function setAnkiConnectPort(browser: WebdriverIO.Browser, port: number) {
+	await browser.executeObsidian(async ({ plugins }, ankiConnectPort) => {
+		plugins.yanki.settings.ankiConnect.port = ankiConnectPort
+		await plugins.yanki.saveSettings()
+	}, port)
+}
 
 test('loads the release bundle and reports an unconfigured sync in Obsidian', async ({
 	desktop,
@@ -50,6 +78,53 @@ test('offers installer updates and issue reporting after a sync error', async ({
 	expect(
 		await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync),
 	).toMatchObject({ errors: 1, manual: 0 })
+})
+
+test('reports that Anki is unreachable when nothing is listening', async ({ desktop }) => {
+	const { browser } = desktop
+	await watchFolders(browser)
+	await setAnkiConnectPort(browser, await getClosedPort())
+	const before = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+
+	await browser.executeObsidianCommand('yanki:sync')
+
+	await expect
+		.poll(async () => browser.$('.notice-container').getText())
+		.toContain('Could not connect to Anki')
+	const after = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+	expect(after.errors).toBe(before.errors)
+	expect(after.notes.ankiUnreachable).toBeGreaterThan(before.notes.ankiUnreachable)
+})
+
+test('reports HTTP errors from AnkiConnect as sync errors', async ({ desktop }) => {
+	const { browser } = desktop
+	const server = http.createServer((_request, response) => {
+		response.writeHead(500).end()
+	})
+	await new Promise<void>((resolve) => {
+		server.listen(0, '127.0.0.1', resolve)
+	})
+
+	try {
+		await watchFolders(browser)
+		await setAnkiConnectPort(browser, (server.address() as AddressInfo).port)
+		const before = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+
+		await browser.executeObsidianCommand('yanki:sync')
+
+		await expect
+			.poll(async () => browser.$('.notice-container').getText())
+			.toContain('AnkiConnect response status is 500')
+		const after = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+		expect(after.errors).toBe(before.errors + 1)
+		expect(after.notes.ankiUnreachable).toBe(before.notes.ankiUnreachable)
+	} finally {
+		// Electron may hold keep-alive connections open, which would stall close()
+		server.closeAllConnections()
+		await new Promise((resolve) => {
+			server.close(resolve)
+		})
+	}
 })
 
 test('persists folder settings from the UI through plugin reloads', async ({ desktop }) => {

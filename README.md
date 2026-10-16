@@ -60,7 +60,7 @@ The primary novelty of its approach is in how Markdown is translated into Anki n
 
 - The [Obsidian desktop application](https://obsidian.md/download), with both the app and **installer version** at 1.9.12+. Yanki is tested on Windows, macOS, and Linux.
 - The [Anki desktop application](https://apps.ankiweb.net), version 26.08+. (Linux users should install from the Anki Website, [issues have been reported](#my-obsidian-vault-links-arent-opening-on-linux) with Flatpak distributions.)
-- The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on, version 2026.10.13.0 or newer.
+- The [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on, version 26.10.14.0 or newer.
 
   To install the AnkiConnect add-on, open the Anki desktop application and select _Tools → Add-ons_ from the menu, click _Get Add-ons..._, and then enter the code `2055492159` in the field to get AnkiConnect.
 
