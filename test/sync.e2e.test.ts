@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto'
+import fs from 'node:fs/promises'
 import { expect } from 'vitest'
 import { ankiRequest } from './support/anki'
 import { sync, test, watchFolders } from './support/obsidian'
@@ -26,6 +28,27 @@ test('syncs an added note into a nested deck and preserves existing note IDs', a
 	)
 	expect(Object.values(firstIdsByPath).toSorted((a, b) => a - b)).toEqual(
 		originalIds.toSorted((a, b) => a - b),
+	)
+
+	// The Cat fixture embeds an image stored outside the watched folder. Yanki
+	// names uploaded media by content hash, so the plugin's binary file adapter
+	// and Obsidian's Web Crypto must produce the digest the CLI would in Node,
+	// and the stored bytes must round-trip.
+	const catId = firstIdsByPath['Anki/Animals/Quadruped/Cat.md']
+	if (catId === undefined) {
+		throw new Error('Cat fixture was not synced')
+	}
+
+	const image = await fs.readFile('test/vault/Attachments/cat.jpeg')
+	const [cat] = await ankiRequest<Array<{ fields: Record<string, { value: string }> }>>(
+		anki,
+		'notesInfo',
+		{ notes: [catId] },
+	)
+	const mediaFilename = /<img src="([^"]+)"/u.exec(cat?.fields.Back?.value ?? '')?.[1]
+	expect(mediaFilename).toContain(createHash('sha256').update(image).digest('hex').slice(0, 16))
+	expect(await ankiRequest<string>(anki, 'retrieveMediaFile', { filename: mediaFilename })).toBe(
+		image.toString('base64'),
 	)
 
 	// Use the real Vault API: this exercises the plugin's adapters and Obsidian's
@@ -79,7 +102,9 @@ test('syncs an added note into a nested deck and preserves existing note IDs', a
 		'Non-living things',
 	])
 
-	// An unchanged third sync must neither recreate nor duplicate notes.
-	await sync(browser)
+	// An unchanged third sync must neither recreate, update, nor duplicate notes.
+	// Plugin stats accumulate across syncs, so compare against the second sync.
+	const third = await sync(browser)
+	expect(third.notes.unchanged - second.notes.unchanged).toBe(5)
 	expect(await ankiRequest<number[]>(anki, 'findNotes', { query })).toEqual(ids)
 })

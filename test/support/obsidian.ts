@@ -4,6 +4,7 @@ import path from 'node:path'
 import { test as base, expect, inject } from 'vitest'
 import ObsidianService, { launcher as ObsidianLauncher } from 'wdio-obsidian-service'
 import { remote } from 'webdriverio'
+import type { YankiPluginSettings } from '../../src/settings/settings'
 import type { AnkiConnection } from './anki'
 import { getTestEnvironment } from './environment'
 
@@ -210,18 +211,28 @@ export async function watchFolders(browser: WebdriverIO.Browser, folders = ['Ank
 	}, folders)
 }
 
+type SyncStats = YankiPluginSettings['stats']['sync']
+
 /**
- * Run the user command and assert its completed result, including caught
- * errors.
+ * Read the plugin's persisted sync statistics.
  */
-export async function sync(browser: WebdriverIO.Browser) {
-	const before = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
-	await browser.executeObsidianCommand('yanki:sync')
+export async function getSyncStats(browser: WebdriverIO.Browser): Promise<SyncStats> {
+	return browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+}
+
+/**
+ * Wait until a sync started after `before` has finished, whatever its outcome.
+ * The command callback does not await the sync, and a refused connection can
+ * take over a second on Windows, so the default `expect.poll` timeout is too
+ * short to wait on a notice alone.
+ */
+export async function waitForSyncCompletion(
+	browser: WebdriverIO.Browser,
+	before: SyncStats,
+): Promise<SyncStats> {
 	await browser.waitUntil(
 		async () => {
-			const stats = await browser.executeObsidian(
-				({ plugins }) => plugins.yanki.settings.stats.sync,
-			)
+			const stats = await getSyncStats(browser)
 			return (
 				stats.manual > before.manual ||
 				stats.errors > before.errors ||
@@ -230,6 +241,17 @@ export async function sync(browser: WebdriverIO.Browser) {
 		},
 		{ timeout: 45_000, timeoutMsg: 'Yanki sync did not complete; see test-results diagnostics.' },
 	)
+	return getSyncStats(browser)
+}
+
+/**
+ * Run the user command and assert its completed result, including caught
+ * errors.
+ */
+export async function sync(browser: WebdriverIO.Browser) {
+	const before = await getSyncStats(browser)
+	await browser.executeObsidianCommand('yanki:sync')
+	await waitForSyncCompletion(browser, before)
 	const result = await browser.executeObsidian(({ plugins }) => ({
 		notices: Array.from(document.querySelectorAll('.notice'), (notice) => notice.textContent),
 		stats: plugins.yanki.settings.stats.sync,

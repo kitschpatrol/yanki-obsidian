@@ -3,7 +3,15 @@ import http from 'node:http'
 import net from 'node:net'
 import { expect } from 'vitest'
 import { ankiRequest } from './support/anki'
-import { closeSettings, openSettings, sync, test, watchFolders } from './support/obsidian'
+import {
+	closeSettings,
+	getSyncStats,
+	openSettings,
+	sync,
+	test,
+	waitForSyncCompletion,
+	watchFolders,
+} from './support/obsidian'
 
 /**
  * Get a port with nothing listening on it.
@@ -69,12 +77,17 @@ test('offers installer updates and issue reporting after a sync error', async ({
 	)
 	await notice.waitForDisplayed()
 	await expect.poll(async () => notice.getText()).toContain('Could not read test flashcard')
-	expect(
-		await notice.$('a[href="https://obsidian.md/help/updates#Installer+updates"]').getText(),
-	).toBe('install the latest version of Obsidian')
-	expect(
-		await notice.$('a[href="https://github.com/kitschpatrol/yanki-obsidian/issues"]').getText(),
-	).toBe('open an issue')
+	// Visible text can read as empty while the notice is still sliding in
+	await expect
+		.poll(async () =>
+			notice.$('a[href="https://obsidian.md/help/updates#Installer+updates"]').getText(),
+		)
+		.toBe('install the latest version of Obsidian')
+	await expect
+		.poll(async () =>
+			notice.$('a[href="https://github.com/kitschpatrol/yanki-obsidian/issues"]').getText(),
+		)
+		.toBe('open an issue')
 	expect(
 		await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync),
 	).toMatchObject({ errors: 1, manual: 0 })
@@ -84,14 +97,14 @@ test('reports that Anki is unreachable when nothing is listening', async ({ desk
 	const { browser } = desktop
 	await watchFolders(browser)
 	await setAnkiConnectPort(browser, await getClosedPort())
-	const before = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+	const before = await getSyncStats(browser)
 
 	await browser.executeObsidianCommand('yanki:sync')
 
+	const after = await waitForSyncCompletion(browser, before)
 	await expect
 		.poll(async () => browser.$('.notice-container').getText())
 		.toContain('Could not connect to Anki')
-	const after = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
 	expect(after.errors).toBe(before.errors)
 	expect(after.notes.ankiUnreachable).toBeGreaterThan(before.notes.ankiUnreachable)
 })
@@ -108,14 +121,14 @@ test('reports HTTP errors from AnkiConnect as sync errors', async ({ desktop }) 
 	try {
 		await watchFolders(browser)
 		await setAnkiConnectPort(browser, (server.address() as AddressInfo).port)
-		const before = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
+		const before = await getSyncStats(browser)
 
 		await browser.executeObsidianCommand('yanki:sync')
 
+		const after = await waitForSyncCompletion(browser, before)
 		await expect
 			.poll(async () => browser.$('.notice-container').getText())
 			.toContain('AnkiConnect response status is 500')
-		const after = await browser.executeObsidian(({ plugins }) => plugins.yanki.settings.stats.sync)
 		expect(after.errors).toBe(before.errors + 1)
 		expect(after.notes.ankiUnreachable).toBe(before.notes.ankiUnreachable)
 	} finally {
@@ -185,7 +198,7 @@ test('uses real vault files to filter folders and preserves links when renaming'
 		),
 	).toEqual([
 		'Anki/Animals/Biped/Plato.md',
-		'Anki/Animals/Quadruped/Horse.md',
+		'Anki/Animals/Quadruped/Cat.md',
 		'Anki/Animals/ignore.md',
 		'Anki/Non-living things/Rock.md',
 	])

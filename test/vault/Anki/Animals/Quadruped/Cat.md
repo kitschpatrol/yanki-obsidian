@@ -1,5 +1,7 @@
-Horse
+Cat
 
 ---
 
 A quadruped.
+
+![[cat.jpeg]]

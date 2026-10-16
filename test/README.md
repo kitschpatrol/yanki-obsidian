@@ -4,7 +4,7 @@ These tests run the production bundle in real Obsidian and sync to real Anki. [V
 
 The focus is the plugin boundary: commands and notices, settings UI and persistence, watched folders, file and fetch adapters, metadata cache updates, and plugin lifecycle. Parsing, note types, media permutations, and sync algorithm coverage belong in [yanki](https://github.com/kitschpatrol/yanki).
 
-The [sync regression test](./sync.e2e.test.ts) syncs notes into nested decks, adds another note through Obsidian's Vault API, and syncs again. It verifies successful completion, stable existing Anki IDs, frontmatter and metadata cache updates, and an unchanged third sync without duplicate notes. This scenario runs in every supported CI combination.
+The [sync regression test](./sync.e2e.test.ts) syncs notes into nested decks, adds another note through Obsidian's Vault API, and syncs again. One fixture note embeds an image stored outside the watched folder, which exercises the binary file adapter, vault-wide link resolution, and media hashing in Obsidian's renderer. It verifies successful completion, stable existing Anki IDs, the uploaded media file and its content-hash name, frontmatter and metadata cache updates, and an unchanged third sync without duplicate notes. This scenario runs in every supported CI combination.
 
 ## Local setup
 

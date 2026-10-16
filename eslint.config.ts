@@ -52,7 +52,12 @@ export default eslintConfig(
 	},
 	{
 		files: ['test/vault/**/*.md'],
-		rules: { 'unicorn/filename-case': 'off' },
+		rules: {
+			// Fixture notes are Obsidian documents, not project prose. Their
+			// wiki-link embeds read as undefined references to remark-lint.
+			'mdx/remark': 'off',
+			'unicorn/filename-case': 'off',
+		},
 	},
 	// Follow upstream's rules-only presets, retaining our stricter overrides.
 	// See https://github.com/obsidianmd/eslint-plugin.
