@@ -50,10 +50,10 @@ jobs:
 
       - name: Release Notes
         id: release-notes
-        uses: kitschpatrol/github-action-release-changelog@12279a22cf9d0b432dca8ff189d82ad0dd393345 # v2.0.9
+        uses: kitschpatrol/github-action-release-changelog@5cc343b830037ae77937e9e66c31be0da5798efe # v2.0.10
 
       - name: Release
-        uses: kitschpatrol/github-action-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
+        uses: kitschpatrol/github-action-release@13b1829f4e449586eb63ed614e0429a684cb291c # v3.0.3
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
           fail_on_unmatched_files: true

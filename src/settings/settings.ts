@@ -152,13 +152,9 @@ export class YankiPluginSettingTab extends PluginSettingTab {
 	}
 
 	override getSettingDefinitions(): YankiSettingGroup[] {
+		// With no definitions, Obsidian 1.13+ falls back to the `display()` code path.
 		// eslint-disable-next-line ts/no-unnecessary-condition -- `FORCE_LEGACY_SETTINGS` is a hard-coded debug flag.
-		if (FORCE_LEGACY_SETTINGS) {
-			// With no definitions, Obsidian 1.13+ falls back to the `display()` code path.
-			return []
-		}
-
-		return this.getSettingGroups()
+		return FORCE_LEGACY_SETTINGS ? [] : this.getSettingGroups()
 	}
 
 	override hide(): void {
