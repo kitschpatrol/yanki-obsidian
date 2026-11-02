@@ -4,6 +4,8 @@ export default defineConfig({
 	test: {
 		// Real desktop applications share one disposable Anki collection.
 		fileParallelism: false,
+		// Vitest 5.0.5 loads cached global setup as bytes, breaking Vite's error reporting.
+		fsModuleCache: false,
 		globalSetup: ['./test/support/global-setup.ts'],
 		hookTimeout: 300_000,
 		include: ['test/**/*.e2e.test.ts'],
