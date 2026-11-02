@@ -30,7 +30,7 @@ For automated testing in real Obsidian and Anki, see [Desktop tests](./test/READ
 
 This project uses [`@kitschpatrol/shared-config`](https://github.com/kitschpatrol/shared-config) for linting, formatting, and type checking, orchestrated through the `ksc` CLI. **Run `pnpm fix` before submitting a PR** — it auto-fixes formatting, import sorting, and most lint issues in one shot.
 
-For an overview of code standards enforced byt the config, see the [`ksc` reference](https://github.com/kitschpatrol/shared-config/blob/673c251d774647dd7ee3956d45cb17e17baff39e/packages/repo-config/init/.claude/skills/ksc/SKILL.md).
+For an overview of code standards enforced by the config, see the [`ksc` reference](https://github.com/kitschpatrol/shared-config/blob/673c251d774647dd7ee3956d45cb17e17baff39e/packages/repo-config/init/.claude/skills/ksc/SKILL.md).
 
 ## License
 
