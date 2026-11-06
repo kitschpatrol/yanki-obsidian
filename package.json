@@ -35,7 +35,7 @@
 		"dev": "shx rm -rf ./dist && tsx ./scripts/build.ts",
 		"fix": "ksc fix",
 		"lint": "ksc lint",
-		"release": "bumpp package.json manifest.json -c 'Release: %s' --tag '%s' --all -x 'pnpm build && chagent'",
+		"release": "pnpm build && bumpp package.json manifest.json -c 'Release: %s' --tag '%s' --all -x 'chagent'",
 		"test": "pnpm build --no-demo && vitest run",
 		"test:e2e": "vitest run",
 		"yanki:deploy-local": "shx cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
