@@ -8,7 +8,7 @@ export default eslintConfig(
 				'html/no-inline-styles': 'off',
 			},
 		},
-		ignores: ['examples/Yanki Demo Vault/*'],
+		ignores: ['examples/Yanki Demo Vault/*', '**/changelog.md'],
 		ts: {
 			overrides: {
 				'no-new': 'off',

@@ -5,6 +5,7 @@ allowBuilds:
   geckodriver: false
   unrs-resolver: true
 minimumReleaseAgeExclude:
+  - '@kitschpatrol/chagent@0.4.0'
   - yanki-connect@5.2.1
   - yanki@3.2.2
 peerDependencyRules:

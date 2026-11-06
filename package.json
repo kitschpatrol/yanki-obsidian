@@ -35,7 +35,7 @@
 		"dev": "shx rm -rf ./dist && tsx ./scripts/build.ts",
 		"fix": "ksc fix",
 		"lint": "ksc lint",
-		"release": "bumpp package.json manifest.json -x 'pnpm build' -c 'Release: %s' --tag '%s'",
+		"release": "bumpp package.json manifest.json -c 'Release: %s' --tag '%s' --all -x 'pnpm build && chagent'",
 		"test": "pnpm build --no-demo && vitest run",
 		"test:e2e": "vitest run",
 		"yanki:deploy-local": "shx cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
@@ -44,6 +44,7 @@
 	},
 	"devDependencies": {
 		"@eslint/json": "0.14.0",
+		"@kitschpatrol/chagent": "0.4.0",
 		"@kitschpatrol/cspell-config": "^8.14.0",
 		"@kitschpatrol/eslint-config": "^8.14.0",
 		"@kitschpatrol/knip-config": "^8.14.0",
