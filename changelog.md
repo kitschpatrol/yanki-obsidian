@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 (Node.js support requirements have sometimes increased in minor or patch releases.)
 
+## [1.14.3] - 2026-11-15
+
+### Fixed
+
+- Fix handling of certain characters inside clozes by updating Yanki to 3.2.3.
+
+### Documentation
+
+- Add a changelog covering past releases.
+
+### Maintenance
+
+- Integrate chagent into release tooling to generate changelog entries, and run the build before bumping versions.
+- Refresh shared configuration, Obsidian typings and lint tooling, pnpm, and workflow actions; update desktop tests to WebdriverIO 10 and Vitest 5.1 and remove obsolete lint and test workarounds.
+- Raise contributor Node.js requirements and consolidate pnpm-managed skills in `.agents/skills`.
+
 ## [1.14.2] - 2026-11-02
 
 ### Documentation
@@ -1132,3 +1148,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.14.0]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.13.0...1.14.0
 [1.14.1]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.0...1.14.1
 [1.14.2]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.1...1.14.2
+[1.14.3]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.2...1.14.3
