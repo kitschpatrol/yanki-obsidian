@@ -3,11 +3,9 @@ allowBuilds:
   edgedriver: false
   esbuild: true
   geckodriver: false
-  unrs-resolver: true
 minimumReleaseAgeExclude:
-  - '@kitschpatrol/chagent@0.4.0'
-  - yanki-connect@5.2.1
-  - yanki@3.2.2
+  - yanki-connect@5.2.2
+  - yanki@3.2.3
 peerDependencyRules:
   allowedVersions:
     # Remove once the installed version declares ESLint 10 support.
@@ -33,4 +31,3 @@ publicHoistPattern:
 skills:
   dirs:
     - .agents/skills
-    - .claude/skills

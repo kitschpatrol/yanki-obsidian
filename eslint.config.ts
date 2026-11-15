@@ -84,7 +84,6 @@ export default eslintConfig(
 			'obsidianmd/no-tfile-tfolder-cast': 'error',
 			'obsidianmd/object-assign': 'error',
 			'obsidianmd/prefer-abstract-input-suggest': 'error',
-			'obsidianmd/prefer-active-doc': 'warn',
 			'obsidianmd/prefer-get-language': 'error',
 			'obsidianmd/prefer-window-timers': 'error',
 			'obsidianmd/ui/sentence-case': [

@@ -1,6 +1,7 @@
 {
 	"extends": "@kitschpatrol/typescript-config",
 	"compilerOptions": {
+		// Include Obsidian internal API augmentations used by the plugin and desktop tests.
 		"types": ["obsidian-typings"]
 	},
 	"exclude": ["dist/"]
