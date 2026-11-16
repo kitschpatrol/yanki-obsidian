@@ -266,8 +266,8 @@ importers:
         specifier: ^10.2.0
         version: 10.2.0(bare-buffer@3.7.2)(supports-color@10.2.2)
       yanki:
-        specifier: ^3.2.3
-        version: 3.2.3(supports-color@10.2.2)
+        specifier: ^3.2.4
+        version: 3.2.4(supports-color@10.2.2)
 
 packages:
 
@@ -7277,12 +7277,12 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  yanki-connect@5.2.2:
-    resolution: {integrity: sha512-lfbO8tGJBcCBKADULGWcKe3BW0MsUIa6QykZpJpUqbaVmZrMMcqKaOK1vQFDCTDO36g19xgYsbgfKpNgVMbWgA==}
+  yanki-connect@5.3.0:
+    resolution: {integrity: sha512-thd/ulkMkeRlB3DZMmhquVUkH+mwNDtlCe22Fi0RBjF1n9zkiQTzWe8htXb7hXeiVjJ+aWV/itKzU+ej5Guu9g==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
 
-  yanki@3.2.3:
-    resolution: {integrity: sha512-d1qf1Ew9K48qtzhemvwKVpULC07cHXuCnFoMXyjovbR3gA45xkQ6bvPkXedapDyokS8Dab7pW3d8FzIgS3k4TQ==}
+  yanki@3.2.4:
+    resolution: {integrity: sha512-6zBEHwEiz1ucqm2EG89BpgVjBOJzNLZ3/9PMObA5SQ4l3BtS7de686khpmYII1fmJ9V1B5ikI9fb2KFdtDxUeg==}
     engines: {node: ^22.18.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
 
@@ -15879,11 +15879,11 @@ snapshots:
 
   yaml@2.9.1: {}
 
-  yanki-connect@5.2.2:
+  yanki-connect@5.3.0:
     dependencies:
       open: 11.0.4
 
-  yanki@3.2.3(supports-color@10.2.2):
+  yanki@3.2.4(supports-color@10.2.2):
     dependencies:
       '@shikijs/langs': 4.6.0
       '@shikijs/rehype': 4.6.0
@@ -15935,7 +15935,7 @@ snapshots:
       unist-util-visit: 5.2.0
       untildify: 6.0.0
       yaml: 2.9.1
-      yanki-connect: 5.2.2
+      yanki-connect: 5.3.0
       yargs: 18.2.0
     transitivePeerDependencies:
       - canvas

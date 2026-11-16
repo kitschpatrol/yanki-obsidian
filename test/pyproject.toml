@@ -2,7 +2,7 @@
 name = 'yanki-obsidian-e2e'
 version = '0.0.0'
 requires-python = '>=3.13,<3.14'
-dependencies = ['aqt==26.9.3']
+dependencies = ['aqt==26.9.4']
 
 [tool.uv]
 # Keep user-level resolver cutoffs from invalidating the committed lockfile.
