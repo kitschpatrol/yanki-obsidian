@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 (Node.js support requirements have sometimes increased in minor or patch releases.)
 
+Entries are drafted with LLM assistance via [Chagent](https://github.com/kitschpatrol/chagent).
+
+## [1.14.4] - 2026-11-18
+
+### Fixed
+
+- Fix internal wiki links. Match full file names and follow Obsidian’s rules for resolving duplicate names and vault paths. (Addresses #88, thanks @DrSandhu for reporting.)
+- Fix orphaned-deck cleanup during sync so it skips missing decks and preserves decks with cards anywhere in their subdeck hierarchy, including unmanaged cards, suspended or buried cards, cards due later, and cards temporarily in filtered decks.
+- Fix links such as `[[#Heading]]` and `[[#^block]]` so they open the intended heading or block in the correct Obsidian source note from Anki.
+
+### Documentation
+
+- Update the documented AnkiConnect prerequisite to 26.11.15.0 and the test setup guide to Anki 26.9.4.
+- Clarify that deleting `noteId` can lose Anki review progress if sync recreates the note.
+
+### Maintenance
+
+- Run end-to-end tests with Anki 26.9.4 and AnkiConnect 26.11.15.0.
+- Add end-to-end tests that verify links in synced Anki cards resolve to the same files and anchors as in Obsidian.
+- Update chagent to 0.8.0 and enable interactive changelog review in the release script.
+- Refresh Obsidian typings and ESLint tooling.
+
 ## [1.14.3] - 2026-11-15
 
 ### Fixed
@@ -1149,3 +1171,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.14.1]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.0...1.14.1
 [1.14.2]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.1...1.14.2
 [1.14.3]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.2...1.14.3
+[1.14.4]: https://github.com/kitschpatrol/yanki-obsidian/compare/1.14.3...1.14.4
