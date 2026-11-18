@@ -35,7 +35,7 @@
 		"dev": "shx rm -rf ./dist && tsx ./scripts/build.ts",
 		"fix": "ksc fix",
 		"lint": "ksc lint",
-		"release": "pnpm build && bumpp package.json manifest.json -c 'Release: %s' --tag '%s' --all -x 'chagent'",
+		"release": "pnpm build && bumpp package.json manifest.json -c 'Release: %s' --tag '%s' --all -x 'chagent -i'",
 		"test": "pnpm build --no-demo && vitest run",
 		"test:e2e": "vitest run",
 		"yanki:deploy-local": "shx cp -r ./dist/* ~/Notes/Vault/.obsidian/plugins/yanki",
@@ -43,7 +43,7 @@
 		"yanki:use-npm": "pnpm remove yanki && pnpm add -D yanki"
 	},
 	"devDependencies": {
-		"@kitschpatrol/chagent": "^0.6.0",
+		"@kitschpatrol/chagent": "^0.8.0",
 		"@kitschpatrol/cspell-config": "^8.14.1",
 		"@kitschpatrol/eslint-config": "^8.14.1",
 		"@kitschpatrol/knip-config": "^8.14.1",
@@ -60,10 +60,10 @@
 		"esbuild": "^0.28.2",
 		"esbuild-plugin-copy": "^2.1.1",
 		"escape-string-regexp": "^5.0.0",
-		"eslint-plugin-obsidianmd": "^0.5.1",
+		"eslint-plugin-obsidianmd": "^0.6.0",
 		"moment": "^2.31.0",
 		"obsidian": "1.14.4",
-		"obsidian-typings": "6.60.0",
+		"obsidian-typings": "6.61.0",
 		"plur": "^6.0.0",
 		"pretty-ms": "^10.0.0",
 		"shx": "^0.4.0",
@@ -73,7 +73,7 @@
 		"vitest": "^5.1.0",
 		"wdio-obsidian-service": "3.5.0",
 		"webdriverio": "^10.2.0",
-		"yanki": "^3.2.4"
+		"yanki": "^3.3.0"
 	},
 	"packageManager": "pnpm@12.21.0",
 	"engines": {

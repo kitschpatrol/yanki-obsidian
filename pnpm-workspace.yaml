@@ -4,8 +4,8 @@ allowBuilds:
   esbuild: true
   geckodriver: false
 minimumReleaseAgeExclude:
-  - yanki-connect@5.3.0
-  - yanki@3.2.4
+  - '@kitschpatrol/chagent@0.8.0'
+  - yanki@3.3.0
 peerDependencyRules:
   allowedVersions:
     # Remove once the installed version declares ESLint 10 support.

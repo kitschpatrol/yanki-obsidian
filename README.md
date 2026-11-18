@@ -667,7 +667,7 @@ It's Anki's internal ID for the note, which is saved after the first sync.
 
 ### Can I delete the `noteId`?
 
-Don't. If it goes missing, Yanki might consider the ID-less note in Anki to be an orphan, and it might be deleted from Anki on the next sync and replaced with a fresh note with a new ID. If this happens, you won't lose your note because it's safe in Obsidian, but you _will_ lose stats in Anki, so touch the `noteId` property at your own peril.
+Don't. If it goes missing, Yanki might consider the ID-less note in Anki to be an orphan, and it might be deleted from Anki on the next sync and replaced with a fresh note with a new ID. If this happens, you won't lose your note because it's safe in Obsidian, but you _will_ lose progress in Anki, so touch the `noteId` property at your own peril.
 
 ### What happens if I accidentally delete a `noteId`?
 

@@ -8,6 +8,7 @@ export default cspellConfig({
 		'executemany',
 		'Flatseal',
 		'geckodriver',
+		'linktext',
 		'prefs',
 		'PYTHONUNBUFFERED',
 		'runpy',
